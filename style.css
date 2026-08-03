@@ -92,3 +92,19 @@ nav ul{
 }
 
 }
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:26px;
+    font-weight:bold;
+    color:#FFD700;
+}
+
+nav ul li a{
+    transition:.3s;
+}
+
+nav ul li a:hover{
+    color:#FFD700;
+}
