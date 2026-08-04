@@ -1,1 +1,14 @@
+body{
+    background:#0b1020;
+    color:white;
+    font-family:Arial,sans-serif;
+}
 
+h1{
+    color:#FFD700;
+}
+
+header{
+    background:#8B0000;
+    padding:20px;
+}
