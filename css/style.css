@@ -638,3 +638,39 @@ color:#FFD700;
     font-size:16px;
     color:#8b0000;
 }
+/* ===== Dark Theme ===== */
+
+body.dark-mode{
+    background:#0b0b0b;
+    color:#f5f5f5;
+    transition:.4s;
+}
+
+body.dark-mode .navbar{
+    background:#111;
+}
+
+body.dark-mode .hero{
+    background:linear-gradient(180deg,#111,#1b0000);
+}
+
+body.dark-mode .about{
+    background:#181818;
+    color:white;
+}
+
+body.dark-mode .events{
+    background:#111827;
+}
+
+body.dark-mode .team{
+    background:#151515;
+}
+
+body.dark-mode .team-card{
+    background:#222;
+}
+
+body.dark-mode footer{
+    background:#111;
+}
