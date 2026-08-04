@@ -37,12 +37,12 @@ kn:{
     "nav-team":"AGB ತಂಡ",
     "nav-gallery":"ಗ್ಯಾಲರಿ",
     "nav-news":"ಸುದ್ದಿ",
-    "nav-contact":"ಸಂಪರ್ಕಿಸಿ"
+    "nav-contact":"ಸಂಪರ್ಕಿಸಿ",
     "hero-title":"ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ",
-"hero-city":"ಮೈಸೂರು",
-"hero-tagline":"ಸೇವೆ • ಸ್ನೇಹ • ಸಂಸ್ಕೃತಿ",
-"btn-events":"ಕಾರ್ಯಕ್ರಮಗಳು",
-"btn-about":"ನಮ್ಮ ಬಗ್ಗೆ",
+    "hero-city":"ಮೈಸೂರು",
+    "hero-tagline":"ಸೇವೆ • ಸ್ನೇಹ • ಸಂಸ್ಕೃತಿ",
+    "btn-events":"ಕಾರ್ಯಕ್ರಮಗಳು",
+    "btn-about":"ನಮ್ಮ ಬಗ್ಗೆ"
 },
 
 en:{
@@ -52,12 +52,12 @@ en:{
     "nav-team":"AGB Team",
     "nav-gallery":"Gallery",
     "nav-news":"News",
-    "nav-contact":"Contact"
+    "nav-contact":"Contact",
     "hero-title":"AIGIRI GELEYARA BALAGA",
-"hero-city":"Mysuru",
-"hero-tagline":"Service • Friendship • Culture",
-"btn-events":"Upcoming Events",
-"btn-about":"About Us",
+    "hero-city":"Mysuru",
+    "hero-tagline":"Service • Friendship • Culture",
+    "btn-events":"Upcoming Events",
+    "btn-about":"About Us"
 }
 
 };
