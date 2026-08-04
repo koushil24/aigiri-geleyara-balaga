@@ -127,3 +127,14 @@ langBtn.addEventListener("click",()=>{
     changeLanguage(currentLanguage==="kn" ? "en" : "kn");
 
 });
+// Mobile Menu
+
+const menuToggle=document.getElementById("menuToggle");
+
+const navMenu=document.querySelector("nav ul");
+
+menuToggle.addEventListener("click",()=>{
+
+navMenu.classList.toggle("active");
+
+});
