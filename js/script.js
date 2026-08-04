@@ -42,7 +42,7 @@ kn:{
     "hero-city":"ಮೈಸೂರು",
     "hero-tagline":"ಸೇವೆ • ಸ್ನೇಹ • ಸಂಸ್ಕೃತಿ",
     "btn-events":"ಕಾರ್ಯಕ್ರಮಗಳು",
-    "btn-about":"ನಮ್ಮ ಬಗ್ಗೆ"
+    "btn-about":"ನಮ್ಮ ಬಗ್ಗೆ",
     "about-title":"ನಮ್ಮ ಬಗ್ಗೆ",
 "about-text":"ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ, ಮೈಸೂರು ಸ್ನೇಹ, ಸಂಸ್ಕೃತಿ ಮತ್ತು ಸಮಾಜ ಸೇವೆಗೆ ಸಮರ್ಪಿತ ಯುವಕರ ಸಂಘವಾಗಿದೆ.",
 
@@ -75,7 +75,7 @@ en:{
     "hero-city":"Mysuru",
     "hero-tagline":"Service • Friendship • Culture",
     "btn-events":"Upcoming Events",
-    "btn-about":"About Us"
+    "btn-about":"About Us",
     "about-title":"About Us",
 "about-text":"AIGIRI GELEYARA BALAGA, Mysuru is a youth organization dedicated to friendship, culture and community service.",
 
@@ -133,8 +133,8 @@ const menuToggle=document.getElementById("menuToggle");
 
 const navMenu=document.querySelector("nav ul");
 
-menuToggle.addEventListener("click",()=>{
-
-navMenu.classList.toggle("active");
-
-});
+if (menuToggle && navMenu) {
+    menuToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+    });
+}
