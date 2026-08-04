@@ -131,7 +131,7 @@ langBtn.addEventListener("click",()=>{
 
 const menuToggle=document.getElementById("menuToggle");
 
-const navMenu=document.querySelector("nav ul");
+const navMenu=document.querySelector(".nav-links");
 
 if (menuToggle && navMenu) {
     menuToggle.addEventListener("click", () => {
