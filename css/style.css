@@ -72,20 +72,94 @@ header{
     font-weight:bold;
 }
 
-@media(max-width:768px){
+/* ===================================
+   MOBILE RESPONSIVE
+=================================== */
 
-.navbar{
+@media screen and (max-width:768px){
+
+nav{
     flex-direction:column;
+    align-items:center;
+    padding:15px;
 }
 
-.nav-links{
+.logo{
     flex-direction:column;
     text-align:center;
-    margin:20px 0;
+}
+
+.logo img{
+    width:70px;
+    height:70px;
+}
+
+nav ul{
+    flex-direction:column;
+    width:100%;
+    margin-top:15px;
+    gap:12px;
+    text-align:center;
 }
 
 .actions{
-    margin-top:15px;
+    margin-top:20px;
+}
+
+.hero{
+    padding:70px 20px;
+}
+
+.hero h1{
+    font-size:32px;
+}
+
+.hero h2{
+    font-size:20px;
+}
+
+.hero p{
+    font-size:16px;
+}
+
+.hero-buttons{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.hero-buttons a{
+    width:100%;
+    text-align:center;
+}
+
+.team-grid,
+.video-grid{
+    grid-template-columns:1fr;
+}
+
+.team-card{
+    margin:auto;
+    max-width:280px;
+}
+
+.video-card{
+    margin:auto;
+    max-width:320px;
+}
+
+img{
+    max-width:100%;
+    height:auto;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 }
