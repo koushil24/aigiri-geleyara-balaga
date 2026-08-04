@@ -674,3 +674,64 @@ body.dark-mode .team-card{
 body.dark-mode footer{
     background:#111;
 }
+/* =======================
+   Gallery Section
+======================= */
+
+.gallery{
+    padding:70px 20px;
+    text-align:center;
+    background:#faf6ef;
+}
+
+.gallery h2{
+    color:#8B0000;
+    margin-bottom:10px;
+}
+
+.gallery p{
+    color:#555;
+}
+
+.video-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+    margin-top:40px;
+}
+
+.video-card{
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+    transition:0.3s;
+}
+
+.video-card:hover{
+    transform:translateY(-8px);
+}
+
+.video-card h3{
+    color:#8B0000;
+    margin-bottom:15px;
+}
+
+.video-card p{
+    margin-bottom:20px;
+}
+
+.video-card a{
+    display:inline-block;
+    background:#8B0000;
+    color:white;
+    padding:12px 24px;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.video-card a:hover{
+    background:#FFD700;
+    color:#8B0000;
+}
