@@ -43,6 +43,24 @@ kn:{
     "hero-tagline":"ಸೇವೆ • ಸ್ನೇಹ • ಸಂಸ್ಕೃತಿ",
     "btn-events":"ಕಾರ್ಯಕ್ರಮಗಳು",
     "btn-about":"ನಮ್ಮ ಬಗ್ಗೆ"
+    "about-title":"ನಮ್ಮ ಬಗ್ಗೆ",
+"about-text":"ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ, ಮೈಸೂರು ಸ್ನೇಹ, ಸಂಸ್ಕೃತಿ ಮತ್ತು ಸಮಾಜ ಸೇವೆಗೆ ಸಮರ್ಪಿತ ಯುವಕರ ಸಂಘವಾಗಿದೆ.",
+
+"events-title":"✨ ಮುಂಬರುವ ಕಾರ್ಯಕ್ರಮಗಳು ✨",
+"event1-title":"🪔 ಆಷಾಢ ಶುಕ್ರವಾರ ಪೂಜಾ ಮಹೋತ್ಸವ 2026",
+"view-details":"ವಿವರಗಳನ್ನು ನೋಡಿ",
+
+"team-title":"👥 AGB ತಂಡ",
+"team-subtitle":"ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗದ ಸದಸ್ಯರು",
+
+"gallery-title":"📸 ಗ್ಯಾಲರಿ",
+"gallery-subtitle":"ನಮ್ಮ ಕಾರ್ಯಕ್ರಮಗಳ ನೆನಪುಗಳು",
+"gallery-video1":"🪔 ಆಷಾಷ ಪೂಜಾ 2025",
+"gallery-video2":"🐘 ಗಣೇಶೋತ್ಸವ 2025",
+
+"contact-title":"ಸಂಪರ್ಕಿಸಿ",
+
+"footer-text":"© 2026 ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ | ಮೈಸೂರು"
 },
 
 en:{
@@ -58,6 +76,24 @@ en:{
     "hero-tagline":"Service • Friendship • Culture",
     "btn-events":"Upcoming Events",
     "btn-about":"About Us"
+    "about-title":"About Us",
+"about-text":"AIGIRI GELEYARA BALAGA, Mysuru is a youth organization dedicated to friendship, culture and community service.",
+
+"events-title":"✨ Upcoming Events ✨",
+"event1-title":"🪔 Ashada Pooja Mahotsava 2026",
+"view-details":"View Details",
+
+"team-title":"👥 AGB Team",
+"team-subtitle":"Meet the members of AIGIRI GELEYARA BALAGA",
+
+"gallery-title":"📸 Gallery",
+"gallery-subtitle":"Memories from our events",
+"gallery-video1":"🪔 Ashada Pooja 2025",
+"gallery-video2":"🐘 Ganeshotsava 2025",
+
+"contact-title":"Contact Us",
+
+"footer-text":"© 2026 AIGIRI GELEYARA BALAGA | Mysuru"
 }
 
 };
