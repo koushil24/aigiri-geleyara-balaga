@@ -566,3 +566,33 @@ color:#FFD700;
 100%{transform:translateY(0px);}
 
 }
+.event-card{
+    background:#4d0000;
+    border:2px solid gold;
+    border-radius:18px;
+    padding:20px;
+    max-width:700px;
+    margin:30px auto;
+    text-align:center;
+}
+
+.event-card h3{
+    color:#ffd700;
+    margin-bottom:15px;
+}
+
+.event-card p{
+    color:white;
+    margin:10px 0;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:20px;
+    padding:12px 28px;
+    background:#ffd700;
+    color:#5a0000;
+    text-decoration:none;
+    border-radius:30px;
+    font-weight:bold;
+}
