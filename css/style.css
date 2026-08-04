@@ -12,3 +12,80 @@ header{
     background:#8B0000;
     padding:20px;
 }
+/* ===== NAVIGATION ===== */
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#6d0f0f;
+    padding:15px 30px;
+    flex-wrap:wrap;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo img{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+}
+
+.logo h2{
+    color:#FFD700;
+    margin:0;
+    font-size:22px;
+}
+
+.logo small{
+    color:white;
+}
+
+.nav-links{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.nav-links a:hover{
+    color:#FFD700;
+}
+
+.actions button{
+    margin-left:10px;
+    padding:10px 18px;
+    border:none;
+    border-radius:25px;
+    cursor:pointer;
+    background:#FFD700;
+    color:#6d0f0f;
+    font-weight:bold;
+}
+
+@media(max-width:768px){
+
+.navbar{
+    flex-direction:column;
+}
+
+.nav-links{
+    flex-direction:column;
+    text-align:center;
+    margin:20px 0;
+}
+
+.actions{
+    margin-top:15px;
+}
+
+}
