@@ -1245,3 +1245,10 @@ color:white;
 color:#FFD700;
 
 }
+.section-title{
+    text-align: center;
+    font-size: 32px;
+    color: #FFD700;
+    margin: 40px 0 25px;
+    font-weight: bold;
+}
