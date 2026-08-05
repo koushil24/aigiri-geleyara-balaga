@@ -358,3 +358,32 @@ dot.classList.toggle("active",i===galleryIndex);
 });
 
 }
+/* ===== Full Screen Gallery ===== */
+
+const imageViewer=document.getElementById("imageViewer");
+
+const fullImage=document.getElementById("fullImage");
+
+sliderImage.onclick=()=>{
+
+fullImage.src=sliderImage.src;
+
+imageViewer.style.display="flex";
+
+};
+
+document.getElementById("closeViewer").onclick=()=>{
+
+imageViewer.style.display="none";
+
+};
+
+imageViewer.onclick=(e)=>{
+
+if(e.target===imageViewer){
+
+imageViewer.style.display="none";
+
+}
+
+};
