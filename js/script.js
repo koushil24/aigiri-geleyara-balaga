@@ -245,3 +245,45 @@ document.getElementById("loader").style.display="none";
 },1800);
 
 });
+/* ==========================
+   GALLERY IMAGE SLIDER
+========================== */
+
+const galleryImages = [
+"images/gallery-slider/photo1.jpg",
+"images/gallery-slider/photo2.jpg",
+"images/gallery-slider/photo3.jpg",
+"images/gallery-slider/photo4.jpg",
+"images/gallery-slider/photo5.jpg",
+"images/gallery-slider/photo6.jpg",
+"images/gallery-slider/photo7.jpg",
+"images/gallery-slider/photo8.jpg"
+];
+
+let galleryIndex = 0;
+
+const sliderImage = document.getElementById("sliderImage");
+
+if(sliderImage){
+
+setInterval(()=>{
+
+galleryIndex++;
+
+if(galleryIndex>=galleryImages.length){
+galleryIndex=0;
+}
+
+sliderImage.style.opacity=0;
+
+setTimeout(()=>{
+
+sliderImage.src=galleryImages[galleryIndex];
+
+sliderImage.style.opacity=1;
+
+},300);
+
+},4000);
+
+}
