@@ -1252,3 +1252,31 @@ color:#FFD700;
     margin: 40px 0 25px;
     font-weight: bold;
 }
+/* ==========================
+   GALLERY SLIDER
+========================== */
+
+.gallery-slider{
+    background:#111;
+    padding:25px 15px;
+    text-align:center;
+}
+
+.gallery-slider h2{
+    color:#FFD700;
+    margin-bottom:20px;
+    font-size:26px;
+}
+
+.slider{
+    max-width:900px;
+    margin:auto;
+}
+
+.slider img{
+    width:100%;
+    border-radius:18px;
+    border:3px solid #FFD700;
+    box-shadow:0 0 25px rgba(255,215,0,.35);
+    transition:.6s;
+}
