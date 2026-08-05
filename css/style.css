@@ -1372,3 +1372,40 @@ left:15px;
 right:15px;
 
 }
+/* ===== Slider Dots ===== */
+
+.slider-dots{
+
+display:flex;
+
+justify-content:center;
+
+gap:10px;
+
+margin-top:15px;
+
+}
+
+.slider-dots span{
+
+width:12px;
+
+height:12px;
+
+border-radius:50%;
+
+background:#777;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.slider-dots span.active{
+
+background:#FFD700;
+
+transform:scale(1.3);
+
+}
