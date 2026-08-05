@@ -209,3 +209,22 @@ behavior:"smooth"
 });
 
 });
+// ===== Random Team Shuffle =====
+
+const teamGrid = document.querySelector(".team-grid");
+
+if(teamGrid){
+
+const cards = Array.from(teamGrid.children);
+
+for(let i = cards.length - 1; i > 0; i--){
+
+const j = Math.floor(Math.random() * (i + 1));
+
+[cards[i], cards[j]] = [cards[j], cards[i]];
+
+}
+
+cards.forEach(card => teamGrid.appendChild(card));
+
+}
