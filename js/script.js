@@ -314,3 +314,42 @@ galleryIndex=0;
 sliderImage.src=galleryImages[galleryIndex];
 
 };
+/* ===== Gallery Dots ===== */
+
+const dotsContainer = document.getElementById("sliderDots");
+
+if(dotsContainer){
+
+galleryImages.forEach((img,index)=>{
+
+const dot=document.createElement("span");
+
+if(index===0) dot.classList.add("active");
+
+dot.onclick=()=>{
+
+galleryIndex=index;
+
+sliderImage.src=galleryImages[index];
+
+updateDots();
+
+};
+
+dotsContainer.appendChild(dot);
+
+});
+
+}
+
+function updateDots(){
+
+const dots=document.querySelectorAll("#sliderDots span");
+
+dots.forEach((dot,i)=>{
+
+dot.classList.toggle("active",i===galleryIndex);
+
+});
+
+}
