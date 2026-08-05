@@ -21,6 +21,14 @@ header{
     background:#6d0f0f;
     padding:15px 30px;
     flex-wrap:wrap;
+
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    box-shadow:0 2px 12px rgba(0,0,0,0.25);
+
+    transition:all .3s ease;
 }
 
 .logo{
@@ -987,4 +995,8 @@ height:auto;
 
 }
 
+}
+.navbar.scrolled{
+    padding:10px 30px;
+    box-shadow:0 6px 20px rgba(0,0,0,.35);
 }
