@@ -1156,3 +1156,92 @@ transform:scale(1.08);
 }
 
 }
+/* ======================
+   SPONSOR
+====================== */
+
+.sponsor{
+
+padding:80px 20px;
+
+text-align:center;
+
+}
+
+.section-subtitle{
+
+max-width:700px;
+
+margin:15px auto 40px;
+
+font-size:18px;
+
+}
+
+.sponsor-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+gap:25px;
+
+margin-top:40px;
+
+}
+
+.sponsor-card{
+
+background:white;
+
+padding:30px;
+
+border-radius:18px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.15);
+
+transition:.3s;
+
+}
+
+.sponsor-card:hover{
+
+transform:translateY(-8px);
+
+}
+
+.sponsor-card h3{
+
+color:#6d0f0f;
+
+margin-bottom:15px;
+
+}
+
+.sponsor-contact{
+
+margin-top:50px;
+
+}
+
+.sponsor-contact a{
+
+margin:10px;
+
+display:inline-block;
+
+}
+
+.dark-mode .sponsor-card{
+
+background:#222;
+
+color:white;
+
+}
+
+.dark-mode .sponsor-card h3{
+
+color:#FFD700;
+
+}
