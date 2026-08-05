@@ -282,6 +282,8 @@ sliderImage.src=galleryImages[galleryIndex];
 
 sliderImage.style.opacity=1;
 
+updateDots();   // ← Add this line
+
 },300);
 
 },4000);
@@ -299,8 +301,9 @@ galleryIndex=galleryImages.length-1;
 
 sliderImage.src=galleryImages[galleryIndex];
 
-};
+updateDots();
 
+};
 document.getElementById("nextSlide").onclick=()=>{
 
 galleryIndex++;
@@ -312,6 +315,8 @@ galleryIndex=0;
 }
 
 sliderImage.src=galleryImages[galleryIndex];
+
+updateDots();
 
 };
 /* ===== Gallery Dots ===== */
