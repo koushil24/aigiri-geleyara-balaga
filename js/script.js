@@ -127,14 +127,39 @@ langBtn.addEventListener("click",()=>{
     changeLanguage(currentLanguage==="kn" ? "en" : "kn");
 
 });
-// Mobile Menu
+// ===== Mobile Menu =====
 
-const menuToggle=document.getElementById("menuToggle");
+const menuToggle = document.getElementById("menuToggle");
+const navMenu = document.querySelector(".nav-links");
 
-const navMenu=document.querySelector(".nav-links");
+if(menuToggle && navMenu){
 
-if (menuToggle && navMenu) {
-    menuToggle.addEventListener("click", () => {
-        navMenu.classList.toggle("active");
-    });
+menuToggle.addEventListener("click",()=>{
+
+navMenu.classList.toggle("active");
+
+if(navMenu.classList.contains("active")){
+
+menuToggle.innerHTML="✖";
+
+}else{
+
+menuToggle.innerHTML="☰";
+
+}
+
+});
+
+document.querySelectorAll(".nav-links a").forEach(link=>{
+
+link.addEventListener("click",()=>{
+
+navMenu.classList.remove("active");
+
+menuToggle.innerHTML="☰";
+
+});
+
+});
+
 }
