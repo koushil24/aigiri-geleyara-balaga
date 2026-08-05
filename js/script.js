@@ -228,3 +228,20 @@ const j = Math.floor(Math.random() * (i + 1));
 cards.forEach(card => teamGrid.appendChild(card));
 
 }
+// ===== Loader =====
+
+window.addEventListener("load",()=>{
+
+setTimeout(()=>{
+
+document.getElementById("loader").style.opacity="0";
+
+setTimeout(()=>{
+
+document.getElementById("loader").style.display="none";
+
+},600);
+
+},1800);
+
+});
