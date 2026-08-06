@@ -1663,3 +1663,19 @@ border:.5px solid rgba(255,255,255,.2);
 background:#111;
 
 }
+/* Visitor Counter */
+
+.visitor-counter{
+    margin:25px 0;
+}
+
+.visitor-counter h3{
+    color:#FFD700;
+    margin-bottom:10px;
+}
+
+.visitor-counter p{
+    font-size:26px;
+    font-weight:bold;
+    color:white;
+}
