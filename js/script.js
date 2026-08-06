@@ -387,10 +387,3 @@ imageViewer.style.display="none";
 }
 
 };
-// ===== Visitor Counter =====
-
-fetch("https://api.countapi.xyz/hit/aigiri-geleyara-balaga/website")
-.then(response => response.json())
-.then(data => {
-    document.getElementById("visitorCount").innerText = data.value;
-});
