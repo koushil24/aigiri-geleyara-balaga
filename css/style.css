@@ -1584,3 +1584,82 @@ color:#FFD700;
 color:#ddd;
 
 }
+/* ==========================
+   FOOTER
+========================== */
+
+.footer{
+
+background:#5b0d0d;
+
+color:white;
+
+text-align:center;
+
+padding:50px 20px;
+
+margin-top:60px;
+
+}
+
+.footer-logo{
+
+width:90px;
+
+margin-bottom:15px;
+
+}
+
+.footer h2{
+
+color:#FFD700;
+
+margin-bottom:15px;
+
+}
+
+.footer p{
+
+margin:10px 0;
+
+}
+
+.footer-links{
+
+display:flex;
+
+justify-content:center;
+
+gap:25px;
+
+margin:20px 0;
+
+flex-wrap:wrap;
+
+}
+
+.footer-links a{
+
+color:#FFD700;
+
+text-decoration:none;
+
+font-weight:bold;
+
+}
+
+.footer hr{
+
+margin:25px auto;
+
+width:80%;
+
+border:.5px solid rgba(255,255,255,.2);
+
+}
+
+.dark-mode .footer{
+
+background:#111;
+
+}
