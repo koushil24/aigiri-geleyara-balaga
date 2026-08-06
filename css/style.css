@@ -1475,3 +1475,112 @@ body.light-mode footer{
     background:#ffffff !important;
     color:#222 !important;
 }
+/* ==========================
+   CONTACT SECTION
+========================== */
+
+.contact{
+
+padding:80px 20px;
+
+text-align:center;
+
+}
+
+.contact-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+gap:25px;
+
+margin-top:40px;
+
+}
+
+.contact-card{
+
+background:#ffffff;
+
+padding:30px;
+
+border-radius:20px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.15);
+
+transition:.3s;
+
+}
+
+.contact-card:hover{
+
+transform:translateY(-8px);
+
+}
+
+.contact-card h3{
+
+color:#6d0f0f;
+
+margin-bottom:15px;
+
+}
+
+.contact-card p{
+
+color:#555;
+
+margin-bottom:20px;
+
+}
+
+.contact-card .btn{
+
+display:inline-block;
+
+padding:10px 20px;
+
+background:#FFD700;
+
+color:#6d0f0f;
+
+border-radius:30px;
+
+text-decoration:none;
+
+font-weight:bold;
+
+transition:.3s;
+
+}
+
+.contact-card .btn:hover{
+
+background:#6d0f0f;
+
+color:#FFD700;
+
+}
+
+/* Dark Mode */
+
+.dark-mode .contact-card{
+
+background:#222;
+
+color:#fff;
+
+}
+
+.dark-mode .contact-card h3{
+
+color:#FFD700;
+
+}
+
+.dark-mode .contact-card p{
+
+color:#ddd;
+
+}
