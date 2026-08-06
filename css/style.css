@@ -1459,3 +1459,35 @@ cursor:pointer;
 font-weight:bold;
 
 }
+/* ===============================
+   LIGHT / DARK MODE FIX
+================================= */
+
+body.light-mode{
+    background:#f8f8f8;
+    color:#222;
+}
+
+body.light-mode p,
+body.light-mode span,
+body.light-mode small,
+body.light-mode li{
+    color:#222 !important;
+}
+
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode h4{
+    color:#8B0000 !important;
+}
+
+body.light-mode .card,
+body.light-mode .about,
+body.light-mode .team-card,
+body.light-mode .gallery,
+body.light-mode .sponsor-card,
+body.light-mode footer{
+    background:#ffffff !important;
+    color:#222 !important;
+}
