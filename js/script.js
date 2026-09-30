@@ -40,7 +40,9 @@ const translations = {
         "gallery-title": "📸 ಗ್ಯಾಲರಿ",
         "gallery-subtitle": "ನಮ್ಮ ಕಾರ್ಯಕ್ರಮಗಳ ನೆನಪುಗಳು",
         "gallery-video1": "🪔 ಆಷಾಢ ಪೂಜಾ 2025",
-        "gallery-video2": "🐘 ಗಣೇಶೋತ್ಸವ 2025"
+        "gallery-video2": "🐘 ಗಣೇಶೋತ್ಸವ 2025",
+        "gallery-video3": "🪔 ಆಷಾಢ ಪೂಜಾ 2026",
+        "gallery-video4": "🐘 ಗಣೇಶೋತ್ಸವ 2026"
     },
     en: {
         "nav-home": "Home",
@@ -62,7 +64,9 @@ const translations = {
         "gallery-title": "📸 Gallery",
         "gallery-subtitle": "Memories from our events",
         "gallery-video1": "🪔 Ashada Pooja 2025",
-        "gallery-video2": "🐘 Ganeshotsava 2025"
+        "gallery-video2": "🐘 Ganeshotsava 2025",
+        "gallery-video3": "🪔 Ashada Pooja 2026",
+        "gallery-video4": "🐘 Ganeshotsava 2026"
     }
 };
 
