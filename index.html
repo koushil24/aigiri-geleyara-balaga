@@ -1,487 +1,383 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kn">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow">
 <meta name="author" content="Koushil R Gowda">
 <meta name="copyright" content="AIGIRI GELEYARA BALAGA, Mysuru">
 <meta name="description" content="Official website of AIGIRI GELEYARA BALAGA, Mysuru.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ, ಮೈಸೂರು</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ, ಮೈಸೂರು</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#6d0f0f">
-    <link rel="icon" type="image/png" href="images/icon-192.png">
+<link rel="icon" type="image/png" href="images/icon-192.png">
 <link rel="apple-touch-icon" href="images/icon-192.png">
 </head>
 <body>
 
 <!-- ===== Loader ===== -->
 <div id="loader">
-    <img src="images/logo.png" alt="AGB Logo">
-    <h1>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ</h1>
-    <h2>AIGIRI GELEYARA BALAGA</h2>
-    <div class="loader-spinner"></div>
-    <p>Loading...</p>
+<img src="images/logo.png" alt="AGB Logo">
+<h1>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ</h1>
+<h2>AIGIRI GELEYARA BALAGA</h2>
+<div class="loader-spinner"></div>
+<p>Loading...</p>
 </div>
+
+<!-- ===== Header ===== -->
 <header>
-    <nav class="navbar">
-        <div class="logo">
-            <img src="images/logo.png" alt="Logo">
-            <div>
-                <h2>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ, ಮೈಸೂರು</h2>
-                <small>AIGIRI GELEYARA BALAGA, Mysuru</small>
-            </div>
-        </div>
-<button class="menu-toggle" id="menuToggle">
-☰
-</button>
-        <ul class="nav-links">
-            <li><a href="#home" id="nav-home">ಮುಖಪುಟ</a></li>
-<li><a href="#about" id="nav-about">ನಮ್ಮ ಬಗ್ಗೆ</a></li>
-<li><a href="#events" id="nav-events">ಕಾರ್ಯಕ್ರಮಗಳು</a></li>
-<li><a href="#team" id="nav-team">AGB ತಂಡ</a></li>
-<li><a href="#gallery" id="nav-gallery">ಗ್ಯಾಲರಿ</a></li>
-<li><a href="#contact" id="nav-contact">ಸಂಪರ್ಕಿಸಿ</a></li>
-        </ul>
-        <div class="actions">
-            <button id="langBtn">🌐 English</button>
-            <button id="themeBtn">🌙</button>
-        </div>
-    </nav>
+<nav class="navbar">
+<div class="logo">
+<img src="images/logo.png" alt="Logo" width="52" height="52">
+<div>
+<h2>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ, ಮೈಸೂರು</h2>
+<small>AIGIRI GELEYARA BALAGA, Mysuru</small>
+</div>
+</div>
+<button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+<ul class="nav-links">
+<li><a href="#home" data-i18n="nav-home">Home</a></li>
+<li><a href="#about" data-i18n="nav-about">About</a></li>
+<li><a href="#events" data-i18n="nav-events">Events</a></li>
+<li><a href="#team" data-i18n="nav-team">AGB Team</a></li>
+<li><a href="#gallery" data-i18n="nav-gallery">Gallery</a></li>
+<li><a href="#sponsor" data-i18n="nav-sponsor">Support</a></li>
+<li><a href="#contact" data-i18n="nav-contact">Contact</a></li>
+</ul>
+<div class="actions">
+<button id="langBtn">🌐 English</button>
+<button id="themeBtn">🌙</button>
+</div>
+</nav>
 </header>
 
-<!-- =========================
-GANESHOTSAVA 2025 SLIDER
-========================= -->
-
+<!-- ===== Photo slider ===== -->
 <section class="gallery-slider">
 <div class="slider">
-<button id="prevSlide" class="slide-btn">❮</button>
-<img id="sliderImage"
-src="images/gallery-slider/photo1.jpg"
-alt="Ganeshotsava 2025"
-style="cursor:pointer;">
-<button id="nextSlide" class="slide-btn">❯</button>
+<button id="prevSlide" class="slide-btn" aria-label="Previous">❮</button>
+<img id="sliderImage" src="images/gallery-slider/photo1.jpg" alt="Ganeshotsava 2025">
+<button id="nextSlide" class="slide-btn" aria-label="Next">❯</button>
 <div class="slider-overlay">
-<h2>Ganeshotsava 2025</h2>
-<p>Memories of Unity • Devotion • Friendship</p>
+<h2 data-i18n="slide-title">Ganeshotsava 2025</h2>
+<p data-i18n="slide-sub">Memories of Unity • Devotion • Friendship</p>
 </div>
 </div>
 <div class="slider-dots" id="sliderDots"></div>
 </section>
 
-    <!-- Full Screen Gallery Viewer -->
 <div id="imageViewer" class="image-viewer">
 <span id="closeViewer">&times;</span>
 <img id="fullImage" src="" alt="Full Image">
 </div>
 
+<!-- ===== Hero ===== -->
 <section id="home" class="hero">
-
-    <!-- Watermark Logo -->
-    <img src="images/logo.png" class="hero-watermark" alt="AIGIRI Logo">
-    <div class="hero-content">
-        <img src="images/logo.png" class="hero-logo" alt="Logo">
-        <h1 id="hero-title">ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ</h1>
-        <h2 id="hero-city">ಮೈಸೂರು</h2>
-        <p id="hero-tagline">ಸೇವೆ • ಸ್ನೇಹ • ಸಂಸ್ಕೃತಿ</p>
-        <div class="hero-buttons">
-            <a href="#events" class="btn-primary" id="btn-events">
-    ಕಾರ್ಯಕ್ರಮಗಳು
-</a>
-        </div>
-        <div class="social-coming">
-            <h3>Connect With Us</h3>
-            <a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ=="
-target="_blank">
-                📷 Instagram
-                <small>Follow us on Instagram</small>
-            </a>
-            <a href="https://www.threads.com/@aigiri2025"
-   target="_blank">
-    🧵 Threads
-    <small>Official Page</small>
-            </a>
-        </div>
-    </div>
+<img src="images/logo.png" class="hero-watermark" alt="">
+<div class="hero-content">
+<img src="images/logo.png" class="hero-logo" alt="AGB Logo">
+<h1 data-i18n="hero-title">AIGIRI GELEYARA BALAGA</h1>
+<h2 data-i18n="hero-city">Mysuru</h2>
+<p data-i18n="hero-tagline">Service • Friendship • Culture</p>
+<a href="#events" class="btn" data-i18n="btn-events">Upcoming Events</a>
+<div class="social-coming">
+<h3 data-i18n="connect">Connect With Us</h3>
+<div class="social-links">
+<a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" rel="noopener">📷 Instagram<small data-i18n="insta-follow">Follow us on Instagram</small></a>
+<a href="https://www.threads.com/@aigiri2025" target="_blank" rel="noopener">🧵 Threads<small data-i18n="threads-official">Official Page</small></a>
+</div>
+</div>
+</div>
 </section>
 
-    <section id="events" class="events">
+<!-- ===== About ===== -->
+<section id="about" class="section alt">
+<div class="wrap">
+<h2 class="section-title" data-i18n="about-title">About AIGIRI GELEYARA BALAGA</h2>
+<div class="about-text">
+<h3 data-i18n="about-sub">Serving Society Through Friendship, Culture &amp; Unity</h3>
+<p data-i18n="about-p1"><strong>AIGIRI GELEYARA BALAGA (AGB), Mysuru</strong> is a youth community organization established in <strong>2025</strong> with the vision of bringing people together through friendship, culture, spirituality, and social service.</p>
+<p data-i18n="about-p2">Since its inception, AGB has been actively organizing religious celebrations, cultural events, social activities, and community service initiatives that strengthen unity and promote positive values among youth and society.</p>
+<p data-i18n="about-p3">Our flagship celebrations include <strong>Ganeshotsava</strong>, <strong>Ashada Shukravara Pooja Mahotsava</strong>, and various future initiatives dedicated to serving society, preserving traditions, and encouraging volunteerism.</p>
+<p data-i18n="about-p4">We believe that true friendship becomes meaningful when it inspires service, respect, leadership, and collective responsibility. Every member of AGB contributes towards building a stronger, united, and compassionate community.</p>
+<div class="motto">
+<p data-i18n="motto-title"><strong>Our Motto:</strong></p>
+<p data-i18n="motto-1">🟡 Service • Friendship • Culture</p>
+<p data-i18n="motto-2">🙏 Together We Grow, Together We Serve.</p>
+</div>
+</div>
+</div>
+</section>
 
-<h2 class="section-title" id="upcoming-title">✨ Upcoming Events ✨</h2>
-
-<div class="countdown-grid">
-
+<!-- ===== Events ===== -->
+<section id="events" class="section">
+<div class="wrap">
+<h2 class="section-title" data-i18n="upcoming-title">✨ Upcoming Events ✨</h2>
+<div class="cards two">
 <div class="event-card countdown-card" data-date="2027-07-30T00:00:00">
-<h3>🪔 ಆಷಾಢ ಶುಕ್ರವಾರ ಪೂಜಾ ಮಹೋತ್ಸವ 2027</h3>
-<p class="event-sub">Ashada Pooja Mahotsava 2027</p>
-<p>📅 30 July 2027</p>
+<h3><span data-i18n="t-ashada">🪔 Ashada Pooja Mahotsava</span> 2027</h3>
+<p data-i18n="d-ashada27">📅 30 July 2027</p>
 <div class="countdown">
-<div><span class="cd-days">0</span><small>ದಿನ · Days</small></div>
-<div><span class="cd-hours">0</span><small>ಗಂಟೆ · Hours</small></div>
-<div><span class="cd-mins">0</span><small>ನಿಮಿಷ · Min</small></div>
-<div><span class="cd-secs">0</span><small>ಸೆಕೆಂಡ್ · Sec</small></div>
+<div><span class="cd-days">0</span><small data-i18n="cd-days">Days</small></div>
+<div><span class="cd-hours">0</span><small data-i18n="cd-hours">Hours</small></div>
+<div><span class="cd-mins">0</span><small data-i18n="cd-mins">Min</small></div>
+<div><span class="cd-secs">0</span><small data-i18n="cd-secs">Sec</small></div>
 </div>
 </div>
-
 <div class="event-card countdown-card" data-date="2027-09-04T00:00:00">
-<h3>🐘 ಗಣೇಶೋತ್ಸವ 2027</h3>
-<p class="event-sub">Ganeshotsava 2027</p>
-<p>📅 04 September 2027</p>
+<h3><span data-i18n="t-ganesh">🐘 Ganeshotsava</span> 2027</h3>
+<p data-i18n="d-ganesh27">📅 04 September 2027</p>
 <div class="countdown">
-<div><span class="cd-days">0</span><small>ದಿನ · Days</small></div>
-<div><span class="cd-hours">0</span><small>ಗಂಟೆ · Hours</small></div>
-<div><span class="cd-mins">0</span><small>ನಿಮಿಷ · Min</small></div>
-<div><span class="cd-secs">0</span><small>ಸೆಕೆಂಡ್ · Sec</small></div>
+<div><span class="cd-days">0</span><small data-i18n="cd-days">Days</small></div>
+<div><span class="cd-hours">0</span><small data-i18n="cd-hours">Hours</small></div>
+<div><span class="cd-mins">0</span><small data-i18n="cd-mins">Min</small></div>
+<div><span class="cd-secs">0</span><small data-i18n="cd-secs">Sec</small></div>
 </div>
 </div>
-
 </div>
-
-<h2 class="section-title" id="past-title">🕰️ Past Events</h2>
-
-<div class="past-grid">
-
+<h2 class="section-title event-sub-title" data-i18n="past-title">🕰️ Past Events</h2>
+<div class="cards two">
 <div class="event-card">
-<h3>🪔 ಆಷಾಢ ಶುಕ್ರವಾರ ಪೂಜಾ ಮಹೋತ್ಸವ 2025</h3>
-<p class="event-sub">Ashada Pooja Mahotsava 2025</p>
-<a href="https://www.instagram.com/reel/DPC3tYskmFy/?igsh=MTkzZGs1MW9qZ2EzaA==" target="_blank" class="btn">▶ Watch on Instagram</a>
+<h3><span data-i18n="t-ashada">🪔 Ashada Pooja Mahotsava</span> 2025</h3>
+<a href="https://www.instagram.com/reel/DPC3tYskmFy/?igsh=MTkzZGs1MW9qZ2EzaA==" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
 </div>
-
 <div class="event-card">
-<h3>🐘 ಗಣೇಶೋತ್ಸವ 2025</h3>
-<p class="event-sub">Ganeshotsava 2025</p>
-<a href="https://www.instagram.com/reel/DN8gSypiRLA/?igsh=dmU1NnNwOHFoaWNv" target="_blank" class="btn">▶ Watch on Instagram</a>
+<h3><span data-i18n="t-ganesh">🐘 Ganeshotsava</span> 2025</h3>
+<a href="https://www.instagram.com/reel/DN8gSypiRLA/?igsh=dmU1NnNwOHFoaWNv" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
 </div>
-
 <div class="event-card">
-<h3>🪔 ಆಷಾಢ ಶುಕ್ರವಾರ ಪೂಜಾ ಮಹೋತ್ಸವ 2026</h3>
-<p class="event-sub">Ashada Pooja Mahotsava 2026</p>
-<a href="https://www.instagram.com/reel/DcJg-cJxuG5/?stkn=bm42NjNkZDg2bndz" target="_blank" class="btn">▶ Watch on Instagram</a>
+<h3><span data-i18n="t-ashada">🪔 Ashada Pooja Mahotsava</span> 2026</h3>
+<a href="https://www.instagram.com/reel/DcJg-cJxuG5/?stkn=bm42NjNkZDg2bndz" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
 </div>
-
 <div class="event-card">
-<h3>🐘 ಗಣೇಶೋತ್ಸವ 2026</h3>
-<p class="event-sub">Ganeshotsava 2026</p>
-<a href="https://www.instagram.com/reel/DddP9tUpsAl/?stkn=MXJiZWRmaHQyaDB5ag==" target="_blank" class="btn">▶ Watch on Instagram</a>
-</div>
-
-</div>
-
-</section>
-
-<section id="sponsor" class="sponsor">
-<h2 class="section-title">🤝 Support AIGIRI GELEYARA BALAGA</h2>
-<p class="section-subtitle">
-We welcome individuals, businesses and well-wishers who wish to support our cultural, religious and community service activities. Every contribution through volunteering, materials or event support helps us serve society better.
-</p>
-<div class="sponsor-grid">
-<div class="sponsor-card">
-<h3>🎉 Event Support</h3>
-<p>
-Support the successful organization of our cultural and community events.
-</p>
-</div>
-<div class="sponsor-card">
-<h3>🍛 Annadanam Support</h3>
-<p>
-Support prasada and food distribution during our religious and community events.
-</p>
-</div>
-<div class="sponsor-card">
-<h3>🎵 Sound & Stage Support</h3>
-<p>
-Support sound systems, lighting, stage setup and event arrangements.
-</p>
-</div>
-<div class="sponsor-card">
-<h3>🎁 Material Support</h3>
-<p>
-Support flowers, decorations, pooja items, drinking water, chairs and other event materials.
-</p>
-</div>
-<div class="sponsor-card">
-<h3>🙋 Volunteer</h3>
-<p>
-Join AIGIRI GELEYARA BALAGA as a volunteer and help us serve the community with dedication.
-</p>
+<h3><span data-i18n="t-ganesh">🐘 Ganeshotsava</span> 2026</h3>
+<a href="https://www.instagram.com/reel/DddP9tUpsAl/?stkn=MXJiZWRmaHQyaDB5ag==" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
 </div>
 </div>
-<div class="sponsor-contact">
-<h3>Interested in Supporting Our Activities?</h3>
-<a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" class="btn-primary">
-📷 Contact on Instagram
-</a>
-<a href="https://www.threads.com/@aigiri2025" target="_blank" class="btn-primary">
-🧵 Contact on Threads
-</a>
 </div>
 </section>
 
-<section id="about" class="about">
-<div class="container">
-<h2 id="about-title">About AIGIRI GELEYARA BALAGA</h2>
-<h3>Serving Society Through Friendship, Culture & Unity</h3>
-<p id="about-text">
-<strong>AIGIRI GELEYARA BALAGA (AGB), Mysuru</strong> is a youth community organization established in <strong>2025</strong> with the vision of bringing people together through friendship, culture, spirituality, and social service.
-</p>
-<p>
-Since its inception, AGB has been actively organizing religious celebrations, cultural events, social activities, and community service initiatives that strengthen unity and promote positive values among youth and society.
-</p>
-<p>
-Our flagship celebrations include <strong>Ganeshotsava</strong>, <strong>Ashada Shukravara Pooja Mahotsava</strong>, and various future initiatives dedicated to serving society, preserving traditions, and encouraging volunteerism.
-</p>
-<p>
-We believe that true friendship becomes meaningful when it inspires service, respect, leadership, and collective responsibility. Every member of AGB contributes towards building a stronger, united, and compassionate community.
-</p>
-<p>
-<strong>Our Motto:</strong><br>
-🟡 Service • Friendship • Culture<br>
-🙏 Together We Grow, Together We Serve.
-</p>
-</div>
-</section>
-
-<section id="team" class="team">
-<h2 id="team-title">
-👥 AGB ತಂಡ
-</h2>
-<p id="team-subtitle">
-ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗದ ಸದಸ್ಯರು
-</p>
+<!-- ===== Team ===== -->
+<section id="team" class="section alt">
+<div class="wrap">
+<h2 class="section-title" data-i18n="team-title">👥 AGB Team</h2>
+<p class="section-sub" data-i18n="team-subtitle">Meet the members of AIGIRI GELEYARA BALAGA</p>
 <div class="team-grid">
 <div class="team-card">
-<img src="images/team/member1.jpg" alt="Abhishek S" loading="lazy">
+<img src="images/team/member1.jpg" alt="Abhishek S" width="120" height="120" loading="lazy">
 <h3>Abhishek S</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member2.jpg" alt="Sourav sumanth" loading="lazy">
+<img src="images/team/member2.jpg" alt="Sourav sumanth" width="120" height="120" loading="lazy">
 <h3>Sourav sumanth</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member3.jpg" alt="suni" loading="lazy">
+<img src="images/team/member3.jpg" alt="suni" width="120" height="120" loading="lazy">
 <h3>suni</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member4.jpg" alt="Hemanth" loading="lazy">
+<img src="images/team/member4.jpg" alt="Hemanth" width="120" height="120" loading="lazy">
 <h3>Hemanth</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member5.jpg" alt="chandan" loading="lazy">
+<img src="images/team/member5.jpg" alt="chandan" width="120" height="120" loading="lazy">
 <h3>chandan</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member6.jpg" alt="Rakesh" loading="lazy">
+<img src="images/team/member6.jpg" alt="Rakesh" width="120" height="120" loading="lazy">
 <h3>Rakesh</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member7.jpg" alt="Amruth" loading="lazy">
+<img src="images/team/member7.jpg" alt="Amruth" width="120" height="120" loading="lazy">
 <h3>Amruth</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member8.jpg" alt="Ramesh" loading="lazy">
+<img src="images/team/member8.jpg" alt="Ramesh" width="120" height="120" loading="lazy">
 <h3>Ramesh</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member9.jpg" alt="preethu" loading="lazy">
+<img src="images/team/member9.jpg" alt="preethu" width="120" height="120" loading="lazy">
 <h3>preethu</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member10.jpg" alt="Koushil" loading="lazy">
+<img src="images/team/member10.jpg" alt="Koushil" width="120" height="120" loading="lazy">
 <h3>Koushil</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member11.jpg" alt="Sunil B" loading="lazy">
+<img src="images/team/member11.jpg" alt="Sunil B" width="120" height="120" loading="lazy">
 <h3>Sunil B</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member12.jpg" alt="Kishan" loading="lazy">
+<img src="images/team/member12.jpg" alt="Kishan" width="120" height="120" loading="lazy">
 <h3>Kishan</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member13.jpg" alt="Pawan boregowda" loading="lazy">
+<img src="images/team/member13.jpg" alt="Pawan boregowda" width="120" height="120" loading="lazy">
 <h3>Pawan boregowda</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member14.jpg" alt="Akhilesh" loading="lazy">
+<img src="images/team/member14.jpg" alt="Akhilesh" width="120" height="120" loading="lazy">
 <h3>Akhilesh</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member15.jpg" alt="Yashwant" loading="lazy">
+<img src="images/team/member15.jpg" alt="Yashwant" width="120" height="120" loading="lazy">
 <h3>Yashwant</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member16.jpg" alt="Dhanush" loading="lazy">
+<img src="images/team/member16.jpg" alt="Dhanush" width="120" height="120" loading="lazy">
 <h3>Dhanush</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member17.jpg" alt="Nithish" loading="lazy">
+<img src="images/team/member17.jpg" alt="Nithish" width="120" height="120" loading="lazy">
 <h3>Nithish</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member18.jpg" alt="sunil Dio" loading="lazy">
+<img src="images/team/member18.jpg" alt="sunil Dio" width="120" height="120" loading="lazy">
 <h3>sunil Dio</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member19.jpg" alt="Ravi Nayak" loading="lazy">
+<img src="images/team/member19.jpg" alt="Ravi Nayak" width="120" height="120" loading="lazy">
 <h3>Ravi Nayak</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member20.jpg" alt="Rohan" loading="lazy">
+<img src="images/team/member20.jpg" alt="Rohan" width="120" height="120" loading="lazy">
 <h3>Rohan</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member21.jpg" alt="Nuthan" loading="lazy">
+<img src="images/team/member21.jpg" alt="Nuthan" width="120" height="120" loading="lazy">
 <h3>Nuthan</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member22.jpg" alt="Yogesh" loading="lazy">
+<img src="images/team/member22.jpg" alt="Yogesh" width="120" height="120" loading="lazy">
 <h3>Yogesh</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member23.jpg" alt="Sanjay NL" loading="lazy">
+<img src="images/team/member23.jpg" alt="Sanjay NL" width="120" height="120" loading="lazy">
 <h3>Sanjay NL</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member24.jpg" alt="Prajwal R" loading="lazy">
+<img src="images/team/member24.jpg" alt="Prajwal R" width="120" height="120" loading="lazy">
 <h3>Prajwal R</h3>
 </div>
 <div class="team-card">
-<img src="images/team/member25.jpg" alt="Akshay" loading="lazy">
+<img src="images/team/member25.jpg" alt="Akshay" width="120" height="120" loading="lazy">
 <h3>Akshay</h3>
 </div>
 </div>
+</div>
 </section>
 
-    <section id="gallery" class="gallery">
-    <h2 id="gallery-title">
-📸 ಗ್ಯಾಲರಿ
-</h2>
-<p id="gallery-subtitle">
-ನಮ್ಮ ಕಾರ್ಯಕ್ರಮಗಳ ನೆನಪುಗಳು
-</p>
-    <div class="video-grid">
-        <div class="video-card">
-            <h3 id="gallery-video1">
-🪔 Ashada Pooja 2025
-            </h3>
-            <a href="https://www.instagram.com/reel/DPC3tYskmFy/?igsh=MTkzZGs1MW9qZ2EzaA=="
-               target="_blank"
-               class="btn-primary">
-                ▶ Watch on Instagram
-            </a>
-        </div>
-        <div class="video-card">
-            <h3 id="gallery-video2">
-🐘 Ganeshotsava 2025
-            </h3>
-            <a href="https://www.instagram.com/reel/DN8gSypiRLA/?igsh=dmU1NnNwOHFoaWNv"
-               target="_blank"
-               class="btn-primary">
-                ▶ Watch on Instagram
-            </a>
-        </div>
-
+<!-- ===== Gallery ===== -->
+<section id="gallery" class="section">
+<div class="wrap">
+<h2 class="section-title" data-i18n="gallery-title">📸 Gallery</h2>
+<p class="section-sub" data-i18n="gallery-subtitle">Memories from our events</p>
+<div class="cards four">
 <div class="video-card">
-<h3 id="gallery-video3">🪔 Ashada Pooja 2026</h3>
-<a href="https://www.instagram.com/reel/DcJg-cJxuG5/?stkn=bm42NjNkZDg2bndz" target="_blank" class="btn-primary">▶ Watch on Instagram</a>
+<h3><span data-i18n="g-ashada">🪔 Ashada Pooja</span> 2025</h3>
+<a href="https://www.instagram.com/reel/DPC3tYskmFy/?igsh=MTkzZGs1MW9qZ2EzaA==" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
 </div>
-
 <div class="video-card">
-<h3 id="gallery-video4">🐘 Ganeshotsava 2026</h3>
-<a href="https://www.instagram.com/reel/DddP9tUpsAl/?stkn=MXJiZWRmaHQyaDB5ag==" target="_blank" class="btn-primary">▶ Watch on Instagram</a>
+<h3><span data-i18n="g-ganesh">🐘 Ganeshotsava</span> 2025</h3>
+<a href="https://www.instagram.com/reel/DN8gSypiRLA/?igsh=dmU1NnNwOHFoaWNv" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
 </div>
-    </div>
-    </section>
+<div class="video-card">
+<h3><span data-i18n="g-ashada">🪔 Ashada Pooja</span> 2026</h3>
+<a href="https://www.instagram.com/reel/DcJg-cJxuG5/?stkn=bm42NjNkZDg2bndz" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
+</div>
+<div class="video-card">
+<h3><span data-i18n="g-ganesh">🐘 Ganeshotsava</span> 2026</h3>
+<a href="https://www.instagram.com/reel/DddP9tUpsAl/?stkn=MXJiZWRmaHQyaDB5ag==" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
+</div>
+</div>
+</div>
+</section>
 
-<section id="contact" class="contact">
-<h2 class="section-title">
-📍 Contact Us
-</h2>
-<p class="section-subtitle">
-We would love to hear from you.
-Connect with AIGIRI GELEYARA BALAGA through our official platforms.
-</p>
-<div class="contact-grid">
-<div class="contact-card">
-<h3>📍 Our Location</h3>
-<p>
-Vijayanagar Water Tank,<br>
-Opposite Dolphin Bakes 'N' Ice Creams,<br>
-Mysuru-570017
-</p>
-<a href="https://maps.app.goo.gl/EUnA2Y4ucPZn27hu7?g_st=ac"
-target="_blank"
-class="btn">
-🗺️ Open in Google Maps
-</a>
+<!-- ===== Support ===== -->
+<section id="sponsor" class="section alt">
+<div class="wrap">
+<h2 class="section-title" data-i18n="sponsor-title">🤝 Support AIGIRI GELEYARA BALAGA</h2>
+<p class="section-sub" data-i18n="sponsor-sub">We welcome individuals, businesses and well-wishers who wish to support our cultural, religious and community service activities. Every contribution through volunteering, materials or event support helps us serve society better.</p>
+<div class="cards">
+<div class="card">
+<h3 data-i18n="sp1-t">🎉 Event Support</h3>
+<p data-i18n="sp1-p">Support the successful organization of our cultural and community events.</p>
 </div>
-<div class="contact-card">
+<div class="card">
+<h3 data-i18n="sp2-t">🍛 Annadanam Support</h3>
+<p data-i18n="sp2-p">Support prasada and food distribution during our religious and community events.</p>
+</div>
+<div class="card">
+<h3 data-i18n="sp3-t">🎵 Sound &amp; Stage Support</h3>
+<p data-i18n="sp3-p">Support sound systems, lighting, stage setup and event arrangements.</p>
+</div>
+<div class="card">
+<h3 data-i18n="sp4-t">🎁 Material Support</h3>
+<p data-i18n="sp4-p">Support flowers, decorations, pooja items, drinking water, chairs and other event materials.</p>
+</div>
+<div class="card">
+<h3 data-i18n="sp5-t">🙋 Volunteer</h3>
+<p data-i18n="sp5-p">Join AIGIRI GELEYARA BALAGA as a volunteer and help us serve the community with dedication.</p>
+</div>
+</div>
+<div class="sponsor-contact">
+<h3 data-i18n="sponsor-cta">Interested in Supporting Our Activities?</h3>
+<a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" rel="noopener" class="btn" data-i18n="sponsor-insta">📷 Contact on Instagram</a>
+<a href="https://www.threads.com/@aigiri2025" target="_blank" rel="noopener" class="btn" data-i18n="sponsor-threads">🧵 Contact on Threads</a>
+</div>
+</div>
+</section>
+
+<!-- ===== Contact ===== -->
+<section id="contact" class="section">
+<div class="wrap">
+<h2 class="section-title" data-i18n="contact-title">📍 Contact Us</h2>
+<p class="section-sub" data-i18n="contact-sub">We would love to hear from you. Connect with AIGIRI GELEYARA BALAGA through our official platforms.</p>
+<div class="cards">
+<div class="card">
+<h3 data-i18n="loc-title">📍 Our Location</h3>
+<p data-i18n="loc-text">Vijayanagar Water Tank,<br>Opposite Dolphin Bakes 'N' Ice Creams,<br>Mysuru-570017</p><a href="https://maps.app.goo.gl/EUnA2Y4ucPZn27hu7?g_st=ac" target="_blank" rel="noopener" class="btn" data-i18n="loc-btn">🗺️ Open in Google Maps</a>
+</div>
+<div class="card">
 <h3>📷 Instagram</h3>
-<p>Follow our official page</p>
-<a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ=="
-target="_blank"
-class="btn">
-Open Instagram
-</a>
+<p data-i18n="insta-text">Follow our official page</p><a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" rel="noopener" class="btn" data-i18n="insta-btn">Open Instagram</a>
 </div>
-<div class="contact-card">
+<div class="card">
 <h3>🧵 Threads</h3>
-<p>Stay connected with us</p>
-<a href="https://www.threads.com/@aigiri2025"
-target="_blank"
-class="btn">
-Open Threads
-</a>
+<p data-i18n="threads-text">Stay connected with us</p><a href="https://www.threads.com/@aigiri2025" target="_blank" rel="noopener" class="btn" data-i18n="threads-btn">Open Threads</a>
 </div>
-<div class="contact-card">
-<h3>📧 Email</h3>
-<p>Official Email will be available soon.</p>
-</div>
-<div class="contact-card">
-<h3>📞 Phone</h3>
-<p>Official Contact Number will be announced soon.</p>
+<div class="card">
+<h3 data-i18n="email-title">📧 Email</h3>
+<p data-i18n="email-text">Official Email will be available soon.</p></div>
+<div class="card">
+<h3 data-i18n="phone-title">📞 Phone</h3>
+<p data-i18n="phone-text">Official Contact Number will be announced soon.</p></div>
 </div>
 </div>
 </section>
 
-    <footer class="footer">
+<!-- ===== Footer ===== -->
+<footer class="footer">
 <img src="images/logo.png" class="footer-logo" alt="AGB Logo">
-<h2>AIGIRI GELEYARA BALAGA</h2>
-<p>
-🤝 Friendship • 🛕 Culture • ❤️ Service
-</p>
-<p>
-📍 Mysuru, Karnataka
-</p>
+<h2 data-i18n="foot-name">AIGIRI GELEYARA BALAGA</h2>
+<p data-i18n="foot-tag">🤝 Friendship • 🛕 Culture • ❤️ Service</p>
+<p data-i18n="foot-place">📍 Mysuru, Karnataka</p>
 <div class="footer-links">
-<a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank">
-📷 Instagram
-</a>
-<a href="https://www.threads.com/@aigiri2025" target="_blank">
-🧵 Threads
-</a>
+<a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" rel="noopener">📷 Instagram</a>
+<a href="https://www.threads.com/@aigiri2025" target="_blank" rel="noopener">🧵 Threads</a>
 </div>
 <hr>
-<p>
-© 2026 AIGIRI GELEYARA BALAGA
-</p>
-<p>
-Developed with ❤️ by
-<b>Koushil R Gowda</b>
-</p>
-<p>
-Website Version 2.1
-</p>
-    </footer>
-    <button id="topBtn">⬆</button>
+<p data-i18n="foot-copy">© 2026 AIGIRI GELEYARA BALAGA</p>
+<p data-i18n="foot-dev">Developed with ❤️ by <b>Koushil R Gowda</b></p>
+<p data-i18n="foot-ver">Website Version 2.2</p>
+</footer>
+<button id="topBtn" aria-label="Back to top">⬆</button>
+
 <script src="js/script.js"></script>
 <script>
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js")
-    .then(() => console.log("Service Worker Registered"));
+    navigator.serviceWorker.register("service-worker.js").then(() => console.log("Service Worker Registered"));
 }
 </script>
 </body>
