@@ -1043,3 +1043,63 @@ body.dark-mode .video-card {
 body.dark-mode .video-card h3 {
     color: #FFD700;
 }
+
+/* ===== Events: Upcoming (countdown) + Past ===== */
+.events {
+    padding: 0 20px 50px;
+}
+
+.countdown-grid,
+.past-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.countdown-grid .event-card,
+.past-grid .event-card {
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.event-sub {
+    color: #ffe082;
+    font-size: 15px;
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.countdown div {
+    background: rgba(255, 215, 0, .12);
+    border: 1px solid gold;
+    border-radius: 12px;
+    padding: 10px 6px;
+    min-width: 62px;
+}
+
+.countdown span {
+    display: block;
+    font-size: 28px;
+    font-weight: bold;
+    color: #FFD700;
+}
+
+.countdown small {
+    font-size: 11px;
+    color: #ffe082;
+}
+
+.cd-live {
+    color: #FFD700;
+    font-weight: bold;
+}
+
