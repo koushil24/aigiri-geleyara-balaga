@@ -33,9 +33,8 @@ const translations = {
         "btn-events": "ಕಾರ್ಯಕ್ರಮಗಳು",
         "about-title": "ನಮ್ಮ ಬಗ್ಗೆ",
         "about-text": "ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ, ಮೈಸೂರು ಸ್ನೇಹ, ಸಂಸ್ಕೃತಿ ಮತ್ತು ಸಮಾಜ ಸೇವೆಗೆ ಸಮರ್ಪಿತ ಯುವಕರ ಸಂಘವಾಗಿದೆ.",
-        "events-title": "✨ ಮುಂಬರುವ ಕಾರ್ಯಕ್ರಮಗಳು ✨",
-        "event1-title": "🪔 ಆಷಾಢ ಶುಕ್ರವಾರ ಪೂಜಾ ಮಹೋತ್ಸವ 2026",
-        "view-details": "ವಿವರಗಳನ್ನು ನೋಡಿ",
+        "upcoming-title": "✨ ಮುಂಬರುವ ಕಾರ್ಯಕ್ರಮಗಳು ✨",
+        "past-title": "🕰️ ಹಿಂದಿನ ಕಾರ್ಯಕ್ರಮಗಳು",
         "team-title": "👥 AGB ತಂಡ",
         "team-subtitle": "ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗದ ಸದಸ್ಯರು",
         "gallery-title": "📸 ಗ್ಯಾಲರಿ",
@@ -56,9 +55,8 @@ const translations = {
         "btn-events": "Upcoming Events",
         "about-title": "About Us",
         "about-text": "AIGIRI GELEYARA BALAGA, Mysuru is a youth organization dedicated to friendship, culture and community service.",
-        "events-title": "✨ Upcoming Events ✨",
-        "event1-title": "🪔 Ashada Pooja Mahotsava 2026",
-        "view-details": "View Details",
+        "upcoming-title": "✨ Upcoming Events ✨",
+        "past-title": "🕰️ Past Events",
         "team-title": "👥 AGB Team",
         "team-subtitle": "Meet the members of AIGIRI GELEYARA BALAGA",
         "gallery-title": "📸 Gallery",
@@ -219,3 +217,34 @@ if (sliderImage) {
         if (e.target === imageViewer) imageViewer.style.display = "none";
     };
 }
+
+
+// ===== Upcoming Events Countdown =====
+// Change the date in index.html (data-date="YYYY-MM-DDTHH:MM:SS") to update a countdown
+document.querySelectorAll(".countdown-card").forEach(card => {
+    const target = new Date(card.dataset.date).getTime();
+    const box = card.querySelector(".countdown");
+    const days = card.querySelector(".cd-days");
+    const hours = card.querySelector(".cd-hours");
+    const mins = card.querySelector(".cd-mins");
+    const secs = card.querySelector(".cd-secs");
+    let timer;
+
+    function tick() {
+        const diff = target - Date.now();
+
+        if (diff <= 0) {
+            box.innerHTML = '<p class="cd-live">🙏 ಕಾರ್ಯಕ್ರಮ ಪ್ರಾರಂಭವಾಗಿದೆ · Event has started</p>';
+            clearInterval(timer);
+            return;
+        }
+
+        days.textContent = Math.floor(diff / 86400000);
+        hours.textContent = String(Math.floor(diff / 3600000) % 24).padStart(2, "0");
+        mins.textContent = String(Math.floor(diff / 60000) % 60).padStart(2, "0");
+        secs.textContent = String(Math.floor(diff / 1000) % 60).padStart(2, "0");
+    }
+
+    tick();
+    timer = setInterval(tick, 1000);
+});
