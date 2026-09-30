@@ -942,3 +942,44 @@ body.dark-mode .footer {
 @keyframes pulse {
     50% { transform: scale(1.08); }
 }
+
+
+/* ---------- 12. SUPPORT BOXES (click -> Instagram) & TOAST ---------- */
+a.card-link {
+    color: inherit;
+    cursor: pointer;
+}
+
+a.card-link:hover {
+    box-shadow: 0 0 0 2px var(--gold), var(--shadow);
+}
+
+.card-cta {
+    margin-top: auto;
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 90px;
+    z-index: 100000;
+    max-width: 90%;
+    padding: 12px 18px;
+    text-align: center;
+    background: #222;
+    color: #fff;
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%);
+    transition: opacity .3s;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
