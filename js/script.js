@@ -103,7 +103,14 @@ const translations = {
         "foot-place": "📍 ಮೈಸೂರು, ಕರ್ನಾಟಕ",
         "foot-copy": "© 2026 ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ",
         "foot-dev": "ರಚನೆ: <b>Koushil R Gowda</b> ❤️",
-        "foot-ver": "ವೆಬ್‌ಸೈಟ್ ಆವೃತ್ತಿ 2.2"
+        "foot-ver": "ವೆಬ್‌ಸೈಟ್ ಆವೃತ್ತಿ 2.2",
+        "sp-cta": "💬 Instagram ನಲ್ಲಿ ಸಂದೇಶ ಕಳುಹಿಸಿ",
+        "copied": "✅ ಸಂದೇಶ ನಕಲಾಗಿದೆ! Instagram ಚಾಟ್‌ನಲ್ಲಿ ಪೇಸ್ಟ್ ಮಾಡಿ ಕಳುಹಿಸಿ.",
+        "sp1-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಕಾರ್ಯಕ್ರಮ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
+        "sp2-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಅನ್ನದಾನ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
+        "sp3-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಧ್ವನಿ ಮತ್ತು ವೇದಿಕೆ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
+        "sp4-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಸಾಮಗ್ರಿ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
+        "sp5-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ಸ್ವಯಂಸೇವಕನಾಗಿ ಸೇರಲು ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ."
     },
     "en": {
         "nav-home": "Home",
@@ -182,7 +189,14 @@ const translations = {
         "foot-place": "📍 Mysuru, Karnataka",
         "foot-copy": "© 2026 AIGIRI GELEYARA BALAGA",
         "foot-dev": "Developed with ❤️ by <b>Koushil R Gowda</b>",
-        "foot-ver": "Website Version 2.2"
+        "foot-ver": "Website Version 2.2",
+        "sp-cta": "💬 Message us on Instagram",
+        "copied": "✅ Message copied! Paste it in the Instagram chat and send.",
+        "sp1-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Event Support. Please share the details.",
+        "sp2-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Annadanam Support. Please share the details.",
+        "sp3-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Sound & Stage Support. Please share the details.",
+        "sp4-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Material Support. Please share the details.",
+        "sp5-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to join as a Volunteer. Please share the details."
     }
 };
 
@@ -367,3 +381,40 @@ document.querySelectorAll(".countdown-card").forEach(card => {
     tick();
     timer = setInterval(tick, 1000);
 });
+
+
+// ===== 9. Support boxes -> Instagram message =====
+// Tapping a box copies a ready message and opens our Instagram chat.
+// (Instagram does not allow pre-filled text in links, so the user pastes it.)
+const toast = document.getElementById("toast");
+let toastTimer;
+
+function showToast() {
+    toast.textContent = translations[currentLanguage].copied;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 6000);
+}
+
+function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    }
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand("copy");
+    area.remove();
+    return Promise.resolve();
+}
+
+document.querySelectorAll("[data-msg]").forEach(card => {
+    card.addEventListener("click", () => {
+        const message = translations[currentLanguage][card.dataset.msg];
+        copyText(message).then(showToast).catch(showToast);
+    });
+});
+
