@@ -96,7 +96,7 @@ header {
     align-items: center;
     gap: 16px;
     background: var(--maroon);
-    padding: 10px max(20px, calc((100% - 1240px) / 2));
+    padding: 10px max(20px, calc((100% - 1440px) / 2));
     box-shadow: 0 2px 12px rgba(0, 0, 0, .25);
     transition: padding .3s, box-shadow .3s;
 }
@@ -139,7 +139,7 @@ body.dark-mode .navbar {
 
 .nav-links {
     display: flex;
-    gap: 20px;
+    gap: 16px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -180,7 +180,7 @@ body.dark-mode .navbar {
     border-radius: 10px;
 }
 
-@media (max-width: 1240px) {
+@media (max-width: 1300px) {
     .navbar {
         flex-wrap: wrap;
         gap: 10px;
@@ -1012,7 +1012,7 @@ img {
     color: var(--gold);
 }
 
-@media (min-width: 1241px) {
+@media (min-width: 1301px) {
     .nav-links a.nav-cta {
         padding: 6px 14px;
         border: 1px solid var(--gold);
@@ -1058,5 +1058,87 @@ img {
 
 @keyframes loaderAutoHide {
     to { opacity: 0; visibility: hidden; }
+}
+
+
+/* ---------- 16. MEMBER PORTAL ---------- */
+[hidden] {
+    display: none !important;
+}
+
+.member-box {
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 32px 26px;
+    text-align: center;
+    background: var(--card);
+    border: 2px solid var(--gold);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+.member-box img {
+    margin-bottom: 10px;
+    border-radius: 50%;
+}
+
+.member-box h2 {
+    margin: 0 0 8px;
+    color: var(--heading);
+}
+
+.member-box p {
+    margin: 0 0 18px;
+    color: var(--muted);
+}
+
+.member-box label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text);
+}
+
+.member-box input {
+    width: 100%;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    font-size: 16px;
+    color: var(--text);
+    background: var(--bg);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+}
+
+.member-error {
+    margin: 0 0 12px;
+    color: #c62828;
+    font-weight: bold;
+}
+
+body.dark-mode .member-error {
+    color: #ff8a80;
+}
+
+.member-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.member-back {
+    color: var(--heading);
+    font-weight: bold;
+}
+
+.member-hash {
+    padding: 10px;
+    text-align: left;
+    font-family: monospace;
+    font-size: 13px;
+    word-break: break-all;
+    background: var(--bg-alt);
+    border-radius: 10px;
 }
 
