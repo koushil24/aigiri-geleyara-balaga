@@ -114,7 +114,17 @@ const translations = {
         "nav-birthday": "🎂 ಹುಟ್ಟುಹಬ್ಬ ಪೋಸ್ಟರ್",
         "bd-title": "🎂 ಹುಟ್ಟುಹಬ್ಬದ ಪೋಸ್ಟರ್ ಮೇಕರ್",
         "bd-sub": "ನಿಮ್ಮ ಫೋಟೋ ಸೇರಿಸಿ, ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗದ ಸುಂದರ ಹುಟ್ಟುಹಬ್ಬದ ಪೋಸ್ಟರ್ ಕ್ಷಣಾರ್ಧದಲ್ಲಿ ರಚಿಸಿ. ನಿಮ್ಮ ಫೋಟೋ ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲೇ ಉಳಿಯುತ್ತದೆ.",
-        "bd-open": "ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ ↗"
+        "bd-open": "ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ ↗",
+        "nav-member": "🪪 ಸದಸ್ಯ ಐಡಿ",
+        "mb-title": "ಐಗಿರಿ ಸದಸ್ಯರ ಪೋರ್ಟಲ್",
+        "mb-sub": "ಈ ವಿಭಾಗ ಐಗಿರಿ ಸದಸ್ಯರಿಗಾಗಿ ಮಾತ್ರ.",
+        "mb-label": "ಸದಸ್ಯರ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ",
+        "mb-unlock": "🔓 ತೆರೆಯಿರಿ",
+        "mb-back": "← ವೆಬ್‌ಸೈಟ್‌ಗೆ ಮರಳಿ",
+        "mb-wrong": "ತಪ್ಪು ಪಾಸ್‌ವರ್ಡ್. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+        "mb-ok-title": "✅ ಪ್ರವೇಶ ಅನುಮತಿಸಲಾಗಿದೆ",
+        "mb-ok-sub": "ಐಡಿ ಕಾರ್ಡ್ ಜನರೇಟರ್ ಮುಂದಿನ ಹಂತದಲ್ಲಿ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ.",
+        "mb-lock": "🔒 ಮತ್ತೆ ಲಾಕ್ ಮಾಡಿ"
     },
     "en": {
         "nav-home": "Home",
@@ -201,10 +211,20 @@ const translations = {
         "sp3-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Sound & Stage Support. Please share the details.",
         "sp4-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Material Support. Please share the details.",
         "sp5-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to join as a Volunteer. Please share the details.",
-        "nav-birthday": "🎂 Make Birthday Poster",
+        "nav-birthday": "🎂 Birthday Poster",
         "bd-title": "🎂 Birthday Poster Maker",
         "bd-sub": "Add your photo and create a beautiful AGB birthday poster in seconds. Your photo stays on your phone.",
-        "bd-open": "Open in a new tab ↗"
+        "bd-open": "Open in a new tab ↗",
+        "nav-member": "🪪 Member ID",
+        "mb-title": "AIGIRI MEMBER PORTAL",
+        "mb-sub": "This section is for AIGIRI members only.",
+        "mb-label": "Enter Member Access Password",
+        "mb-unlock": "🔓 Unlock",
+        "mb-back": "← Back to Website",
+        "mb-wrong": "Wrong password. Please try again.",
+        "mb-ok-title": "✅ Access granted",
+        "mb-ok-sub": "The ID Card Generator will appear here in the next step.",
+        "mb-lock": "🔒 Lock again"
     }
 };
 
@@ -215,6 +235,12 @@ function changeLanguage(language) {
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const text = translations[language][el.dataset.i18n];
         if (text !== undefined) el.innerHTML = text;
+    });
+
+    // Placeholders inside input boxes use data-i18n-ph
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+        const text = translations[language][el.dataset.i18nPh];
+        if (text !== undefined) el.placeholder = text;
     });
 
     document.documentElement.lang = language;
@@ -386,87 +412,4 @@ document.querySelectorAll(".countdown-card").forEach(card => {
         days.textContent = Math.floor(diff / 86400000);
         hours.textContent = String(Math.floor(diff / 3600000) % 24).padStart(2, "0");
         mins.textContent = String(Math.floor(diff / 60000) % 60).padStart(2, "0");
-        secs.textContent = String(Math.floor(diff / 1000) % 60).padStart(2, "0");
-    }
-
-    tick();
-    timer = setInterval(tick, 1000);
-});
-
-
-// ===== 9. Support boxes -> Instagram message =====
-// Tapping a box copies a ready message and opens our Instagram chat.
-// (Instagram does not allow pre-filled text in links, so the user pastes it.)
-const toast = document.getElementById("toast");
-let toastTimer;
-
-function showToast() {
-    toast.textContent = translations[currentLanguage].copied;
-    toast.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("show"), 6000);
-}
-
-function copyText(text) {
-    if (navigator.clipboard && window.isSecureContext) {
-        return navigator.clipboard.writeText(text);
-    }
-    const area = document.createElement("textarea");
-    area.value = text;
-    area.style.position = "fixed";
-    area.style.opacity = "0";
-    document.body.appendChild(area);
-    area.select();
-    document.execCommand("copy");
-    area.remove();
-    return Promise.resolve();
-}
-
-document.querySelectorAll("[data-msg]").forEach(card => {
-    card.addEventListener("click", () => {
-        const message = translations[currentLanguage][card.dataset.msg];
-        copyText(message).then(showToast).catch(showToast);
-    });
-});
-
-
-// ===== 10. Image protection =====
-// Stops casual saving of photos (right-click, long-press, dragging).
-// It cannot stop screenshots. To allow saving on one image, put it
-// inside any element with class="allow-save".
-function isProtectedImage(target) {
-    return target.tagName === "IMG" && !target.closest(".allow-save");
-}
-
-document.addEventListener("contextmenu", (e) => {
-    if (isProtectedImage(e.target)) e.preventDefault();
-});
-
-document.addEventListener("dragstart", (e) => {
-    if (isProtectedImage(e.target)) e.preventDefault();
-});
-
-
-// ===== 11. Birthday poster page: frame grows to fit the poster maker =====
-// The poster maker lives on the same website address, so we are allowed
-// to read its height and make our frame exactly that tall (no inner scrolling).
-const posterFrame = document.getElementById("posterFrame");
-
-if (posterFrame) {
-    posterFrame.addEventListener("load", () => {
-        try {
-            const doc = posterFrame.contentDocument;
-
-            const fitHeight = () => {
-                posterFrame.style.height = "0px";   // shrink first to measure real content height
-                posterFrame.style.height = doc.documentElement.scrollHeight + "px";
-            };
-
-            fitHeight();
-            new ResizeObserver(fitHeight).observe(doc.body);
-        } catch (error) {
-            console.log("Poster frame could not be resized:", error);
-        }
-    });
-}
-
+        secs.textContent = String(Math.floor(diff / 1000) % 60).padStart(2, "0"
