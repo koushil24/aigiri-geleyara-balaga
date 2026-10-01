@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex,nofollow">
+<meta name="author" content="Koushil R Gowda">
+<meta name="copyright" content="AIGIRI GELEYARA BALAGA, Mysuru">
+<meta name="description" content="AIGIRI member portal.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Member Portal | ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ</title>
+<script>
+/* Debug helper: open the website with ?debug at the end of the address
+   (example: .../aigiri-geleyara-balaga/?debug) and any JavaScript error is
+   shown in a red box at the bottom of the screen. */
+window.addEventListener("error", function (e) {
+    if (location.search.indexOf("debug") === -1) return;
+    var box = document.createElement("pre");
+    box.style.cssText = "position:fixed;z-index:999999;left:0;right:0;bottom:0;margin:0;padding:10px;background:#b00020;color:#fff;font-size:12px;white-space:pre-wrap";
+    box.textContent = "ERROR: " + e.message + " (" + String(e.filename || "").split("/").pop() + " line " + e.lineno + ")";
+    document.body.appendChild(box);
+});
+</script>
+<link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6d0f0f">
+<link rel="icon" type="image/png" href="images/icon-192.png">
+<link rel="apple-touch-icon" href="images/icon-192.png">
+</head>
+<body>
+
+<header>
+<nav class="navbar">
+<div class="logo">
+<img src="images/logo.png" alt="Logo" width="52" height="52">
+<div>
+<h2>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ, ಮೈಸೂರು</h2>
+<small>AIGIRI GELEYARA BALAGA, Mysuru</small>
+</div>
+</div>
+<button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+<ul class="nav-links">
+<li><a href="index.html#home" data-i18n="nav-home">Home</a></li>
+<li><a href="index.html#about" data-i18n="nav-about">About</a></li>
+<li><a href="index.html#events" data-i18n="nav-events">Events</a></li>
+<li><a href="index.html#team" data-i18n="nav-team">AGB Team</a></li>
+<li><a href="index.html#gallery" data-i18n="nav-gallery">Gallery</a></li>
+<li><a href="index.html#sponsor" data-i18n="nav-sponsor">Support</a></li>
+<li><a href="index.html#contact" data-i18n="nav-contact">Contact</a></li>
+<li><a href="birthday.html" class="nav-cta" data-i18n="nav-birthday">🎂 Birthday Poster</a></li>
+<li><a href="member.html" data-i18n="nav-member">🪪 Member ID</a></li>
+</ul>
+<div class="actions">
+<button id="langBtn">🌐 English</button>
+<button id="themeBtn">🌙</button>
+</div>
+</nav>
+</header>
+
+<!-- ===== Member portal ===== -->
+<section id="member" class="section">
+<div class="wrap">
+
+<!-- 1. Password screen -->
+<div class="member-box" id="memberGate" hidden>
+<img src="images/logo.png" alt="AGB Logo" width="90" height="90">
+<h2 data-i18n="mb-title">AIGIRI MEMBER PORTAL</h2>
+<p data-i18n="mb-sub">This section is for AIGIRI members only.</p>
+<form id="memberForm" autocomplete="off">
+<label for="memberPass" data-i18n="mb-label">Enter Member Access Password</label>
+<input type="password" id="memberPass" required>
+<p class="member-error" id="memberError" data-i18n="mb-wrong" hidden>Wrong password. Please try again.</p>
+<div class="member-actions">
+<button class="btn" type="submit" data-i18n="mb-unlock">🔓 Unlock</button>
+<a class="member-back" href="index.html" data-i18n="mb-back">← Back to Website</a>
+</div>
+</form>
+</div>
+
+<!-- 2. After unlocking (the ID card generator will be built here) -->
+<div class="member-box" id="memberTool" hidden>
+<h2 data-i18n="mb-ok-title">✅ Access granted</h2>
+<p data-i18n="mb-ok-sub">The ID Card Generator will appear here in the next step.</p>
+<div class="member-actions">
+<button class="btn" type="button" id="memberLock" data-i18n="mb-lock">🔒 Lock again</button>
+<a class="member-back" href="index.html" data-i18n="mb-back">← Back to Website</a>
+</div>
+</div>
+
+<!-- 3. Password setup helper (shown when no password is set yet, or at member.html?setup) -->
+<div class="member-box" id="memberSetup" hidden>
+<h2>🔧 Set the member password</h2>
+<p>Type a new password. Copy the code below and paste it into <b>js/member-config.js</b>. The password itself is never saved anywhere.</p>
+<input type="text" id="setupPass" placeholder="New password" autocomplete="off">
+<p class="member-hash" id="setupHash">…</p>
+<div class="member-actions">
+<button class="btn" type="button" id="setupCopy">Copy code</button>
+<a class="member-back" href="index.html">← Back to Website</a>
+</div>
+</div>
+
+</div>
+</section>
+
+<footer class="footer">
+<img src="images/logo.png" class="footer-logo" alt="AGB Logo">
+<h2 data-i18n="foot-name">AIGIRI GELEYARA BALAGA</h2>
+<p data-i18n="foot-tag">🤝 Friendship • 🛕 Culture • ❤️ Service</p>
+<p data-i18n="foot-place">📍 Mysuru, Karnataka</p>
+<div class="footer-links">
+<a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" rel="noopener">📷 Instagram</a>
+<a href="https://www.threads.com/@aigiri2025" target="_blank" rel="noopener">🧵 Threads</a>
+</div>
+<hr>
+<p data-i18n="foot-copy">© 2026 AIGIRI GELEYARA BALAGA</p>
+<p data-i18n="foot-dev">Developed with ❤️ by <b>Koushil R Gowda</b></p>
+<p data-i18n="foot-ver">Website Version 2.3</p>
+</footer>
+<div id="toast" class="toast"></div>
+<button id="topBtn" aria-label="Back to top">⬆</button>
+
+<script src="js/member-config.js"></script>
+<script src="js/script.js"></script>
+<script src="js/member.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").then(() => console.log("Service Worker Registered"));
+}
+</script>
+</body>
+</html>
