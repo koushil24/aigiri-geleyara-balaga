@@ -426,4 +426,47 @@ document.querySelectorAll("[data-msg]").forEach(card => {
     card.addEventListener("click", () => {
         const message = translations[currentLanguage][card.dataset.msg];
         copyText(message).then(showToast).catch(showToast);
-    })
+    });
+});
+
+
+// ===== 10. Image protection =====
+// Stops casual saving of photos (right-click, long-press, dragging).
+// It cannot stop screenshots. To allow saving on one image, put it
+// inside any element with class="allow-save".
+function isProtectedImage(target) {
+    return target.tagName === "IMG" && !target.closest(".allow-save");
+}
+
+document.addEventListener("contextmenu", (e) => {
+    if (isProtectedImage(e.target)) e.preventDefault();
+});
+
+document.addEventListener("dragstart", (e) => {
+    if (isProtectedImage(e.target)) e.preventDefault();
+});
+
+
+// ===== 11. Birthday poster page: frame grows to fit the poster maker =====
+// The poster maker lives on the same website address, so we are allowed
+// to read its height and make our frame exactly that tall (no inner scrolling).
+const posterFrame = document.getElementById("posterFrame");
+
+if (posterFrame) {
+    posterFrame.addEventListener("load", () => {
+        try {
+            const doc = posterFrame.contentDocument;
+
+            const fitHeight = () => {
+                posterFrame.style.height = "0px";   // shrink first to measure real content height
+                posterFrame.style.height = doc.documentElement.scrollHeight + "px";
+            };
+
+            fitHeight();
+            new ResizeObserver(fitHeight).observe(doc.body);
+        } catch (error) {
+            console.log("Poster frame could not be resized:", error);
+        }
+    });
+}
+
