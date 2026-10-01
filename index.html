@@ -9,6 +9,18 @@
 <meta name="description" content="Official website of AIGIRI GELEYARA BALAGA, Mysuru.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ, ಮೈಸೂರು</title>
+<script>
+/* Debug helper: open the website with ?debug at the end of the address
+   (example: .../aigiri-geleyara-balaga/?debug) and any JavaScript error is
+   shown in a red box at the bottom of the screen. */
+window.addEventListener("error", function (e) {
+    if (location.search.indexOf("debug") === -1) return;
+    var box = document.createElement("pre");
+    box.style.cssText = "position:fixed;z-index:999999;left:0;right:0;bottom:0;margin:0;padding:10px;background:#b00020;color:#fff;font-size:12px;white-space:pre-wrap";
+    box.textContent = "ERROR: " + e.message + " (" + String(e.filename || "").split("/").pop() + " line " + e.lineno + ")";
+    document.body.appendChild(box);
+});
+</script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#6d0f0f">
