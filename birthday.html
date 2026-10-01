@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="index,follow">
+<meta name="author" content="Koushil R Gowda">
+<meta name="copyright" content="AIGIRI GELEYARA BALAGA, Mysuru">
+<meta name="description" content="Create a birthday poster in seconds - AIGIRI GELEYARA BALAGA, Mysuru.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Poster Maker | ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6d0f0f">
+<link rel="icon" type="image/png" href="images/icon-192.png">
+<link rel="apple-touch-icon" href="images/icon-192.png">
+</head>
+<body>
+
+<header>
+<nav class="navbar">
+<div class="logo">
+<img src="images/logo.png" alt="Logo" width="52" height="52">
+<div>
+<h2>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ, ಮೈಸೂರು</h2>
+<small>AIGIRI GELEYARA BALAGA, Mysuru</small>
+</div>
+</div>
+<button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+<ul class="nav-links">
+<li><a href="index.html#home" data-i18n="nav-home">Home</a></li>
+<li><a href="index.html#about" data-i18n="nav-about">About</a></li>
+<li><a href="index.html#events" data-i18n="nav-events">Events</a></li>
+<li><a href="index.html#team" data-i18n="nav-team">AGB Team</a></li>
+<li><a href="index.html#gallery" data-i18n="nav-gallery">Gallery</a></li>
+<li><a href="index.html#sponsor" data-i18n="nav-sponsor">Support</a></li>
+<li><a href="index.html#contact" data-i18n="nav-contact">Contact</a></li>
+<li><a href="birthday.html" class="nav-cta" data-i18n="nav-birthday">🎂 Make Birthday Poster</a></li>
+</ul>
+<div class="actions">
+<button id="langBtn">🌐 English</button>
+<button id="themeBtn">🌙</button>
+</div>
+</nav>
+</header>
+
+<!-- ===== Birthday Poster Maker (opens inside our website) ===== -->
+<section id="birthday" class="section">
+<div class="wrap">
+<h2 class="section-title" data-i18n="bd-title">🎂 Birthday Poster Maker</h2>
+<p class="section-sub" data-i18n="bd-sub">Add your photo and create a beautiful AGB birthday poster in seconds. Your photo stays on your phone.</p>
+<div class="poster-frame">
+<iframe id="posterFrame" src="https://koushil24.github.io/AIGIRI-birthday-poster-maker/" title="Birthday Poster Maker" loading="lazy"></iframe>
+</div>
+<p class="poster-open"><a class="btn" href="https://koushil24.github.io/AIGIRI-birthday-poster-maker/" target="_blank" rel="noopener" data-i18n="bd-open">Open in a new tab ↗</a></p>
+</div>
+</section>
+
+<footer class="footer">
+<img src="images/logo.png" class="footer-logo" alt="AGB Logo">
+<h2 data-i18n="foot-name">AIGIRI GELEYARA BALAGA</h2>
+<p data-i18n="foot-tag">🤝 Friendship • 🛕 Culture • ❤️ Service</p>
+<p data-i18n="foot-place">📍 Mysuru, Karnataka</p>
+<div class="footer-links">
+<a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" rel="noopener">📷 Instagram</a>
+<a href="https://www.threads.com/@aigiri2025" target="_blank" rel="noopener">🧵 Threads</a>
+</div>
+<hr>
+<p data-i18n="foot-copy">© 2026 AIGIRI GELEYARA BALAGA</p>
+<p data-i18n="foot-dev">Developed with ❤️ by <b>Koushil R Gowda</b></p>
+<p data-i18n="foot-ver">Website Version 2.3</p>
+</footer>
+<div id="toast" class="toast"></div>
+<button id="topBtn" aria-label="Back to top">⬆</button>
+
+<script src="js/script.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").then(() => console.log("Service Worker Registered"));
+}
+</script>
+</body>
+</html>
