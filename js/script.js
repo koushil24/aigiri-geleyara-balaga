@@ -103,14 +103,18 @@ const translations = {
         "foot-place": "📍 ಮೈಸೂರು, ಕರ್ನಾಟಕ",
         "foot-copy": "© 2026 ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ",
         "foot-dev": "ರಚನೆ: <b>Koushil R Gowda</b> ❤️",
-        "foot-ver": "ವೆಬ್‌ಸೈಟ್ ಆವೃತ್ತಿ 2.2",
+        "foot-ver": "ವೆಬ್‌ಸೈಟ್ ಆವೃತ್ತಿ 2.3",
         "sp-cta": "💬 Instagram ನಲ್ಲಿ ಸಂದೇಶ ಕಳುಹಿಸಿ",
         "copied": "✅ ಸಂದೇಶ ನಕಲಾಗಿದೆ! Instagram ಚಾಟ್‌ನಲ್ಲಿ ಪೇಸ್ಟ್ ಮಾಡಿ ಕಳುಹಿಸಿ.",
         "sp1-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಕಾರ್ಯಕ್ರಮ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
         "sp2-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಅನ್ನದಾನ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
         "sp3-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಧ್ವನಿ ಮತ್ತು ವೇದಿಕೆ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
         "sp4-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಸಾಮಗ್ರಿ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
-        "sp5-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ಸ್ವಯಂಸೇವಕನಾಗಿ ಸೇರಲು ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ."
+        "sp5-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ಸ್ವಯಂಸೇವಕನಾಗಿ ಸೇರಲು ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
+        "nav-birthday": "🎂 ಹುಟ್ಟುಹಬ್ಬ ಪೋಸ್ಟರ್",
+        "bd-title": "🎂 ಹುಟ್ಟುಹಬ್ಬದ ಪೋಸ್ಟರ್ ಮೇಕರ್",
+        "bd-sub": "ನಿಮ್ಮ ಫೋಟೋ ಸೇರಿಸಿ, ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗದ ಸುಂದರ ಹುಟ್ಟುಹಬ್ಬದ ಪೋಸ್ಟರ್ ಕ್ಷಣಾರ್ಧದಲ್ಲಿ ರಚಿಸಿ. ನಿಮ್ಮ ಫೋಟೋ ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲೇ ಉಳಿಯುತ್ತದೆ.",
+        "bd-open": "ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ ↗"
     },
     "en": {
         "nav-home": "Home",
@@ -189,14 +193,18 @@ const translations = {
         "foot-place": "📍 Mysuru, Karnataka",
         "foot-copy": "© 2026 AIGIRI GELEYARA BALAGA",
         "foot-dev": "Developed with ❤️ by <b>Koushil R Gowda</b>",
-        "foot-ver": "Website Version 2.2",
+        "foot-ver": "Website Version 2.3",
         "sp-cta": "💬 Message us on Instagram",
         "copied": "✅ Message copied! Paste it in the Instagram chat and send.",
         "sp1-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Event Support. Please share the details.",
         "sp2-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Annadanam Support. Please share the details.",
         "sp3-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Sound & Stage Support. Please share the details.",
         "sp4-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Material Support. Please share the details.",
-        "sp5-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to join as a Volunteer. Please share the details."
+        "sp5-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to join as a Volunteer. Please share the details.",
+        "nav-birthday": "🎂 Make Birthday Poster",
+        "bd-title": "🎂 Birthday Poster Maker",
+        "bd-sub": "Add your photo and create a beautiful AGB birthday poster in seconds. Your photo stays on your phone.",
+        "bd-open": "Open in a new tab ↗"
     }
 };
 
@@ -273,6 +281,7 @@ if (teamGrid) {
 // ===== 6. Loader =====
 window.addEventListener("load", () => {
     const loader = document.getElementById("loader");
+    if (!loader) return;   // pages without a loader (like birthday.html)
     setTimeout(() => {
         loader.style.opacity = "0";
         setTimeout(() => { loader.style.display = "none"; }, 600);
@@ -336,7 +345,9 @@ if (sliderImage) {
     const imageViewer = document.getElementById("imageViewer");
     const fullImage = document.getElementById("fullImage");
 
-    sliderImage.onclick = () => {
+    // Photos ignore the mouse (see style.css), so the click is caught by the slider box
+    document.querySelector(".slider").onclick = (e) => {
+        if (e.target.closest("button")) return;
         fullImage.src = sliderImage.src;
         imageViewer.style.display = "flex";
     };
@@ -415,6 +426,4 @@ document.querySelectorAll("[data-msg]").forEach(card => {
     card.addEventListener("click", () => {
         const message = translations[currentLanguage][card.dataset.msg];
         copyText(message).then(showToast).catch(showToast);
-    });
-});
-
+    })
