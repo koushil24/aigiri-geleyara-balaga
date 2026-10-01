@@ -180,7 +180,7 @@ body.dark-mode .navbar {
     border-radius: 10px;
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1240px) {
     .navbar {
         flex-wrap: wrap;
         gap: 10px;
@@ -981,5 +981,69 @@ a.card-link:hover {
 
 .toast.show {
     opacity: 1;
+}
+
+
+/* ---------- 13. IMAGE PROTECTION ---------- */
+/* No dragging, text-selecting or iOS long-press menu on photos.
+   (Right-click and Android long-press are blocked in script.js.) */
+img {
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+}
+
+/* Small logo watermark on the top photo slider (also shows in screenshots) */
+.slider::after {
+    content: "";
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 56px;
+    height: 56px;
+    background: url("../images/logo.png") center / contain no-repeat;
+    opacity: .7;
+    pointer-events: none;
+}
+
+
+/* ---------- 14. BIRTHDAY POSTER PAGE & MENU BUTTON ---------- */
+.nav-links a.nav-cta {
+    color: var(--gold);
+}
+
+@media (min-width: 1241px) {
+    .nav-links a.nav-cta {
+        padding: 6px 14px;
+        border: 1px solid var(--gold);
+        border-radius: 20px;
+    }
+
+    .nav-links a.nav-cta:hover {
+        background: var(--gold);
+        color: var(--maroon);
+    }
+}
+
+.poster-frame {
+    max-width: 640px;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #fff;
+    border: 3px solid var(--gold);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+
+.poster-frame iframe {
+    display: block;
+    width: 100%;
+    height: 1200px;
+    border: 0;
+}
+
+.poster-open {
+    margin-top: 24px;
+    text-align: center;
 }
 
