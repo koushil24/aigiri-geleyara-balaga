@@ -1047,3 +1047,16 @@ img {
     text-align: center;
 }
 
+
+/* ---------- 15. LOADER SAFETY NET ---------- */
+/* Normally script.js hides the loader after ~2.4 seconds.
+   If the script ever fails, this CSS hides it after 4 seconds anyway,
+   so visitors are never stuck on the loading screen. */
+#loader {
+    animation: loaderAutoHide .6s ease 4s forwards;
+}
+
+@keyframes loaderAutoHide {
+    to { opacity: 0; visibility: hidden; }
+}
+
