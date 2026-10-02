@@ -1,18 +1,11 @@
 // =====================================================
 // AIGIRI MEMBER PORTAL - settings
-// This file holds the member password as a scrambled
-// code (SHA-256 hash), NOT the password itself.
-//
-// HOW TO SET OR CHANGE THE PASSWORD:
-//  1. Open  your-website/member.html?setup
-//  2. Type the new password and tap "Copy code"
-//  3. Paste the code between the quotes below, then commit
-//
-// IMPORTANT: this is only a simple gate for casual visitors.
-// Anyone who studies the website's code can get around it,
-// so never put private member data in the website files.
-// A real login (Firebase / Supabase) comes in a later version.
+// apiUrl = the address of the Google Apps Script web app
+// that saves and reads the members (your Google Sheet).
+// If you ever deploy a new web app, paste its new address here.
+// The shared member password is NOT stored here - it lives
+// safely inside your Google Apps Script settings.
 // =====================================================
 const MEMBER_CONFIG = {
-    passwordHash: ""
+    apiUrl: "https://script.google.com/macros/s/AKfycbwmV37jdCbhhZ-zXqjK4uxeWSrSePXV8p0Vvjxhl2vNnJCAyk9A0eObiXpkQZ4fJ72vqw/exec"
 };
