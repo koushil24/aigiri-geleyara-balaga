@@ -1,74 +1,299 @@
 // =====================================================
-// AIGIRI MEMBER PORTAL - password gate (version 1)
-// 1 Helpers  2 Which screen to show  3 Unlock  4 Setup helper
+// AIGIRI MEMBER PORTAL - Log in / Sign up / ID card
+// 1 Helpers  2 Card design  3 Photo  4 Screens  5 Sign up
+// 6 Log in   7 Log out
 // =====================================================
 
 
 // ===== 1. Helpers =====
-const memberGate = document.getElementById("memberGate");
-const memberTool = document.getElementById("memberTool");
-const memberSetup = document.getElementById("memberSetup");
+const $ = (id) => document.getElementById(id);
 
-// Turns any text into a scrambled code (SHA-256). The same text always gives the same code.
-async function sha256(text) {
-    const bytes = new TextEncoder().encode(text);
-    const buffer = await crypto.subtle.digest("SHA-256", bytes);
-    return Array.from(new Uint8Array(buffer))
-        .map(b => b.toString(16).padStart(2, "0"))
-        .join("");
+// Gets a text in the language the visitor chose (kn / en)
+const t = (key) => translations[currentLanguage][key];
+
+// Sends a request to our Google Apps Script and returns its answer
+async function callApi(data) {
+    const response = await fetch(MEMBER_CONFIG.apiUrl, {
+        method: "POST",
+        body: JSON.stringify(data)
+    });
+    return response.json();
 }
 
-// Shows one of the three boxes and hides the others
-function showBox(box) {
-    [memberGate, memberTool, memberSetup].forEach(b => { b.hidden = (b !== box); });
-}
-
-
-// ===== 2. Which screen to show =====
-const passwordIsSet = MEMBER_CONFIG.passwordHash !== "";
-const wantsSetup = location.search.indexOf("setup") !== -1;
-
-if (wantsSetup || !passwordIsSet) {
-    showBox(memberSetup);
-} else if (sessionStorage.getItem("agbMember") === "yes") {
-    showBox(memberTool);          // already unlocked in this browser tab
-} else {
-    showBox(memberGate);
+function showMessage(box, text) {
+    box.textContent = text;
+    box.hidden = (text === "");
 }
 
 
-// ===== 3. Unlock / lock =====
-document.getElementById("memberForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const typed = document.getElementById("memberPass").value.trim();
-    const code = await sha256(typed);
+// ===== 2. Card design =====
+// data-f="name" marks the places that are filled with the member's details
+const FRONT_HTML = `
+<div class="idc-top">
+    <img src="images/logo.png" class="idc-logo" alt="">
+    <div class="idc-org"><b>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ</b><span>AIGIRI GELEYARA BALAGA</span><small>Mysuru</small></div>
+</div>
+<div class="idc-photo"><span class="idc-noimg">👤</span><img data-f="photo" alt="" hidden></div>
+<div class="idc-name" data-f="name"></div>
+<div class="idc-role" data-f="role"></div>
+<div class="idc-id" data-f="id"></div>
+<div class="idc-meta">ಸೇರಿದ ವರ್ಷ / Joined <b data-f="year"></b></div>
+<div class="idc-bottom">Friendship • Culture • Service</div>`;
 
-    if (code === MEMBER_CONFIG.passwordHash) {
-        sessionStorage.setItem("agbMember", "yes");   // remembered until the tab is closed
-        document.getElementById("memberError").hidden = true;
-        showBox(memberTool);
-    } else {
-        document.getElementById("memberError").hidden = false;
+const BACK_HTML = `
+<div class="idc-top slim">
+    <img src="images/logo.png" class="idc-logo" alt="">
+    <div class="idc-org"><b>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ</b><span>AIGIRI GELEYARA BALAGA</span></div>
+</div>
+<div class="idc-rows">
+    <div><small>ಸದಸ್ಯ ಐಡಿ / Member ID</small><b data-f="id"></b></div>
+    <div class="two">
+        <div><small>ರಕ್ತದ ಗುಂಪು / Blood</small><b class="idc-blood" data-f="blood"></b></div>
+        <div><small>ಮೊಬೈಲ್ / Phone</small><b class="idc-phone" data-f="phone"></b></div>
+    </div>
+</div>
+<div class="idc-note">If found, please return to<br>AIGIRI GELEYARA BALAGA, Mysuru<br><span>koushil24.github.io/aigiri-geleyara-balaga</span></div>
+<div class="idc-bottom">Friendship • Culture • Service</div>`;
+
+// Puts the design into a card box and fills in the member's details
+function drawCard(box, html, data) {
+    box.innerHTML = html;
+    box.querySelectorAll("[data-f]").forEach(el => {
+        const value = data[el.dataset.f];
+        if (el.tagName === "IMG") {
+            if (value) {
+                el.src = value;
+                el.hidden = false;
+                el.previousElementSibling.hidden = true;   // hide the 👤 placeholder
+            }
+        } else {
+            el.textContent = value || "";
+        }
+    });
+}
+
+
+// ===== 3. Photo: shrink it so it fits in one spreadsheet cell =====
+let photoData = "";
+
+function shrinkPhoto(file) {
+    return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+            const side = Math.min(img.width, img.height);
+            const x = (img.width - side) / 2;
+            const y = (img.height - side) * 0.3;       // keep a little more of the top (faces)
+
+            // try bigger first, then smaller until the picture is small enough
+            for (const size of [300, 240, 200]) {
+                const canvas = document.createElement("canvas");
+                canvas.width = canvas.height = size;
+                canvas.getContext("2d").drawImage(img, x, y, side, side, 0, 0, size, size);
+
+                for (const quality of [0.75, 0.6, 0.45]) {
+                    const result = canvas.toDataURL("image/jpeg", quality);
+                    if (result.length <= 40000) return resolve(result);
+                }
+            }
+            reject(new Error("too big"));
+        };
+
+        img.onerror = () => reject(new Error("not a picture"));
+        img.src = url;
+    });
+}
+
+
+// ===== 4. Screens =====
+const KEY = "agbMemberData";      // remembers the logged-in member until the tab is closed
+let shownMember = null;
+let shownIsNew = false;
+
+function showTab(tab) {
+    $("loginForm").hidden = (tab !== "login");
+    $("signupArea").hidden = (tab !== "signup");
+    $("tabLogin").classList.toggle("active", tab === "login");
+    $("tabSignup").classList.toggle("active", tab === "signup");
+}
+
+function writeNotice() {
+    if (!shownMember) return;
+    const status = shownMember.status === "Active" ? t("mb-active") : t("mb-pending");
+    const intro = shownIsNew ? t("mb-new").replace("{id}", shownMember.id) : t("mb-welcome");
+    $("cardNotice").textContent = intro + " " + status;
+}
+
+function showCard(member, isNew) {
+    shownMember = member;
+    shownIsNew = isNew;
+
+    const data = {
+        id: member.id, name: member.name, role: member.role.toUpperCase(),
+        year: member.joiningYear, photo: member.photo,
+        blood: member.bloodGroup, phone: member.phone
+    };
+    drawCard($("cardFront"), FRONT_HTML, data);
+    drawCard($("cardBack"), BACK_HTML, data);
+    writeNotice();
+
+    $("memberAuth").hidden = true;
+    $("memberCard").hidden = false;
+    window.scrollTo({ top: 0 });
+}
+
+function showAuth() {
+    $("memberCard").hidden = true;
+    $("memberAuth").hidden = false;
+    showTab("login");
+}
+
+$("tabLogin").addEventListener("click", () => showTab("login"));
+$("tabSignup").addEventListener("click", () => showTab("signup"));
+langBtn.addEventListener("click", writeNotice);     // change the sentence when the language changes
+
+
+// ===== 5. Sign up =====
+// Joining year list: 2025 up to the current year
+const yearList = $("suYear");
+for (let y = 2025; y <= new Date().getFullYear(); y++) {
+    const option = document.createElement("option");
+    option.value = option.textContent = y;
+    yearList.appendChild(option);
+}
+
+// Live preview: the card updates while the form is being filled
+function updatePreview() {
+    const year = $("suYear").value;
+    drawCard($("previewCard"), FRONT_HTML, {
+        id: "AGB" + (year || "20XX") + "###",
+        name: $("suName").value.trim() || "—",
+        role: "MEMBER",
+        year: year || "—",
+        photo: photoData
+    });
+}
+
+["suName", "suYear"].forEach(id => $(id).addEventListener("input", updatePreview));
+updatePreview();
+
+$("suPhoto").addEventListener("change", async () => {
+    const file = $("suPhoto").files[0];
+    photoData = "";
+    if (file) {
+        try {
+            photoData = await shrinkPhoto(file);
+        } catch (error) {
+            showMessage($("signupMsg"), t("mb-v-photo"));
+        }
     }
+    updatePreview();
 });
 
-document.getElementById("memberLock").addEventListener("click", () => {
-    sessionStorage.removeItem("agbMember");
-    document.getElementById("memberPass").value = "";
-    showBox(memberGate);
+function cleanPhone(value) {
+    return value.replace(/[\s+\-]/g, "").replace(/^91(?=\d{10}$)/, "");
+}
+
+// Checks the form; returns a message if something is wrong, or "" if all is fine
+function signupProblem() {
+    if (!/^[\p{L}\p{M} .'-]{2,60}$/u.test($("suName").value.trim())) return t("mb-v-name");
+    if (!/^[6-9]\d{9}$/.test(cleanPhone($("suPhone").value))) return t("mb-v-phone");
+    if (!$("suBlood").value) return t("mb-v-blood");
+    if (!$("suYear").value) return t("mb-v-year");
+    if (!photoData) return t("mb-v-photo");
+    if (!/^\d{4,6}$/.test($("suPin").value)) return t("mb-v-pin");
+    if ($("suPin").value !== $("suPin2").value) return t("mb-v-pin2");
+    if (!$("suConsent").checked) return t("mb-v-consent");
+    return "";
+}
+
+$("signupForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const problem = signupProblem();
+    showMessage($("signupMsg"), problem);
+    if (problem) return;
+
+    $("signupBtn").disabled = true;
+    $("signupBtn").textContent = t("mb-wait");
+
+    try {
+        const answer = await callApi({
+            action: "signup",
+            name: $("suName").value.trim(),
+            phone: cleanPhone($("suPhone").value),
+            bloodGroup: $("suBlood").value,
+            joiningYear: Number($("suYear").value),
+            photo: photoData,
+            pin: $("suPin").value,
+            consent: true
+        });
+
+        if (answer.ok) {
+            sessionStorage.setItem(KEY, JSON.stringify(answer.member));
+            $("signupForm").reset();
+            photoData = "";
+            updatePreview();
+            showCard(answer.member, true);
+        } else {
+            showMessage($("signupMsg"), answer.error);
+        }
+    } catch (error) {
+        showMessage($("signupMsg"), t("mb-neterr"));
+    }
+
+    $("signupBtn").disabled = false;
+    $("signupBtn").textContent = t("mb-signup-btn");
 });
 
 
-// ===== 4. Setup helper (member.html?setup) =====
-const setupPass = document.getElementById("setupPass");
-const setupHash = document.getElementById("setupHash");
+// ===== 6. Log in =====
+$("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-setupPass.addEventListener("input", async () => {
-    const typed = setupPass.value.trim();
-    setupHash.textContent = typed ? await sha256(typed) : "…";
+    const id = $("loginId").value.trim().toUpperCase();
+    const password = $("loginPass").value;
+
+    if (!id || !password) {
+        showMessage($("loginMsg"), t("mb-v-login"));
+        return;
+    }
+    showMessage($("loginMsg"), "");
+
+    $("loginBtn").disabled = true;
+    $("loginBtn").textContent = t("mb-wait");
+
+    try {
+        const answer = await callApi({ action: "login", id: id, password: password });
+
+        if (answer.ok) {
+            sessionStorage.setItem(KEY, JSON.stringify(answer.member));
+            $("loginPass").value = "";
+            showCard(answer.member, false);
+        } else {
+            showMessage($("loginMsg"), answer.error);
+        }
+    } catch (error) {
+        showMessage($("loginMsg"), t("mb-neterr"));
+    }
+
+    $("loginBtn").disabled = false;
+    $("loginBtn").textContent = t("mb-login-btn");
 });
 
-document.getElementById("setupCopy").addEventListener("click", () => {
-    const code = setupHash.textContent;
-    if (code.length > 10) navigator.clipboard.writeText(code);
+
+// ===== 7. Log out, and open the card again after a page reload =====
+$("logoutBtn").addEventListener("click", () => {
+    sessionStorage.removeItem(KEY);
+    shownMember = null;
+    showAuth();
 });
+
+const saved = sessionStorage.getItem(KEY);
+if (saved) {
+    showCard(JSON.parse(saved), false);
+} else {
+    showAuth();
+}
