@@ -56,46 +56,88 @@ window.addEventListener("error", function (e) {
 </div>
 </nav>
 </header>
-
 <!-- ===== Member portal ===== -->
 <section id="member" class="section">
 <div class="wrap">
 
-<!-- 1. Password screen -->
-<div class="member-box" id="memberGate" hidden>
-<img src="images/logo.png" alt="AGB Logo" width="90" height="90">
-<h2 data-i18n="mb-title">AIGIRI MEMBER PORTAL</h2>
-<p data-i18n="mb-sub">This section is for AIGIRI members only.</p>
-<form id="memberForm" autocomplete="off">
-<label for="memberPass" data-i18n="mb-label">Enter Member Access Password</label>
-<input type="password" id="memberPass" required>
-<p class="member-error" id="memberError" data-i18n="mb-wrong" hidden>Wrong password. Please try again.</p>
+<!-- Screen 1: Log in or Sign up -->
+<div id="memberAuth">
+<h2 class="section-title" data-i18n="mb-title">AIGIRI MEMBER PORTAL</h2>
+<p class="section-sub" data-i18n="mb-sub">Log in to see your ID card, or sign up to create one.</p>
+
+<div class="auth-tabs">
+<button type="button" id="tabLogin" class="active" data-i18n="mb-tab-login">Log in</button>
+<button type="button" id="tabSignup" data-i18n="mb-tab-signup">Sign up</button>
+</div>
+
+<!-- Log in -->
+<form id="loginForm" class="member-box" autocomplete="off" novalidate>
+<label for="loginId" data-i18n="mb-id">Member ID</label>
+<input type="text" id="loginId" placeholder="AGB2025001" autocapitalize="characters" maxlength="12">
+<label for="loginPass" data-i18n="mb-pass">AGB member password</label>
+<input type="password" id="loginPass">
+<p class="member-error" id="loginMsg" hidden></p>
 <div class="member-actions">
-<button class="btn" type="submit" data-i18n="mb-unlock">🔓 Unlock</button>
+<button class="btn" type="submit" id="loginBtn" data-i18n="mb-login-btn">🔓 Log in</button>
 <a class="member-back" href="index.html" data-i18n="mb-back">← Back to Website</a>
 </div>
 </form>
-</div>
 
-<!-- 2. After unlocking (the ID card generator will be built here) -->
-<div class="member-box" id="memberTool" hidden>
-<h2 data-i18n="mb-ok-title">✅ Access granted</h2>
-<p data-i18n="mb-ok-sub">The ID Card Generator will appear here in the next step.</p>
+<!-- Sign up: form on one side, live card preview on the other -->
+<div id="signupArea" class="signup-grid" hidden>
+<form id="signupForm" class="member-box" autocomplete="off" novalidate>
+<label for="suName" data-i18n="mb-name">Full name</label>
+<input type="text" id="suName" maxlength="60">
+
+<label for="suPhone" data-i18n="mb-phone">Mobile number</label>
+<input type="tel" id="suPhone" inputmode="numeric" maxlength="14" placeholder="9XXXXXXXXX">
+
+<label for="suBlood" data-i18n="mb-blood">Blood group</label>
+<select id="suBlood">
+<option value="" data-i18n="mb-choose">Choose…</option>
+<option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+<option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+</select>
+
+<label for="suYear" data-i18n="mb-year">Joining year</label>
+<select id="suYear"><option value="" data-i18n="mb-choose">Choose…</option></select>
+
+<label for="suPhoto" data-i18n="mb-photo">Your photo</label>
+<input type="file" id="suPhoto" accept="image/*">
+<p class="member-hint" data-i18n="mb-photo-hint">A clear face photo. It is made smaller automatically.</p>
+
+<label for="suPin" data-i18n="mb-pin">Create a PIN (4–6 digits)</label>
+<input type="password" id="suPin" inputmode="numeric" maxlength="6">
+<label for="suPin2" data-i18n="mb-pin2">Repeat PIN</label>
+<input type="password" id="suPin2" inputmode="numeric" maxlength="6">
+<p class="member-hint" data-i18n="mb-pin-hint">You need this PIN to edit your details. Remember it!</p>
+
+<label class="member-check"><input type="checkbox" id="suConsent"> <span data-i18n="mb-consent">I agree that AGB may store my details (name, photo, phone, blood group) to make my ID card.</span></label>
+
+<p class="member-error" id="signupMsg" hidden></p>
 <div class="member-actions">
-<button class="btn" type="button" id="memberLock" data-i18n="mb-lock">🔒 Lock again</button>
+<button class="btn" type="submit" id="signupBtn" data-i18n="mb-signup-btn">✨ Create my ID card</button>
 <a class="member-back" href="index.html" data-i18n="mb-back">← Back to Website</a>
 </div>
+</form>
+
+<div class="preview-wrap">
+<p class="preview-title" data-i18n="mb-preview">Live preview</p>
+<div class="idcard front" id="previewCard"></div>
+</div>
+</div>
 </div>
 
-<!-- 3. Password setup helper (shown when no password is set yet, or at member.html?setup) -->
-<div class="member-box" id="memberSetup" hidden>
-<h2>🔧 Set the member password</h2>
-<p>Type a new password. Copy the code below and paste it into <b>js/member-config.js</b>. The password itself is never saved anywhere.</p>
-<input type="text" id="setupPass" placeholder="New password" autocomplete="off">
-<p class="member-hash" id="setupHash">…</p>
-<div class="member-actions">
-<button class="btn" type="button" id="setupCopy">Copy code</button>
-<a class="member-back" href="index.html">← Back to Website</a>
+<!-- Screen 2: the member's own ID card -->
+<div id="memberCard" hidden>
+<h2 class="section-title" data-i18n="mb-card-title">🪪 Your ID Card</h2>
+<p class="member-notice" id="cardNotice"></p>
+<div class="card-pair">
+<div class="idcard front" id="cardFront"></div>
+<div class="idcard back" id="cardBack"></div>
+</div>
+<div class="member-actions card-actions">
+<button class="btn" type="button" id="logoutBtn" data-i18n="mb-logout">🚪 Log out</button>
 </div>
 </div>
 
