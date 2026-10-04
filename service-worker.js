@@ -11,7 +11,7 @@
 // throw away their old saved copy.
 // =====================================================
 
-const CACHE_NAME = "agb-v2";
+const CACHE_NAME = "agb-v4";
 
 // Files saved on the phone for offline use
 const urlsToCache = [
@@ -19,10 +19,14 @@ const urlsToCache = [
     "./index.html",
     "./birthday.html",
     "./member.html",
+    "./verify.html",
     "./css/style.css",
     "./js/script.js",
     "./js/member.js",
     "./js/member-config.js",
+    "./js/qr.js",
+    "./js/card.js",
+    "./js/verify.js",
     "./manifest.json",
     "./images/logo.png"
 ];
