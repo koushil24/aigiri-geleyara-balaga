@@ -48,7 +48,6 @@ window.addEventListener("error", function (e) {
 <li><a href="index.html#sponsor" data-i18n="nav-sponsor">Support</a></li>
 <li><a href="index.html#contact" data-i18n="nav-contact">Contact</a></li>
 <li><a href="birthday.html" class="nav-cta" data-i18n="nav-birthday">🎂 Birthday Poster</a></li>
-<li><a href="member.html" data-i18n="nav-member">🪪 Member ID</a></li>
 </ul>
 <div class="actions">
 <button id="langBtn">🌐 English</button>
@@ -62,7 +61,7 @@ window.addEventListener("error", function (e) {
 
 <!-- Screen 1: Log in or Sign up -->
 <div id="memberAuth">
-<h2 class="section-title" data-i18n="mb-title">AIGIRI MEMBER PORTAL</h2>
+<h2 class="section-title" data-i18n="mb-title">AIGIRI MEMBER ID CARD</h2>
 <p class="section-sub" data-i18n="mb-sub">Log in to see your ID card, or sign up to create one.</p>
 
 <div class="auth-tabs">
@@ -137,13 +136,18 @@ window.addEventListener("error", function (e) {
 <div class="idcard back" id="cardBack"></div>
 </div>
 <div class="member-actions card-actions">
+<div class="dl-row">
+<button class="btn" type="button" id="pngBtn" data-i18n="mb-dl-png">⬇ PNG picture</button>
+<button class="btn" type="button" id="pdfBtn" data-i18n="mb-dl-pdf">📄 PDF (for printing)</button>
+<button class="btn" type="button" id="printBtn" data-i18n="mb-print">🖨 Print</button>
+</div>
+<p class="member-hint" data-i18n="mb-dl-hint">The PDF and Print are exactly card size (54 × 86 mm). When printing, choose 100% (actual size).</p>
 <button class="btn" type="button" id="logoutBtn" data-i18n="mb-logout">🚪 Log out</button>
 </div>
 </div>
 
 </div>
 </section>
-
 <footer class="footer">
 <img src="images/logo.png" class="footer-logo" alt="AGB Logo">
 <h2 data-i18n="foot-name">AIGIRI GELEYARA BALAGA</h2>
@@ -153,6 +157,7 @@ window.addEventListener("error", function (e) {
 <a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" rel="noopener">📷 Instagram</a>
 <a href="https://www.threads.com/@aigiri2025" target="_blank" rel="noopener">🧵 Threads</a>
 </div>
+<p class="footer-member"><a href="member.html" data-i18n="foot-member">🪪 Member Login</a></p>
 <hr>
 <p data-i18n="foot-copy">© 2026 AIGIRI GELEYARA BALAGA</p>
 <p data-i18n="foot-dev">Developed with ❤️ by <b>Koushil R Gowda</b></p>
@@ -163,6 +168,8 @@ window.addEventListener("error", function (e) {
 
 <script src="js/member-config.js"></script>
 <script src="js/script.js"></script>
+<script src="js/qr.js"></script>
+<script src="js/card.js"></script>
 <script src="js/member.js"></script>
 <script>
 if ("serviceWorker" in navigator) {
