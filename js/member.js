@@ -1,7 +1,7 @@
 // =====================================================
 // AIGIRI MEMBER PORTAL - Log in / Sign up / ID card
 // 1 Helpers  2 Card design  3 Photo  4 Screens  5 Sign up
-// 6 Log in   7 Log out
+// 6 Log in   7 Download / Print   8 Log out   8 PNG / PDF / Print
 // =====================================================
 
 
@@ -13,11 +13,27 @@ const t = (key) => translations[currentLanguage][key];
 
 // Sends a request to our Google Apps Script and returns its answer
 async function callApi(data) {
+    if (!MEMBER_CONFIG.apiUrl) {
+        throw new Error("apiUrl is missing in js/member-config.js");
+    }
+
     const response = await fetch(MEMBER_CONFIG.apiUrl, {
         method: "POST",
         body: JSON.stringify(data)
     });
-    return response.json();
+
+    const text = await response.text();
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        throw new Error("The server did not send data. Check that the web app is deployed with access: Anyone.");
+    }
+}
+
+// The "could not connect" sentence. Add ?debug to the page address to also see the technical reason.
+function connectionMessage(error) {
+    const debug = location.search.indexOf("debug") !== -1;
+    return t("mb-neterr") + (debug ? "  [" + error.message + "]" : "");
 }
 
 function showMessage(box, text) {
@@ -26,52 +42,14 @@ function showMessage(box, text) {
 }
 
 
-// ===== 2. Card design =====
-// data-f="name" marks the places that are filled with the member's details
-const FRONT_HTML = `
-<div class="idc-top">
-    <img src="images/logo.png" class="idc-logo" alt="">
-    <div class="idc-org"><b>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ</b><span>AIGIRI GELEYARA BALAGA</span><small>Mysuru</small></div>
-</div>
-<div class="idc-photo"><span class="idc-noimg">👤</span><img data-f="photo" alt="" hidden></div>
-<div class="idc-name" data-f="name"></div>
-<div class="idc-role" data-f="role"></div>
-<div class="idc-id" data-f="id"></div>
-<div class="idc-meta">ಸೇರಿದ ವರ್ಷ / Joined <b data-f="year"></b></div>
-<div class="idc-bottom">Friendship • Culture • Service</div>`;
-
-const BACK_HTML = `
-<div class="idc-top slim">
-    <img src="images/logo.png" class="idc-logo" alt="">
-    <div class="idc-org"><b>ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ</b><span>AIGIRI GELEYARA BALAGA</span></div>
-</div>
-<div class="idc-rows">
-    <div><small>ಸದಸ್ಯ ಐಡಿ / Member ID</small><b data-f="id"></b></div>
-    <div class="two">
-        <div><small>ರಕ್ತದ ಗುಂಪು / Blood</small><b class="idc-blood" data-f="blood"></b></div>
-        <div><small>ಮೊಬೈಲ್ / Phone</small><b class="idc-phone" data-f="phone"></b></div>
-    </div>
-</div>
-<div class="idc-note">If found, please return to<br>AIGIRI GELEYARA BALAGA, Mysuru<br><span>koushil24.github.io/aigiri-geleyara-balaga</span></div>
-<div class="idc-bottom">Friendship • Culture • Service</div>`;
-
-// Puts the design into a card box and fills in the member's details
-function drawCard(box, html, data) {
-    box.innerHTML = html;
-    box.querySelectorAll("[data-f]").forEach(el => {
-        const value = data[el.dataset.f];
-        if (el.tagName === "IMG") {
-            if (value) {
-                el.src = value;
-                el.hidden = false;
-                el.previousElementSibling.hidden = true;   // hide the 👤 placeholder
-            }
-        } else {
-            el.textContent = value || "";
-        }
-    });
+// ===== 2. Card pictures =====
+// The card is drawn by card.js on a canvas. paint() puts the drawing into a box.
+async function paint(box, side, data, scale) {
+    const canvas = await renderCard(side, data, scale);
+    canvas.setAttribute("role", "img");
+    canvas.setAttribute("aria-label", "AGB ID card " + side);
+    box.replaceChildren(canvas);
 }
-
 
 // ===== 3. Photo: shrink it so it fits in one spreadsheet cell =====
 let photoData = "";
@@ -126,17 +104,20 @@ function writeNotice() {
     $("cardNotice").textContent = intro + " " + status;
 }
 
+let cardData = null;          // the details used for the card, PNG, PDF and print
+
 function showCard(member, isNew) {
     shownMember = member;
     shownIsNew = isNew;
 
-    const data = {
+    cardData = {
         id: member.id, name: member.name, role: member.role.toUpperCase(),
         year: member.joiningYear, photo: member.photo,
-        blood: member.bloodGroup, phone: member.phone
+        blood: member.bloodGroup, phone: member.phone,
+        verifyUrl: new URL("verify.html?id=" + member.id, location.href).href   // the QR code opens this page
     };
-    drawCard($("cardFront"), FRONT_HTML, data);
-    drawCard($("cardBack"), BACK_HTML, data);
+    paint($("cardFront"), "front", cardData, 3);
+    paint($("cardBack"), "back", cardData, 3);
     writeNotice();
 
     $("memberAuth").hidden = true;
@@ -167,13 +148,13 @@ for (let y = 2025; y <= new Date().getFullYear(); y++) {
 // Live preview: the card updates while the form is being filled
 function updatePreview() {
     const year = $("suYear").value;
-    drawCard($("previewCard"), FRONT_HTML, {
+    paint($("previewCard"), "front", {
         id: "AGB" + (year || "20XX") + "###",
         name: $("suName").value.trim() || "—",
         role: "MEMBER",
         year: year || "—",
         photo: photoData
-    });
+    }, 2);
 }
 
 ["suName", "suYear"].forEach(id => $(id).addEventListener("input", updatePreview));
@@ -241,7 +222,7 @@ $("signupForm").addEventListener("submit", async (e) => {
             showMessage($("signupMsg"), answer.error);
         }
     } catch (error) {
-        showMessage($("signupMsg"), t("mb-neterr"));
+        showMessage($("signupMsg"), connectionMessage(error));
     }
 
     $("signupBtn").disabled = false;
@@ -276,7 +257,7 @@ $("loginForm").addEventListener("submit", async (e) => {
             showMessage($("loginMsg"), answer.error);
         }
     } catch (error) {
-        showMessage($("loginMsg"), t("mb-neterr"));
+        showMessage($("loginMsg"), connectionMessage(error));
     }
 
     $("loginBtn").disabled = false;
@@ -284,7 +265,30 @@ $("loginForm").addEventListener("submit", async (e) => {
 });
 
 
-// ===== 7. Log out, and open the card again after a page reload =====
+// ===== 7. Download PNG / PDF / Print =====
+// Shows "Preparing..." on the button while the file is being made
+function wireButton(buttonId, labelKey, action) {
+    const button = $(buttonId);
+    button.addEventListener("click", async () => {
+        if (!cardData) return;
+        button.disabled = true;
+        button.textContent = t("mb-wait");
+        try {
+            await action(cardData);
+        } catch (error) {
+            console.error(error);
+        }
+        button.disabled = false;
+        button.textContent = t(labelKey);
+    });
+}
+
+wireButton("pngBtn", "mb-dl-png", downloadPng);
+wireButton("pdfBtn", "mb-dl-pdf", downloadPdf);
+wireButton("printBtn", "mb-print", printCard);
+
+
+// ===== 8. Log out, and open the card again after a page reload =====
 $("logoutBtn").addEventListener("click", () => {
     sessionStorage.removeItem(KEY);
     shownMember = null;
@@ -296,4 +300,4 @@ if (saved) {
     showCard(JSON.parse(saved), false);
 } else {
     showAuth();
-}
+            }
