@@ -27,7 +27,7 @@ window.addEventListener("error", function (e) {
 <link rel="icon" type="image/png" href="images/icon-192.png">
 <link rel="apple-touch-icon" href="images/icon-192.png">
 </head>
-<body>
+<body class="has-tabbar">
 
 <!-- ===== Loader ===== -->
 <div id="loader">
@@ -57,18 +57,55 @@ window.addEventListener("error", function (e) {
 <li><a href="#gallery" data-i18n="nav-gallery">Gallery</a></li>
 <li><a href="#sponsor" data-i18n="nav-sponsor">Support</a></li>
 <li><a href="#contact" data-i18n="nav-contact">Contact</a></li>
-<li><a href="birthday.html" class="nav-cta" data-i18n="nav-birthday">🎂 Birthday Poster</a></li>
-<li><a href="member.html" data-i18n="nav-member">🪪 Member ID</a></li>
+<li class="nav-extra"><a href="birthday.html" class="nav-cta" data-i18n="nav-birthday">🎂 Birthday Poster</a></li>
 </ul>
 <div class="actions">
+<a class="join-btn" href="#sponsor" data-i18n="nav-join">Join / Volunteer</a>
 <button id="langBtn">🌐 English</button>
 <button id="themeBtn">🌙</button>
 </div>
 </nav>
 </header>
 
+<!-- ===== Hero ===== -->
+<section id="home" class="hero2">
+<div class="hero2-bg"></div>
+<div class="wrap-wide hero2-grid">
+<div class="hero2-text">
+<h1 data-i18n="hero2-title">Together We Grow,<br>Together We Serve.</h1>
+<p class="hero2-tag" data-i18n="hero2-tag">Friendship • Culture • Service</p>
+<p class="hero2-sub" data-i18n="hero2-sub">A youth community bringing people together through friendship, culture, spirituality and service.</p>
+<div class="hero2-buttons">
+<a href="#events" class="btn" data-i18n="btn-explore">Explore Events</a>
+<a href="#team" class="btn btn-outline hide-phone" data-i18n="btn-meet">Meet AGB</a>
+<a href="#sponsor" class="btn btn-outline show-phone" data-i18n="nav-join">Join / Volunteer</a>
+</div>
+</div>
+<div class="polaroids" aria-hidden="true">
+<img src="images/gallery-slider/photo2.jpg" alt="">
+<img src="images/gallery-slider/photo3.jpg" alt="">
+<img src="images/gallery-slider/photo4.jpg" alt="">
+</div>
+</div>
+</section>
+
+<!-- ===== Digital Ecosystem ===== -->
+<section class="section eco-section">
+<div class="wrap">
+<h2 class="section-title" data-i18n="de-title">✨ Digital Ecosystem</h2>
+<div class="eco">
+<a href="member.html"><span class="eco-icon">🪪</span><span><b data-i18n="de-member">Digital Member ID</b><small data-i18n="de-member-s">Your AGB identity</small></span></a>
+<a href="birthday.html"><span class="eco-icon">🎂</span><span><b data-i18n="de-poster">Birthday Poster Maker</b><small data-i18n="de-poster-s">Celebrate special moments</small></span></a>
+<a href="#sponsor"><span class="eco-icon">🙋</span><span><b data-i18n="de-join">Join / Volunteer</b><small data-i18n="de-join-s">Be part of AGB</small></span></a>
+<a href="#events"><span class="eco-icon">📅</span><span><b data-i18n="de-events">Events</b><small data-i18n="de-events-s">Stay updated</small></span></a>
+</div>
+</div>
+</section>
+
 <!-- ===== Photo slider ===== -->
-<section class="gallery-slider">
+<section id="memories" class="gallery-slider">
+<div class="wrap">
+<h2 class="section-title" data-i18n="mem-title">📸 Explore Memories</h2>
 <div class="slider">
 <button id="prevSlide" class="slide-btn" aria-label="Previous">❮</button>
 <img id="sliderImage" src="images/gallery-slider/photo1.jpg" alt="Ganeshotsava 2025">
@@ -79,31 +116,13 @@ window.addEventListener("error", function (e) {
 </div>
 </div>
 <div class="slider-dots" id="sliderDots"></div>
+</div>
 </section>
 
 <div id="imageViewer" class="image-viewer">
 <span id="closeViewer">&times;</span>
 <img id="fullImage" src="" alt="Full Image">
 </div>
-
-<!-- ===== Hero ===== -->
-<section id="home" class="hero">
-<img src="images/logo.png" class="hero-watermark" alt="">
-<div class="hero-content">
-<img src="images/logo.png" class="hero-logo" alt="AGB Logo">
-<h1 data-i18n="hero-title">AIGIRI GELEYARA BALAGA</h1>
-<h2 data-i18n="hero-city">Mysuru</h2>
-<p data-i18n="hero-tagline">Service • Friendship • Culture</p>
-<a href="#events" class="btn" data-i18n="btn-events">Upcoming Events</a>
-<div class="social-coming">
-<h3 data-i18n="connect">Connect With Us</h3>
-<div class="social-links">
-<a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" rel="noopener">📷 Instagram<small data-i18n="insta-follow">Follow us on Instagram</small></a>
-<a href="https://www.threads.com/@aigiri2025" target="_blank" rel="noopener">🧵 Threads<small data-i18n="threads-official">Official Page</small></a>
-</div>
-</div>
-</div>
-</section>
 
 <!-- ===== About ===== -->
 <section id="about" class="section alt">
@@ -376,6 +395,14 @@ window.addEventListener("error", function (e) {
 </div>
 </section>
 
+<nav class="tabbar" aria-label="Quick menu">
+<a href="#home" class="on"><span>🏠</span><em data-i18n="tab-home">Home</em></a>
+<a href="#events"><span>📅</span><em data-i18n="tab-events">Events</em></a>
+<a href="#gallery"><span>🖼️</span><em data-i18n="tab-gallery">Gallery</em></a>
+<a href="#sponsor"><span>🤝</span><em data-i18n="tab-support">Support</em></a>
+<button type="button" id="tabMenu"><span>☰</span><em data-i18n="tab-menu">Menu</em></button>
+</nav>
+
 <!-- ===== Footer ===== -->
 <footer class="footer">
 <img src="images/logo.png" class="footer-logo" alt="AGB Logo">
@@ -386,19 +413,10 @@ window.addEventListener("error", function (e) {
 <a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" rel="noopener">📷 Instagram</a>
 <a href="https://www.threads.com/@aigiri2025" target="_blank" rel="noopener">🧵 Threads</a>
 </div>
+<p class="footer-member"><a href="member.html" data-i18n="foot-member">🪪 Member Login</a></p>
 <hr>
 <p data-i18n="foot-copy">© 2026 AIGIRI GELEYARA BALAGA</p>
 <p data-i18n="foot-dev">Developed with ❤️ by <b>Koushil R Gowda</b></p>
 <p data-i18n="foot-ver">Website Version 2.3</p>
 </footer>
-<div id="toast" class="toast"></div>
-<button id="topBtn" aria-label="Back to top">⬆</button>
-
-<script src="js/script.js"></script>
-<script>
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js").then(() => console.log("Service Worker Registered"));
-}
-</script>
-</body>
-</html>
+<div id="toast" c
