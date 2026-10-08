@@ -170,7 +170,28 @@ const translations = {
         "vf-year": "ಸೇರಿದ ವರ್ಷ",
         "vf-note": "ಈ ಪುಟ ಹೆಸರು, ಪಾತ್ರ ಮತ್ತು ಸ್ಥಿತಿಯನ್ನು ಮಾತ್ರ ತೋರಿಸುತ್ತದೆ.",
         "vf-home": "← ವೆಬ್‌ಸೈಟ್‌ಗೆ ಮರಳಿ",
-        "mb-badreply": "ಸರ್ವರ್ ನಿರೀಕ್ಷಿತವಲ್ಲದ ಉತ್ತರ ನೀಡಿದೆ. ದಯವಿಟ್ಟು ಎಜಿಬಿ ನಿರ್ವಾಹಕರಿಗೆ ತಿಳಿಸಿ."
+        "mb-badreply": "ಸರ್ವರ್ ನಿರೀಕ್ಷಿತವಲ್ಲದ ಉತ್ತರ ನೀಡಿದೆ. ದಯವಿಟ್ಟು ಎಜಿಬಿ ನಿರ್ವಾಹಕರಿಗೆ ತಿಳಿಸಿ.",
+        "nav-join": "ಸೇರಿ / ಸ್ವಯಂಸೇವಕರಾಗಿ",
+        "hero2-title": "ಒಟ್ಟಾಗಿ ಬೆಳೆಯೋಣ,<br>ಒಟ್ಟಾಗಿ ಸೇವೆ ಮಾಡೋಣ.",
+        "hero2-tag": "ಸ್ನೇಹ • ಸಂಸ್ಕೃತಿ • ಸೇವೆ",
+        "hero2-sub": "ಸ್ನೇಹ, ಸಂಸ್ಕೃತಿ, ಆಧ್ಯಾತ್ಮಿಕತೆ ಮತ್ತು ಸೇವೆಯ ಮೂಲಕ ಜನರನ್ನು ಒಂದುಗೂಡಿಸುವ ಯುವ ಸಮುದಾಯ.",
+        "btn-explore": "ಕಾರ್ಯಕ್ರಮಗಳನ್ನು ನೋಡಿ",
+        "btn-meet": "AGB ತಂಡ ಭೇಟಿ",
+        "mem-title": "📸 ನೆನಪುಗಳು",
+        "de-title": "✨ ಡಿಜಿಟಲ್ ಸೇವೆಗಳು",
+        "de-member": "ಡಿಜಿಟಲ್ ಸದಸ್ಯ ಐಡಿ",
+        "de-member-s": "ನಿಮ್ಮ AGB ಗುರುತು",
+        "de-poster": "ಹುಟ್ಟುಹಬ್ಬ ಪೋಸ್ಟರ್",
+        "de-poster-s": "ವಿಶೇಷ ಕ್ಷಣಗಳ ಆಚರಣೆ",
+        "de-join": "ಸೇರಿ / ಸ್ವಯಂಸೇವಕರಾಗಿ",
+        "de-join-s": "AGB ಯ ಭಾಗವಾಗಿ",
+        "de-events": "ಕಾರ್ಯಕ್ರಮಗಳು",
+        "de-events-s": "ಮಾಹಿತಿ ಪಡೆಯಿರಿ",
+        "tab-home": "ಮುಖಪುಟ",
+        "tab-events": "ಕಾರ್ಯಕ್ರಮ",
+        "tab-gallery": "ಗ್ಯಾಲರಿ",
+        "tab-support": "ಬೆಂಬಲ",
+        "tab-menu": "ಮೆನು"
     },
     "en": {
         "nav-home": "Home",
@@ -316,7 +337,28 @@ const translations = {
         "vf-year": "Joined",
         "vf-note": "This page only shows name, role and status.",
         "vf-home": "← Back to Website",
-        "mb-badreply": "The server replied in an unexpected way. Please tell the AGB admin."
+        "mb-badreply": "The server replied in an unexpected way. Please tell the AGB admin.",
+        "nav-join": "Join / Volunteer",
+        "hero2-title": "Together We Grow,<br>Together We Serve.",
+        "hero2-tag": "Friendship • Culture • Service",
+        "hero2-sub": "A youth community bringing people together through friendship, culture, spirituality and service.",
+        "btn-explore": "Explore Events",
+        "btn-meet": "Meet AGB",
+        "mem-title": "📸 Explore Memories",
+        "de-title": "✨ Digital Ecosystem",
+        "de-member": "Digital Member ID",
+        "de-member-s": "Your AGB identity",
+        "de-poster": "Birthday Poster Maker",
+        "de-poster-s": "Celebrate special moments",
+        "de-join": "Join / Volunteer",
+        "de-join-s": "Be part of AGB",
+        "de-events": "Events",
+        "de-events-s": "Stay updated",
+        "tab-home": "Home",
+        "tab-events": "Events",
+        "tab-gallery": "Gallery",
+        "tab-support": "Support",
+        "tab-menu": "Menu"
     }
 };
 
@@ -365,6 +407,11 @@ if (menuToggle && navMenu) {
         });
     });
 }
+
+
+// Bottom tab bar on phones: "Menu" opens the same menu as the ☰ button
+const tabMenu = document.getElementById("tabMenu");
+if (tabMenu && menuToggle) tabMenu.addEventListener("click", () => menuToggle.click());
 
 
 // ===== 4. Scroll effects (shrinking navbar + back-to-top button) =====
