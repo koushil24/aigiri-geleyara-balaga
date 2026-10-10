@@ -20,6 +20,47 @@ window.addEventListener("error", function (e) {
     box.textContent = "ERROR: " + e.message + " (" + String(e.filename || "").split("/").pop() + " line " + e.lineno + ")";
     document.body.appendChild(box);
 });
+
+/* With ?debug a small green panel at the top shows what is happening on the page. */
+(function () {
+    if (location.search.indexOf("debug") === -1) return;
+    var last = "(tap somewhere)";
+
+    function panel() {
+        var p = document.getElementById("dbgPanel");
+        if (!p) {
+            p = document.createElement("pre");
+            p.id = "dbgPanel";
+            p.style.cssText = "position:fixed;z-index:999999;left:0;right:0;top:0;margin:0;padding:8px;background:rgba(0,0,0,.88);color:#0f0;font-size:11px;white-space:pre-wrap;pointer-events:none";
+            document.body.appendChild(p);
+        }
+        return p;
+    }
+
+    function show() {
+        var done = false;
+        try { done = typeof posterFrame !== "undefined"; } catch (e) { done = false; }
+        var loader = document.getElementById("loader");
+        var style = loader ? getComputedStyle(loader) : null;
+        var days = document.querySelector(".cd-days");
+        panel().textContent =
+            "DEBUG PANEL\n" +
+            "script.js ran to the end: " + done + "\n" +
+            "functions: language=" + (typeof changeLanguage) + " slider=" + (typeof showSlide) + "\n" +
+            "loader: " + (style ? style.display + "/" + style.visibility + "/" + style.opacity : "none") + "\n" +
+            "countdown days: " + (days ? days.textContent : "-") + "\n" +
+            "screen: " + innerWidth + "x" + innerHeight + "\n" +
+            "last tap on: " + last;
+    }
+
+    document.addEventListener("click", function (e) {
+        var t = e.target;
+        last = t.tagName + (t.id ? "#" + t.id : "") + (typeof t.className === "string" && t.className ? "." + t.className.split(" ")[0] : "");
+        show();
+    }, true);
+
+    window.addEventListener("load", function () { setTimeout(show, 1500); setInterval(show, 2000); });
+})();
 </script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="manifest" href="manifest.json">
@@ -419,4 +460,14 @@ window.addEventListener("error", function (e) {
 <p data-i18n="foot-dev">Developed with ❤️ by <b>Koushil R Gowda</b></p>
 <p data-i18n="foot-ver">Website Version 2.3</p>
 </footer>
-<div id="toast" c
+<div id="toast" class="toast"></div>
+<button id="topBtn" aria-label="Back to top">⬆</button>
+
+<script src="js/script.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").then(() => console.log("Service Worker Registered"));
+}
+</script>
+</body>
+</html>
