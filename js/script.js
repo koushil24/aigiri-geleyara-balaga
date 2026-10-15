@@ -191,7 +191,9 @@ const translations = {
         "tab-events": "ಕಾರ್ಯಕ್ರಮ",
         "tab-gallery": "ಗ್ಯಾಲರಿ",
         "tab-support": "ಬೆಂಬಲ",
-        "tab-menu": "ಮೆನು"
+        "tab-menu": "ಮೆನು",
+        "evt-venue": "📍 ಮೈಸೂರು",
+        "evt-support": "ಈ ಕಾರ್ಯಕ್ರಮಕ್ಕೆ ಬೆಂಬಲ"
     },
     "en": {
         "nav-home": "Home",
@@ -358,7 +360,9 @@ const translations = {
         "tab-events": "Events",
         "tab-gallery": "Gallery",
         "tab-support": "Support",
-        "tab-menu": "Menu"
+        "tab-menu": "Menu",
+        "evt-venue": "📍 Mysuru",
+        "evt-support": "Support this event"
     }
 };
 
@@ -381,6 +385,7 @@ function changeLanguage(language) {
     langBtn.textContent = language === "kn" ? "🌐 English" : "🌐 ಕನ್ನಡ";
     localStorage.setItem("language", language);
     currentLanguage = language;
+    updateEventBadges();
 }
 
 changeLanguage(currentLanguage);
@@ -552,6 +557,16 @@ document.querySelectorAll(".countdown-card").forEach(card => {
         hours.textContent = String(Math.floor(diff / 3600000) % 24).padStart(2, "0");
         mins.textContent = String(Math.floor(diff / 60000) % 60).padStart(2, "0");
         secs.textContent = String(Math.floor(diff / 1000) % 60).padStart(2, "0");
+
+        // progress ring around the days: it fills up as the event comes closer (last 365 days)
+        const ring = card.querySelector(".cd-ring-fg");
+        if (ring) ring.style.strokeDashoffset = 276.46 * Math.min(1, Math.floor(diff / 86400000) / 365);
+
+        // small flip movement every second
+        const secBox = secs.parentElement;
+        secBox.classList.remove("flip");
+        void secBox.offsetWidth;
+        secBox.classList.add("flip");
     }
 
     tick();
@@ -634,4 +649,75 @@ if (posterFrame) {
         }
     });
 }
+
+
+// Date badge on each upcoming event photo (day number + month name in the chosen language)
+function updateEventBadges() {
+    document.querySelectorAll(".countdown-card").forEach(card => {
+        const day = card.querySelector(".evt-day");
+        const month = card.querySelector(".evt-mon");
+        if (!day || !month) return;
+        const date = new Date(card.dataset.date);
+        day.textContent = date.getDate();
+        month.textContent = date.toLocaleString(currentLanguage === "kn" ? "kn-IN" : "en-IN", { month: "short" });
+    });
+}
+updateEventBadges();
+
+
+// ===== 12. Icons: every emoji on the page becomes one of our own drawn icons =====
+// The pictures live in the hidden icon sheet at the top of each page (<symbol id="i-...">).
+const ICON_MAP = {"🪔": "lamp", "🐘": "modak", "📅": "calendar", "🙏": "namaste", "🟡": "diamond", "👥": "people", "📸": "camera", "🤝": "united", "🎉": "sparkle", "🍛": "bowl", "🎵": "music", "🎁": "gift", "🙋": "hand", "📍": "pin", "🗺": "map", "📧": "mail", "📞": "phone", "📷": "camera", "🧵": "at", "🕰": "clock", "✨": "sparkle", "🪪": "idcard", "🎂": "cake", "🔓": "unlock", "🔒": "lock", "🚪": "door", "⬇": "download", "📄": "document", "🖨": "printer", "✅": "check", "⏳": "hourglass", "❌": "cross", "⚠": "warning", "🛕": "temple", "❤": "heart", "🌐": "globe", "🌙": "moon", "☀": "sun", "⬆": "arrowup", "👤": "user", "🔧": "wrench", "▶": "play", "🏠": "home", "🖼": "image", "💬": "chat", "✔": "tick"};
+const ICON_PATTERN = "(" + Object.keys(ICON_MAP).join("|") + ")\\uFE0F?";
+
+function makeIcon(name) {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "ic ic-" + name);
+    svg.setAttribute("aria-hidden", "true");
+    const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+    use.setAttribute("href", "#i-" + name);
+    svg.appendChild(use);
+    return svg;
+}
+
+function iconize(root) {
+    const finder = new RegExp(ICON_PATTERN);
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+            const tag = node.parentNode && node.parentNode.nodeName;
+            if (!tag || /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT|TITLE|OPTION)$/.test(tag)) return NodeFilter.FILTER_REJECT;
+            return finder.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+    });
+
+    const found = [];
+    while (walker.nextNode()) found.push(walker.currentNode);
+
+    found.forEach(node => {
+        const text = node.nodeValue;
+        const fragment = document.createDocumentFragment();
+        let last = 0;
+        text.replace(new RegExp(ICON_PATTERN, "g"), (match, emoji, position) => {
+            fragment.appendChild(document.createTextNode(text.slice(last, position)));
+            fragment.appendChild(makeIcon(ICON_MAP[emoji]));
+            last = position + match.length;
+            return match;
+        });
+        fragment.appendChild(document.createTextNode(text.slice(last)));
+        node.parentNode.replaceChild(fragment, node);
+    });
+}
+
+// run now, and again whenever the page changes its text (language, messages, countdown...)
+let iconTimer;
+const iconWatcher = new MutationObserver(() => {
+    clearTimeout(iconTimer);
+    iconTimer = setTimeout(() => {
+        iconWatcher.disconnect();
+        iconize(document.body);
+        iconWatcher.observe(document.body, { childList: true, subtree: true, characterData: true });
+    }, 30);
+});
+iconize(document.body);
+iconWatcher.observe(document.body, { childList: true, subtree: true, characterData: true });
 

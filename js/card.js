@@ -118,8 +118,13 @@ function drawFront(ctx, data, logo, photo) {
     if (photo) {
         ctx.drawImage(photo, 91, 127, 118, 118);
     } else {
-        ctx.font = "50px " + FONT;
-        ctx.fillText("👤", 150, 204);
+        ctx.fillStyle = "#c9b99a";                 // simple person shape
+        ctx.beginPath();
+        ctx.arc(150, 172, 21, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(150, 236, 42, Math.PI, 0);
+        ctx.fill();
     }
     ctx.restore();
 
