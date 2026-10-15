@@ -1,0 +1,9 @@
+AIGIRI GELEYARA BALAGA - update: own icons, moving loading screen, new event cards
+
+UPLOAD (GitHub, phone) - 3 rounds, Commit after each:
+ Round 1 - main folder : index.html, birthday.html, member.html, verify.html
+ Round 2 - css folder  : style.css
+ Round 3 - js folder   : script.js, card.js
+
+Do NOT upload member-config.js (your web app address stays as it is).
+Then wait 2 minutes, open the site in an Incognito tab, and hard refresh.
