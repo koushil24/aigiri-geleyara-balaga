@@ -27,6 +27,8 @@ themeBtn.addEventListener("click", () => {
 // To change any text on the website, edit it here (both kn and en).
 const translations = {
     "kn": {
+        "sheet-birthday": "ಹುಟ್ಟುಹಬ್ಬ ಪೋಸ್ಟರ್",
+        "sheet-member": "ಸದಸ್ಯ ಐಡಿ",
         "nav-home": "ಮುಖಪುಟ",
         "nav-about": "ನಮ್ಮ ಬಗ್ಗೆ",
         "nav-events": "ಕಾರ್ಯಕ್ರಮಗಳು",
@@ -196,6 +198,8 @@ const translations = {
         "evt-support": "ಈ ಕಾರ್ಯಕ್ರಮಕ್ಕೆ ಬೆಂಬಲ"
     },
     "en": {
+        "sheet-birthday": "Birthday Poster",
+        "sheet-member": "Member ID",
         "nav-home": "Home",
         "nav-about": "About",
         "nav-events": "Events",
@@ -416,7 +420,21 @@ if (menuToggle && navMenu) {
 
 // Bottom tab bar on phones: "Menu" opens the same menu as the ☰ button
 const tabMenu = document.getElementById("tabMenu");
-if (tabMenu && menuToggle) tabMenu.addEventListener("click", () => menuToggle.click());
+const menuSheet = document.getElementById("menuSheet");
+const sheetBackdrop = document.getElementById("sheetBackdrop");
+
+function setSheet(open) {
+    menuSheet.classList.toggle("open", open);
+    sheetBackdrop.classList.toggle("open", open);
+    menuSheet.setAttribute("aria-hidden", open ? "false" : "true");
+}
+
+if (tabMenu && menuSheet) {
+    tabMenu.addEventListener("click", () => setSheet(!menuSheet.classList.contains("open")));
+    sheetBackdrop.addEventListener("click", () => setSheet(false));
+    menuSheet.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setSheet(false)));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") setSheet(false); });
+}
 
 
 // ===== 4. Scroll effects (shrinking navbar + back-to-top button) =====
@@ -558,9 +576,12 @@ document.querySelectorAll(".countdown-card").forEach(card => {
         mins.textContent = String(Math.floor(diff / 60000) % 60).padStart(2, "0");
         secs.textContent = String(Math.floor(diff / 1000) % 60).padStart(2, "0");
 
-        // progress ring around the days: it fills up as the event comes closer (last 365 days)
-        const ring = card.querySelector(".cd-ring-fg");
-        if (ring) ring.style.strokeDashoffset = 276.46 * Math.min(1, Math.floor(diff / 86400000) / 365);
+        // the four dials: each gold ring shows how much is left of its unit
+        const left = [Math.floor(diff / 86400000), Math.floor(diff / 3600000) % 24, Math.floor(diff / 60000) % 60, Math.floor(diff / 1000) % 60];
+        const fraction = [1 - Math.min(1, left[0] / 365), left[1] / 24, left[2] / 60, left[3] / 60];
+        card.querySelectorAll(".dial-fg").forEach((ring, i) => {
+            ring.style.strokeDashoffset = 238.76 * (1 - fraction[i]);
+        });
 
         // small flip movement every second
         const secBox = secs.parentElement;
