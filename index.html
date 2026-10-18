@@ -150,26 +150,7 @@ window.addEventListener("error", function (e) {
 </section>
 
 <!-- ===== Photo slider ===== -->
-<section id="memories" class="gallery-slider">
-<div class="wrap">
-<h2 class="section-title" data-i18n="mem-title">📸 Explore Memories</h2>
-<div class="slider">
-<button id="prevSlide" class="slide-btn" aria-label="Previous">❮</button>
-<img id="sliderImage" src="images/gallery-slider/photo1.jpg" alt="Ganeshotsava 2025">
-<button id="nextSlide" class="slide-btn" aria-label="Next">❯</button>
-<div class="slider-overlay">
-<h2 data-i18n="slide-title">Ganeshotsava 2025</h2>
-<p data-i18n="slide-sub">Memories of Unity • Devotion • Friendship</p>
-</div>
-</div>
-<div class="slider-dots" id="sliderDots"></div>
-</div>
-</section>
 
-<div id="imageViewer" class="image-viewer">
-<span id="closeViewer">&times;</span>
-<img id="fullImage" src="" alt="Full Image">
-</div>
 
 <!-- ===== About ===== -->
 <section id="about" class="section alt">
@@ -201,11 +182,13 @@ window.addEventListener("error", function (e) {
 <h3><span data-i18n="t-ashada">🪔 Ashada Pooja Mahotsava</span> 2027</h3>
 <p class="evt-meta" data-i18n="d-ashada27">📅 30 July 2027</p>
 <p class="evt-meta" data-i18n="evt-venue">📍 Mysuru</p>
-<div class="countdown">
-<figure class="dial"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="dial-petals" fill="rgba(255,215,0,.10)" stroke="rgba(255,215,0,.6)" stroke-width=".8"><path transform="rotate(0 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(30 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(60 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(90 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(120 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(150 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(180 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(210 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(240 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(270 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(300 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(330 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/></g><circle class="dial-bg" cx="50" cy="50" r="38"/><circle class="dial-fg" cx="50" cy="50" r="38" transform="rotate(-90 50 50)"/></svg><span class="cd-days">0</span><small data-i18n="cd-days">Days</small></figure>
-<figure class="dial"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="dial-petals" fill="rgba(255,215,0,.10)" stroke="rgba(255,215,0,.6)" stroke-width=".8"><path transform="rotate(0 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(30 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(60 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(90 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(120 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(150 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(180 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(210 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(240 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(270 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(300 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(330 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/></g><circle class="dial-bg" cx="50" cy="50" r="38"/><circle class="dial-fg" cx="50" cy="50" r="38" transform="rotate(-90 50 50)"/></svg><span class="cd-hours">0</span><small data-i18n="cd-hours">Hours</small></figure>
-<figure class="dial"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="dial-petals" fill="rgba(255,215,0,.10)" stroke="rgba(255,215,0,.6)" stroke-width=".8"><path transform="rotate(0 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(30 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(60 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(90 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(120 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(150 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(180 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(210 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(240 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(270 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(300 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(330 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/></g><circle class="dial-bg" cx="50" cy="50" r="38"/><circle class="dial-fg" cx="50" cy="50" r="38" transform="rotate(-90 50 50)"/></svg><span class="cd-mins">0</span><small data-i18n="cd-mins">Min</small></figure>
-<figure class="dial"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="dial-petals" fill="rgba(255,215,0,.10)" stroke="rgba(255,215,0,.6)" stroke-width=".8"><path transform="rotate(0 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(30 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(60 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(90 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(120 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(150 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(180 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(210 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(240 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(270 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(300 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(330 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/></g><circle class="dial-bg" cx="50" cy="50" r="38"/><circle class="dial-fg" cx="50" cy="50" r="38" transform="rotate(-90 50 50)"/></svg><span class="cd-secs">0</span><small data-i18n="cd-secs">Sec</small></figure>
+<div class="countdown door">
+<fc-row class="units">
+<figure class="unit"><fc-card class="flipcard cd-days"><fc-half class="top"><fc-num>0</fc-num></fc-half><fc-half class="bottom"><fc-num>0</fc-num></fc-half><fc-half class="top flap"><fc-num>0</fc-num></fc-half><fc-half class="bottom flap2"><fc-num>0</fc-num></fc-half></fc-card><small data-i18n="cd-days">Days</small></figure>
+<figure class="unit"><fc-card class="flipcard cd-hours"><fc-half class="top"><fc-num>0</fc-num></fc-half><fc-half class="bottom"><fc-num>0</fc-num></fc-half><fc-half class="top flap"><fc-num>0</fc-num></fc-half><fc-half class="bottom flap2"><fc-num>0</fc-num></fc-half></fc-card><small data-i18n="cd-hours">Hours</small></figure>
+<figure class="unit"><fc-card class="flipcard cd-mins"><fc-half class="top"><fc-num>0</fc-num></fc-half><fc-half class="bottom"><fc-num>0</fc-num></fc-half><fc-half class="top flap"><fc-num>0</fc-num></fc-half><fc-half class="bottom flap2"><fc-num>0</fc-num></fc-half></fc-card><small data-i18n="cd-mins">Min</small></figure>
+<figure class="unit"><fc-card class="flipcard cd-secs"><fc-half class="top"><fc-num>0</fc-num></fc-half><fc-half class="bottom"><fc-num>0</fc-num></fc-half><fc-half class="top flap"><fc-num>0</fc-num></fc-half><fc-half class="bottom flap2"><fc-num>0</fc-num></fc-half></fc-card><small data-i18n="cd-secs">Sec</small></figure>
+</fc-row>
 </div>
 <a class="btn btn-sm" href="#sponsor" data-i18n="evt-support">Support this event</a>
 </div>
@@ -216,11 +199,13 @@ window.addEventListener("error", function (e) {
 <h3><span data-i18n="t-ganesh">🐘 Ganeshotsava</span> 2027</h3>
 <p class="evt-meta" data-i18n="d-ganesh27">📅 04 September 2027</p>
 <p class="evt-meta" data-i18n="evt-venue">📍 Mysuru</p>
-<div class="countdown">
-<figure class="dial"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="dial-petals" fill="rgba(255,215,0,.10)" stroke="rgba(255,215,0,.6)" stroke-width=".8"><path transform="rotate(0 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(30 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(60 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(90 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(120 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(150 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(180 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(210 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(240 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(270 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(300 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(330 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/></g><circle class="dial-bg" cx="50" cy="50" r="38"/><circle class="dial-fg" cx="50" cy="50" r="38" transform="rotate(-90 50 50)"/></svg><span class="cd-days">0</span><small data-i18n="cd-days">Days</small></figure>
-<figure class="dial"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="dial-petals" fill="rgba(255,215,0,.10)" stroke="rgba(255,215,0,.6)" stroke-width=".8"><path transform="rotate(0 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(30 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(60 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(90 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(120 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(150 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(180 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(210 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(240 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(270 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(300 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(330 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/></g><circle class="dial-bg" cx="50" cy="50" r="38"/><circle class="dial-fg" cx="50" cy="50" r="38" transform="rotate(-90 50 50)"/></svg><span class="cd-hours">0</span><small data-i18n="cd-hours">Hours</small></figure>
-<figure class="dial"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="dial-petals" fill="rgba(255,215,0,.10)" stroke="rgba(255,215,0,.6)" stroke-width=".8"><path transform="rotate(0 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(30 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(60 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(90 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(120 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(150 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(180 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(210 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(240 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(270 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(300 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(330 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/></g><circle class="dial-bg" cx="50" cy="50" r="38"/><circle class="dial-fg" cx="50" cy="50" r="38" transform="rotate(-90 50 50)"/></svg><span class="cd-mins">0</span><small data-i18n="cd-mins">Min</small></figure>
-<figure class="dial"><svg viewBox="0 0 100 100" aria-hidden="true"><g class="dial-petals" fill="rgba(255,215,0,.10)" stroke="rgba(255,215,0,.6)" stroke-width=".8"><path transform="rotate(0 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(30 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(60 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(90 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(120 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(150 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(180 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(210 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(240 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(270 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(300 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/><path transform="rotate(330 50 50)" d="M50 2c2.6 4 2.6 7 0 10-2.6-3-2.6-6 0-10z"/></g><circle class="dial-bg" cx="50" cy="50" r="38"/><circle class="dial-fg" cx="50" cy="50" r="38" transform="rotate(-90 50 50)"/></svg><span class="cd-secs">0</span><small data-i18n="cd-secs">Sec</small></figure>
+<div class="countdown door">
+<fc-row class="units">
+<figure class="unit"><fc-card class="flipcard cd-days"><fc-half class="top"><fc-num>0</fc-num></fc-half><fc-half class="bottom"><fc-num>0</fc-num></fc-half><fc-half class="top flap"><fc-num>0</fc-num></fc-half><fc-half class="bottom flap2"><fc-num>0</fc-num></fc-half></fc-card><small data-i18n="cd-days">Days</small></figure>
+<figure class="unit"><fc-card class="flipcard cd-hours"><fc-half class="top"><fc-num>0</fc-num></fc-half><fc-half class="bottom"><fc-num>0</fc-num></fc-half><fc-half class="top flap"><fc-num>0</fc-num></fc-half><fc-half class="bottom flap2"><fc-num>0</fc-num></fc-half></fc-card><small data-i18n="cd-hours">Hours</small></figure>
+<figure class="unit"><fc-card class="flipcard cd-mins"><fc-half class="top"><fc-num>0</fc-num></fc-half><fc-half class="bottom"><fc-num>0</fc-num></fc-half><fc-half class="top flap"><fc-num>0</fc-num></fc-half><fc-half class="bottom flap2"><fc-num>0</fc-num></fc-half></fc-card><small data-i18n="cd-mins">Min</small></figure>
+<figure class="unit"><fc-card class="flipcard cd-secs"><fc-half class="top"><fc-num>0</fc-num></fc-half><fc-half class="bottom"><fc-num>0</fc-num></fc-half><fc-half class="top flap"><fc-num>0</fc-num></fc-half><fc-half class="bottom flap2"><fc-num>0</fc-num></fc-half></fc-card><small data-i18n="cd-secs">Sec</small></figure>
+</fc-row>
 </div>
 <a class="btn btn-sm" href="#sponsor" data-i18n="evt-support">Support this event</a>
 </div>
@@ -361,28 +346,34 @@ window.addEventListener("error", function (e) {
 <!-- ===== Gallery ===== -->
 <section id="gallery" class="section">
 <div class="wrap">
-<h2 class="section-title" data-i18n="gallery-title">📸 Gallery</h2>
-<p class="section-sub" data-i18n="gallery-subtitle">Memories from our events</p>
-<div class="cards four">
-<div class="video-card">
-<h3><span data-i18n="g-ashada">🪔 Ashada Pooja</span> 2025</h3>
-<a href="https://www.instagram.com/reel/DPC3tYskmFy/?igsh=MTkzZGs1MW9qZ2EzaA==" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
+<h2 class="section-title" data-i18n="gal-title">Event Gallery</h2>
+<p class="section-sub" data-i18n="gal-sub">Photos and reels from our celebrations</p>
+<div class="album-tabs" id="albumTabs">
+<button type="button" class="album-tab" data-album="ashada2025"><span data-i18n="g-ashada">Ashada Pooja</span> 2025</button>
+<button type="button" class="album-tab" data-album="ganesh2025"><span data-i18n="g-ganesh">Ganeshotsava</span> 2025</button>
+<button type="button" class="album-tab" data-album="ashada2026"><span data-i18n="g-ashada">Ashada Pooja</span> 2026</button>
+<button type="button" class="album-tab on" data-album="ganesh2026"><span data-i18n="g-ganesh">Ganeshotsava</span> 2026</button>
 </div>
-<div class="video-card">
-<h3><span data-i18n="g-ganesh">🐘 Ganeshotsava</span> 2025</h3>
-<a href="https://www.instagram.com/reel/DN8gSypiRLA/?igsh=dmU1NnNwOHFoaWNv" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
+<div class="album-stage" id="albumStage">
+<div class="stage-bg" id="stageBg"></div>
+<img class="stage-img" id="stageImg" alt="">
+<button type="button" class="stage-nav stage-prev" id="stagePrev" aria-label="Previous">&#10094;</button>
+<button type="button" class="stage-nav stage-next" id="stageNext" aria-label="Next">&#10095;</button>
+<span class="stage-count" id="stageCount"></span>
 </div>
-<div class="video-card">
-<h3><span data-i18n="g-ashada">🪔 Ashada Pooja</span> 2026</h3>
-<a href="https://www.instagram.com/reel/DcJg-cJxuG5/?stkn=bm42NjNkZDg2bndz" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
-</div>
-<div class="video-card">
-<h3><span data-i18n="g-ganesh">🐘 Ganeshotsava</span> 2026</h3>
-<a href="https://www.instagram.com/reel/DddP9tUpsAl/?stkn=MXJiZWRmaHQyaDB5ag==" target="_blank" rel="noopener" class="btn" data-i18n="watch">▶ Watch on Instagram</a>
-</div>
-</div>
+<p class="album-empty" id="albumEmpty" data-i18n="gal-empty" hidden>Photos will be added soon.</p>
+<div class="thumbs" id="thumbs"></div>
+<div class="album-foot"><a class="btn" id="albumReel" href="#" target="_blank" rel="noopener" data-i18n="watch">Watch on Instagram</a></div>
 </div>
 </section>
+
+<div class="lightbox" id="lightbox" hidden>
+<button type="button" class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+<button type="button" class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">&#10094;</button>
+<img id="lbImg" alt="">
+<button type="button" class="lb-nav lb-next" id="lbNext" aria-label="Next">&#10095;</button>
+<span class="lb-count" id="lbCount"></span>
+</div>
 
 <!-- ===== Support ===== -->
 <section id="sponsor" class="section alt">
