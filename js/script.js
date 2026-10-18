@@ -29,6 +29,9 @@ const translations = {
     "kn": {
         "sheet-birthday": "ಹುಟ್ಟುಹಬ್ಬ ಪೋಸ್ಟರ್",
         "sheet-member": "ಸದಸ್ಯ ಐಡಿ",
+        "gal-title": "📸 ಕಾರ್ಯಕ್ರಮ ಗ್ಯಾಲರಿ",
+        "gal-sub": "ನಮ್ಮ ಆಚರಣೆಗಳ ಫೋಟೋ ಮತ್ತು ರೀಲ್‌ಗಳು",
+        "gal-empty": "ಫೋಟೋಗಳನ್ನು ಶೀಘ್ರದಲ್ಲೇ ಸೇರಿಸಲಾಗುವುದು.",
         "nav-home": "ಮುಖಪುಟ",
         "nav-about": "ನಮ್ಮ ಬಗ್ಗೆ",
         "nav-events": "ಕಾರ್ಯಕ್ರಮಗಳು",
@@ -200,6 +203,9 @@ const translations = {
     "en": {
         "sheet-birthday": "Birthday Poster",
         "sheet-member": "Member ID",
+        "gal-title": "📸 Event Gallery",
+        "gal-sub": "Photos and reels from our celebrations",
+        "gal-empty": "Photos will be added soon.",
         "nav-home": "Home",
         "nav-about": "About",
         "nav-events": "Events",
@@ -550,7 +556,30 @@ if (sliderImage) {
 }
 
 
-// ===== 8. Upcoming events countdown =====
+// ===== 8. Upcoming events countdown (brass temple-door flip clock) =====
+// Shows a number on a flip card. When the number changes, the card flips.
+function flipTo(card, value) {
+    const text = String(value);
+    const numbers = card.querySelectorAll("fc-num");     // 0 top, 1 bottom, 2 falling flap, 3 rising flap
+
+    if (card.dataset.v === undefined) {                  // first time: just show the number
+        numbers.forEach(n => { n.textContent = text; });
+        card.dataset.v = text;
+        return;
+    }
+    if (card.dataset.v === text) return;
+
+    numbers[0].textContent = text;                       // new number waits under the falling flap
+    numbers[2].textContent = card.dataset.v;             // the falling flap still shows the old number
+    numbers[3].textContent = text;                       // the rising flap shows the new number
+    card.dataset.v = text;
+
+    card.classList.remove("go");
+    void card.offsetWidth;                               // restart the animation
+    card.classList.add("go");
+    setTimeout(() => { numbers[1].textContent = text; }, 620);
+}
+
 // To change a date, edit data-date="YYYY-MM-DDTHH:MM:SS" in index.html
 document.querySelectorAll(".countdown-card").forEach(card => {
     const target = new Date(card.dataset.date).getTime();
@@ -571,23 +600,10 @@ document.querySelectorAll(".countdown-card").forEach(card => {
             return;
         }
 
-        days.textContent = Math.floor(diff / 86400000);
-        hours.textContent = String(Math.floor(diff / 3600000) % 24).padStart(2, "0");
-        mins.textContent = String(Math.floor(diff / 60000) % 60).padStart(2, "0");
-        secs.textContent = String(Math.floor(diff / 1000) % 60).padStart(2, "0");
-
-        // the four dials: each gold ring shows how much is left of its unit
-        const left = [Math.floor(diff / 86400000), Math.floor(diff / 3600000) % 24, Math.floor(diff / 60000) % 60, Math.floor(diff / 1000) % 60];
-        const fraction = [1 - Math.min(1, left[0] / 365), left[1] / 24, left[2] / 60, left[3] / 60];
-        card.querySelectorAll(".dial-fg").forEach((ring, i) => {
-            ring.style.strokeDashoffset = 238.76 * (1 - fraction[i]);
-        });
-
-        // small flip movement every second
-        const secBox = secs.parentElement;
-        secBox.classList.remove("flip");
-        void secBox.offsetWidth;
-        secBox.classList.add("flip");
+        flipTo(days, Math.floor(diff / 86400000));
+        flipTo(hours, String(Math.floor(diff / 3600000) % 24).padStart(2, "0"));
+        flipTo(mins, String(Math.floor(diff / 60000) % 60).padStart(2, "0"));
+        flipTo(secs, String(Math.floor(diff / 1000) % 60).padStart(2, "0"));
     }
 
     tick();
@@ -742,3 +758,179 @@ const iconWatcher = new MutationObserver(() => {
 iconize(document.body);
 iconWatcher.observe(document.body, { childList: true, subtree: true, characterData: true });
 
+// ===== 13. Event gallery: slideshow + photo grid for each festival =====
+// Photos are found automatically: photo1.jpg, photo2.jpg ... inside each folder.
+const ALBUMS = {
+    ashada2025: { folders: ["images/events/ashada-2025/"], reel: "https://www.instagram.com/reel/DPC3tYskmFy/?igsh=MTkzZGs1MW9qZ2EzaA==" },
+    ganesh2025: { folders: ["images/events/ganeshotsava-2025/", "images/gallery-slider/"], reel: "https://www.instagram.com/reel/DN8gSypiRLA/?igsh=dmU1NnNwOHFoaWNv" },
+    ashada2026: { folders: ["images/events/ashada-2026/"], reel: "https://www.instagram.com/reel/DcJg-cJxuG5/?stkn=bm42NjNkZDg2bndz" },
+    ganesh2026: { folders: ["images/events/ganeshotsava-2026/"], reel: "https://www.instagram.com/reel/DddP9tUpsAl/?stkn=MXJiZWRmaHQyaDB5ag==" }
+};
+
+const albumCache = {};                                   // album name -> list of photo addresses
+const albumState = { name: "", photos: [], index: 0, timer: null, pausedUntil: 0 };
+
+const stageBox = document.getElementById("albumStage");
+const stageImg = document.getElementById("stageImg");
+const stageBg = document.getElementById("stageBg");
+const stageCount = document.getElementById("stageCount");
+const thumbsBox = document.getElementById("thumbs");
+const albumEmpty = document.getElementById("albumEmpty");
+const albumReel = document.getElementById("albumReel");
+const albumTabs = document.querySelectorAll(".album-tab");
+
+// asks the website "does this file exist?" without downloading the photo
+function photoExists(url) {
+    return fetch(url, { method: "HEAD" }).then(r => r.ok).catch(() => false);
+}
+
+async function findPhotos(folder) {
+    const found = [];
+    for (let start = 1; start <= 60; start += 10) {      // look 10 at a time, stop when a group is empty
+        const group = [];
+        for (let n = start; n < start + 10; n++) group.push(folder + "photo" + n + ".jpg");
+        const answers = await Promise.all(group.map(photoExists));
+        const hits = group.filter((url, i) => answers[i]);
+        found.push(...hits);
+        if (hits.length === 0) break;
+    }
+    return found;
+}
+
+function showPhoto(index) {
+    const photos = albumState.photos;
+    if (!photos.length) return;
+    albumState.index = (index + photos.length) % photos.length;
+    const url = photos[albumState.index];
+
+    stageImg.classList.add("swap");
+    const loader = new Image();
+    const finish = () => {
+        stageImg.src = url;
+        stageBg.style.backgroundImage = 'url("' + url + '")';
+        stageImg.classList.remove("swap");
+    };
+    loader.onload = finish;
+    loader.onerror = finish;
+    loader.src = url;
+
+    stageCount.textContent = (albumState.index + 1) + " / " + photos.length;
+    thumbsBox.querySelectorAll("button").forEach((b, i) => b.classList.toggle("on", i === albumState.index));
+}
+
+function startAutoplay() {
+    clearInterval(albumState.timer);
+    albumState.timer = setInterval(() => {
+        if (document.hidden || Date.now() < albumState.pausedUntil || !document.getElementById("lightbox").hidden) return;
+        showPhoto(albumState.index + 1);
+    }, 4500);
+}
+
+function pauseAutoplay() {
+    albumState.pausedUntil = Date.now() + 9000;          // after a tap or swipe, wait 9 seconds
+}
+
+async function openAlbum(name) {
+    albumState.name = name;
+    albumState.pausedUntil = 0;                          // a new album always starts playing
+    clearInterval(albumState.timer);
+    albumTabs.forEach(t => t.classList.toggle("on", t.dataset.album === name));
+    albumReel.href = ALBUMS[name].reel;
+
+    if (!albumCache[name]) {
+        let list = [];
+        for (const folder of ALBUMS[name].folders) {
+            list = await findPhotos(folder);
+            if (list.length) break;
+        }
+        albumCache[name] = list;
+    }
+    if (albumState.name !== name) return;                // another tab was chosen meanwhile
+
+    albumState.photos = albumCache[name];
+    thumbsBox.innerHTML = "";
+
+    if (!albumState.photos.length) {
+        stageBox.hidden = true;
+        albumEmpty.hidden = false;
+        return;
+    }
+    stageBox.hidden = false;
+    albumEmpty.hidden = true;
+
+    albumState.photos.forEach((url, i) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.setAttribute("aria-label", "Photo " + (i + 1));
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "";
+        img.loading = "lazy";
+        button.appendChild(img);
+        button.addEventListener("click", () => { pauseAutoplay(); showPhoto(i); });
+        thumbsBox.appendChild(button);
+    });
+
+    showPhoto(0);
+    startAutoplay();
+}
+
+if (stageBox) {
+    albumTabs.forEach(tab => tab.addEventListener("click", () => openAlbum(tab.dataset.album)));
+
+    document.getElementById("stagePrev").addEventListener("click", (e) => { e.stopPropagation(); pauseAutoplay(); showPhoto(albumState.index - 1); });
+    document.getElementById("stageNext").addEventListener("click", (e) => { e.stopPropagation(); pauseAutoplay(); showPhoto(albumState.index + 1); });
+
+    // swipe on the big photo
+    let touchStartX = 0;
+    stageBox.addEventListener("touchstart", (e) => { touchStartX = e.touches[0].clientX; pauseAutoplay(); }, { passive: true });
+    stageBox.addEventListener("touchend", (e) => {
+        const move = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(move) > 45) showPhoto(albumState.index + (move < 0 ? 1 : -1));
+    }, { passive: true });
+
+    // full-screen viewer
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lbImg");
+    const lightboxCount = document.getElementById("lbCount");
+
+    function lightboxShow(index) {
+        const photos = albumState.photos;
+        albumState.index = (index + photos.length) % photos.length;
+        lightboxImg.src = photos[albumState.index];
+        lightboxCount.textContent = (albumState.index + 1) + " / " + photos.length;
+    }
+    function lightboxClose() {
+        lightbox.hidden = true;
+        showPhoto(albumState.index);
+    }
+
+    stageBox.addEventListener("click", () => { lightbox.hidden = false; lightboxShow(albumState.index); });
+    document.getElementById("lbClose").addEventListener("click", lightboxClose);
+    document.getElementById("lbPrev").addEventListener("click", () => lightboxShow(albumState.index - 1));
+    document.getElementById("lbNext").addEventListener("click", () => lightboxShow(albumState.index + 1));
+    lightbox.addEventListener("click", (e) => { if (e.target === lightbox) lightboxClose(); });
+    document.addEventListener("keydown", (e) => {
+        if (lightbox.hidden) return;
+        if (e.key === "Escape") lightboxClose();
+        if (e.key === "ArrowRight") lightboxShow(albumState.index + 1);
+        if (e.key === "ArrowLeft") lightboxShow(albumState.index - 1);
+    });
+    let boxTouchX = 0;
+    lightbox.addEventListener("touchstart", (e) => { boxTouchX = e.touches[0].clientX; }, { passive: true });
+    lightbox.addEventListener("touchend", (e) => {
+        const move = e.changedTouches[0].clientX - boxTouchX;
+        if (Math.abs(move) > 45) lightboxShow(albumState.index + (move < 0 ? 1 : -1));
+    }, { passive: true });
+
+    // start loading the photos only when the gallery comes into view
+    const gallerySection = document.getElementById("gallery");
+    if ("IntersectionObserver" in window) {
+        const watcher = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) { watcher.disconnect(); openAlbum("ganesh2026"); }
+        }, { rootMargin: "300px" });
+        watcher.observe(gallerySection);
+    } else {
+        openAlbum("ganesh2026");
+    }
+}
