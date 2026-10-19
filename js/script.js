@@ -32,6 +32,7 @@ const translations = {
         "gal-title": "📸 ಕಾರ್ಯಕ್ರಮ ಗ್ಯಾಲರಿ",
         "gal-sub": "ನಮ್ಮ ಆಚರಣೆಗಳ ಫೋಟೋ ಮತ್ತು ರೀಲ್‌ಗಳು",
         "gal-empty": "ಫೋಟೋಗಳನ್ನು ಶೀಘ್ರದಲ್ಲೇ ಸೇರಿಸಲಾಗುವುದು.",
+        "reel-title": "ನಮ್ಮ ರೀಲ್‌ಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
         "nav-home": "ಮುಖಪುಟ",
         "nav-about": "ನಮ್ಮ ಬಗ್ಗೆ",
         "nav-events": "ಕಾರ್ಯಕ್ರಮಗಳು",
@@ -206,6 +207,7 @@ const translations = {
         "gal-title": "📸 Event Gallery",
         "gal-sub": "Photos and reels from our celebrations",
         "gal-empty": "Photos will be added soon.",
+        "reel-title": "Watch our reels",
         "nav-home": "Home",
         "nav-about": "About",
         "nav-events": "Events",
@@ -758,13 +760,15 @@ const iconWatcher = new MutationObserver(() => {
 iconize(document.body);
 iconWatcher.observe(document.body, { childList: true, subtree: true, characterData: true });
 
-// ===== 13. Event gallery: slideshow + photo grid for each festival =====
-// Photos are found automatically: photo1.jpg, photo2.jpg ... inside each folder.
+// ===== 13. Event gallery: slideshow + photo grid + reel cards =====
+// The photo lists come straight from your GitHub folders, so any file names work.
+// If GitHub cannot be asked, the page guesses photo1.jpg, photo2.jpg ... instead.
+const REPO = "koushil24/aigiri-geleyara-balaga";
 const ALBUMS = {
-    ashada2025: { folders: ["images/events/ashada-2025/"], reel: "https://www.instagram.com/reel/DPC3tYskmFy/?igsh=MTkzZGs1MW9qZ2EzaA==" },
-    ganesh2025: { folders: ["images/events/ganeshotsava-2025/", "images/gallery-slider/"], reel: "https://www.instagram.com/reel/DN8gSypiRLA/?igsh=dmU1NnNwOHFoaWNv" },
-    ashada2026: { folders: ["images/events/ashada-2026/"], reel: "https://www.instagram.com/reel/DcJg-cJxuG5/?stkn=bm42NjNkZDg2bndz" },
-    ganesh2026: { folders: ["images/events/ganeshotsava-2026/"], reel: "https://www.instagram.com/reel/DddP9tUpsAl/?stkn=MXJiZWRmaHQyaDB5ag==" }
+    ashada2025: { slug: "ashada-2025", folders: ["images/ashada-2025/", "images/events/ashada-2025/"], reel: "https://www.instagram.com/reel/DPC3tYskmFy/?igsh=MTkzZGs1MW9qZ2EzaA==" },
+    ganesh2025: { slug: "ganeshotsava-2025", folders: ["images/ganeshotsava-2025/", "images/events/ganeshotsava-2025/", "images/gallery-slider/"], reel: "https://www.instagram.com/reel/DN8gSypiRLA/?igsh=dmU1NnNwOHFoaWNv" },
+    ashada2026: { slug: "ashada-2026", folders: ["images/ashada-2026/", "images/events/ashada-2026/"], reel: "https://www.instagram.com/reel/DcJg-cJxuG5/?stkn=bm42NjNkZDg2bndz" },
+    ganesh2026: { slug: "ganeshotsava-2026", folders: ["images/ganeshotsava-2026/", "images/events/ganeshotsava-2026/"], reel: "https://www.instagram.com/reel/DddP9tUpsAl/?stkn=MXJiZWRmaHQyaDB5ag==" }
 };
 
 const albumCache = {};                                   // album name -> list of photo addresses
@@ -776,17 +780,44 @@ const stageBg = document.getElementById("stageBg");
 const stageCount = document.getElementById("stageCount");
 const thumbsBox = document.getElementById("thumbs");
 const albumEmpty = document.getElementById("albumEmpty");
-const albumReel = document.getElementById("albumReel");
 const albumTabs = document.querySelectorAll(".album-tab");
 
-// asks the website "does this file exist?" without downloading the photo
+// ---- the list of all image files in the repository (one question to GitHub, remembered for 10 minutes) ----
+let treePromise;
+
+async function loadTree() {
+    try {
+        const saved = JSON.parse(localStorage.getItem("agbTree") || "null");
+        if (saved && Date.now() - saved.time < 10 * 60 * 1000) return saved.paths;
+    } catch (error) { /* ignore */ }
+
+    try {
+        const response = await fetch("https://api.github.com/repos/" + REPO + "/git/trees/main?recursive=1");
+        if (!response.ok) throw new Error("GitHub answered " + response.status);
+        const data = await response.json();
+        const paths = data.tree
+            .filter(item => item.type === "blob" && /^images\/.*\.(jpe?g|png|webp|gif)$/i.test(item.path))
+            .map(item => item.path);
+        try { localStorage.setItem("agbTree", JSON.stringify({ time: Date.now(), paths: paths })); } catch (error) { /* ignore */ }
+        return paths;
+    } catch (error) {
+        return null;                                     // null = could not ask GitHub
+    }
+}
+
+function getTree() {
+    if (!treePromise) treePromise = loadTree();
+    return treePromise;
+}
+
+// ---- backup way: guess photo1.jpg, photo2.jpg ... ----
 function photoExists(url) {
     return fetch(url, { method: "HEAD" }).then(r => r.ok).catch(() => false);
 }
 
 async function findPhotos(folder) {
     const found = [];
-    for (let start = 1; start <= 60; start += 10) {      // look 10 at a time, stop when a group is empty
+    for (let start = 1; start <= 60; start += 10) {
         const group = [];
         for (let n = start; n < start + 10; n++) group.push(folder + "photo" + n + ".jpg");
         const answers = await Promise.all(group.map(photoExists));
@@ -797,6 +828,28 @@ async function findPhotos(folder) {
     return found;
 }
 
+// the photos of one album: the first folder that has photos wins
+async function photosFor(name) {
+    if (albumCache[name]) return albumCache[name];
+    const paths = await getTree();
+    let list = [];
+
+    for (const folder of ALBUMS[name].folders) {
+        if (paths) {
+            list = paths
+                .filter(p => p.startsWith(folder) && p.indexOf("/", folder.length) === -1)
+                .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+                .map(p => encodeURI(p));
+        } else {
+            list = await findPhotos(folder);
+        }
+        if (list.length) break;
+    }
+    albumCache[name] = list;
+    return list;
+}
+
+// ---- slideshow ----
 function showPhoto(index) {
     const photos = albumState.photos;
     if (!photos.length) return;
@@ -835,22 +888,14 @@ async function openAlbum(name) {
     albumState.pausedUntil = 0;                          // a new album always starts playing
     clearInterval(albumState.timer);
     albumTabs.forEach(t => t.classList.toggle("on", t.dataset.album === name));
-    albumReel.href = ALBUMS[name].reel;
 
-    if (!albumCache[name]) {
-        let list = [];
-        for (const folder of ALBUMS[name].folders) {
-            list = await findPhotos(folder);
-            if (list.length) break;
-        }
-        albumCache[name] = list;
-    }
+    const list = await photosFor(name);
     if (albumState.name !== name) return;                // another tab was chosen meanwhile
 
-    albumState.photos = albumCache[name];
+    albumState.photos = list;
     thumbsBox.innerHTML = "";
 
-    if (!albumState.photos.length) {
+    if (!list.length) {
         stageBox.hidden = true;
         albumEmpty.hidden = false;
         return;
@@ -858,7 +903,7 @@ async function openAlbum(name) {
     stageBox.hidden = false;
     albumEmpty.hidden = true;
 
-    albumState.photos.forEach((url, i) => {
+    list.forEach((url, i) => {
         const button = document.createElement("button");
         button.type = "button";
         button.setAttribute("aria-label", "Photo " + (i + 1));
@@ -873,6 +918,25 @@ async function openAlbum(name) {
 
     showPhoto(0);
     startAutoplay();
+}
+
+// ---- reel cards: a picture + tap to open the reel on Instagram ----
+// Picture = images/reels/<album>.jpg if you upload one, otherwise the first photo of the album.
+async function setupReelCards() {
+    const paths = await getTree();
+    for (const card of document.querySelectorAll(".reel-card")) {
+        const name = card.dataset.album;
+        card.href = ALBUMS[name].reel;
+
+        const custom = "images/reels/" + ALBUMS[name].slug + ".jpg";
+        const hasCustom = paths ? paths.includes(custom) : await photoExists(custom);
+        let url = hasCustom ? custom : "";
+        if (!url) {
+            const list = await photosFor(name);
+            url = list[0] || "";
+        }
+        if (url) card.querySelector(".reel-thumb").style.backgroundImage = 'url("' + url + '")';
+    }
 }
 
 if (stageBox) {
@@ -923,14 +987,15 @@ if (stageBox) {
         if (Math.abs(move) > 45) lightboxShow(albumState.index + (move < 0 ? 1 : -1));
     }, { passive: true });
 
-    // start loading the photos only when the gallery comes into view
+    // start loading only when the gallery comes into view
+    const startGallery = () => { openAlbum("ganesh2026"); setupReelCards(); };
     const gallerySection = document.getElementById("gallery");
     if ("IntersectionObserver" in window) {
         const watcher = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) { watcher.disconnect(); openAlbum("ganesh2026"); }
+            if (entries[0].isIntersecting) { watcher.disconnect(); startGallery(); }
         }, { rootMargin: "300px" });
         watcher.observe(gallerySection);
     } else {
-        openAlbum("ganesh2026");
+        startGallery();
     }
 }
