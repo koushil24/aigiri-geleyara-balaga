@@ -3234,3 +3234,125 @@ fc-card::after {
 
     .thumbs { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
 }
+
+
+/* =====================================================
+   24. REEL CARDS (picture + tap to open the reel on Instagram)
+   ===================================================== */
+.reels-block {
+    max-width: 900px;
+    margin: 44px auto 0;
+}
+
+.reels-title {
+    margin: 0 0 18px;
+    font-family: var(--serif);
+    font-size: 24px;
+    text-align: center;
+    color: var(--heading);
+}
+
+.reels {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.reel-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 9 / 14;
+    color: #fff;
+    background: linear-gradient(160deg, #7a1010, #3b0606);
+    border: 2px solid var(--gold);
+    border-radius: 18px;
+    box-shadow: 0 12px 26px rgba(80, 20, 0, .28);
+    transition: transform .3s, box-shadow .3s;
+}
+
+.reel-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 36px rgba(80, 20, 0, .4);
+}
+
+/* logo shows only until a picture is found */
+.reel-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/logo.png") center 38% / 42% no-repeat;
+    opacity: .4;
+}
+
+.reel-thumb {
+    position: absolute;
+    inset: 0;
+    background: center / cover no-repeat;
+}
+
+.reel-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, .05) 40%, rgba(40, 0, 0, .88));
+}
+
+.reel-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    margin: -27px 0 0 -27px;
+    color: var(--maroon);
+    background: rgba(255, 215, 0, .93);
+    border-radius: 50%;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .45);
+}
+
+.reel-play .ic {
+    width: 26px;
+    height: 26px;
+    margin-left: 3px;
+}
+
+.reel-ig {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    color: #fff;
+    background: rgba(0, 0, 0, .5);
+    border-radius: 50%;
+}
+
+.reel-label {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    z-index: 2;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.reel-label small {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--gold);
+}
+
+@media (max-width: 640px) {
+    .reels { grid-template-columns: repeat(2, 1fr); }
+}
