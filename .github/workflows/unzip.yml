@@ -1,0 +1,37 @@
+name: Unzip site update
+
+# Upload a file named  site-update.zip  into the MAIN folder of the repository.
+# This helper unzips it into the right folders, deletes the zip, and saves the changes.
+
+on:
+  push:
+    paths:
+      - "site-update.zip"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the repository
+        uses: actions/checkout@v4
+
+      - name: Unzip the update into the repository
+        run: |
+          if [ -f site-update.zip ]; then
+            unzip -o site-update.zip -d .
+            rm site-update.zip
+          else
+            echo "site-update.zip not found"
+          fi
+
+      - name: Save the changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Site update (unzipped from site-update.zip)" || echo "Nothing to save"
+          git push
