@@ -1,50 +1,45 @@
 // =====================================================
 // AIGIRI GELEYARA BALAGA - Service worker (offline support)
-//
-// Strategy: "network first".
-//  - Online  -> always load the newest file from the website
-//               (so your updates show up immediately)
-//  - Offline -> use the last copy saved on the phone
-//
-// IMPORTANT: when you change this list, also change the
-// version number below (agb-v2 -> agb-v3 ...) so phones
-// throw away their old saved copy.
+// Online  -> always the newest files.  Offline -> last saved copy.
+// Change the number in CACHE_NAME when you change the list.
 // =====================================================
 
-const CACHE_NAME = "agb-v4";
+const CACHE_NAME = "agb-v5";
 
-// Files saved on the phone for offline use
 const urlsToCache = [
     "./",
     "./index.html",
+    "./about.html",
+    "./events.html",
+    "./gallery.html",
+    "./team.html",
+    "./news.html",
+    "./support.html",
+    "./contact.html",
     "./birthday.html",
     "./member.html",
     "./verify.html",
     "./css/style.css",
     "./js/script.js",
+    "./js/news-data.js",
     "./js/member.js",
     "./js/member-config.js",
-    "./js/qr.js",
     "./js/card.js",
+    "./js/qr.js",
     "./js/verify.js",
     "./manifest.json",
     "./images/logo.png"
 ];
 
-
-// ===== Install: save the files =====
-// Each file is saved on its own, so one missing file cannot break everything.
 self.addEventListener("install", (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) =>
             Promise.all(urlsToCache.map((url) => cache.add(url).catch(() => {})))
         )
     );
-    self.skipWaiting();   // start using this new version right away
+    self.skipWaiting();
 });
 
-
-// ===== Activate: remove old saved copies =====
 self.addEventListener("activate", (event) => {
     event.waitUntil(
         caches.keys().then((names) =>
@@ -53,12 +48,8 @@ self.addEventListener("activate", (event) => {
     );
 });
 
-
-// ===== Fetch: network first, saved copy as backup =====
 self.addEventListener("fetch", (event) => {
     const request = event.request;
-
-    // Only handle normal page/file requests from our own website
     if (request.method !== "GET") return;
     if (new URL(request.url).origin !== self.location.origin) return;
 
@@ -71,8 +62,6 @@ self.addEventListener("fetch", (event) => {
                 }
                 return response;
             })
-            .catch(() =>
-                caches.match(request).then((saved) => saved || caches.match("./index.html"))
-            )
+            .catch(() => caches.match(request).then((saved) => saved || caches.match("./index.html")))
     );
 });

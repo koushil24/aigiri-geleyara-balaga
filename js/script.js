@@ -109,7 +109,7 @@ const translations = {
         "foot-place": "📍 ಮೈಸೂರು, ಕರ್ನಾಟಕ",
         "foot-copy": "© 2026 ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ",
         "foot-dev": "ರಚನೆ: <b>Koushil R Gowda</b> ❤️",
-        "foot-ver": "ವೆಬ್‌ಸೈಟ್ ಆವೃತ್ತಿ 2.3",
+        "foot-ver": "ವೆಬ್‌ಸೈಟ್ ಆವೃತ್ತಿ 3.0",
         "sp-cta": "💬 Instagram ನಲ್ಲಿ ಸಂದೇಶ ಕಳುಹಿಸಿ",
         "copied": "✅ ಸಂದೇಶ ನಕಲಾಗಿದೆ! Instagram ಚಾಟ್‌ನಲ್ಲಿ ಪೇಸ್ಟ್ ಮಾಡಿ ಕಳುಹಿಸಿ.",
         "sp1-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಕಾರ್ಯಕ್ರಮ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
@@ -208,6 +208,32 @@ const translations = {
         "gal-sub": "Photos and reels from our celebrations",
         "gal-empty": "Photos will be added soon.",
         "reel-title": "Watch our reels",
+        "nav-news": "News",
+        "crumb-home": "Home",
+        "banner-about": "Our story, our values and our journey",
+        "banner-events": "Celebrations that bring us together",
+        "banner-support": "Together we serve",
+        "news-title": "News & Announcements",
+        "news-sub": "Latest news and announcements from AGB",
+        "news-empty": "News coming soon.",
+        "news-share": "Share on WhatsApp",
+        "news-more": "Read more",
+        "news-all": "View all news",
+        "news-latest": "Latest news",
+        "more-events": "All events",
+        "meet-team": "Meet the full team",
+        "learn-more": "Learn more",
+        "stat-founded": "Founded",
+        "stat-celebrations": "Celebrations",
+        "stat-members": "Team members",
+        "stat-upcoming": "Upcoming events",
+        "foot-links": "Quick links",
+        "foot-follow": "Follow us",
+        "tl1": "AGB established",
+        "tl2": "Celebrations & community activities",
+        "tl3": "Future growth",
+        "cta-title": "Be a part of AGB",
+        "cta-sub": "Volunteer, support an event, or simply say hello.",
         "nav-home": "Home",
         "nav-about": "About",
         "nav-events": "Events",
@@ -284,7 +310,7 @@ const translations = {
         "foot-place": "📍 Mysuru, Karnataka",
         "foot-copy": "© 2026 AIGIRI GELEYARA BALAGA",
         "foot-dev": "Developed with ❤️ by <b>Koushil R Gowda</b>",
-        "foot-ver": "Website Version 2.3",
+        "foot-ver": "Website Version 3.0",
         "sp-cta": "💬 Message us on Instagram",
         "copied": "✅ Message copied! Paste it in the Instagram chat and send.",
         "sp1-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Event Support. Please share the details.",
@@ -398,6 +424,7 @@ function changeLanguage(language) {
     localStorage.setItem("language", language);
     currentLanguage = language;
     updateEventBadges();
+    renderNews();
 }
 
 changeLanguage(currentLanguage);
@@ -999,3 +1026,158 @@ if (stageBox) {
         startGallery();
     }
 }
+
+// ===== 14. Cinematic page change: temple doors =====
+(function () {
+    const root = document.documentElement;
+    const doors = document.getElementById("doors");
+    if (!doors) return;
+
+    // arriving from another page: the doors are shut, now they open
+    if (root.classList.contains("doors-closed")) {
+        try { sessionStorage.removeItem("agbDoor"); } catch (e) { /* ignore */ }
+        const open = () => root.classList.remove("doors-closed");
+        requestAnimationFrame(() => setTimeout(open, 350));
+        setTimeout(open, 2500);                              // safety: never stay shut
+    }
+    try { sessionStorage.setItem("agbSeen", "1"); } catch (e) { /* ignore */ }
+
+    // leaving: close the doors, then go to the other page
+    document.addEventListener("click", (e) => {
+        const link = e.target.closest("a[href]");
+        if (!link || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        if (link.target === "_blank" || link.hasAttribute("download")) return;
+
+        const url = new URL(link.href, location.href);
+        if (url.origin !== location.origin || !/(\.html|\/)$/.test(url.pathname)) return;
+        if (url.pathname === location.pathname) return;       // same page (# links)
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        e.preventDefault();
+        try { sessionStorage.setItem("agbDoor", "1"); } catch (err) { /* ignore */ }
+        doors.classList.add("closing");
+        setTimeout(() => { location.href = link.href; }, 700);
+    });
+
+    // coming back with the browser Back button
+    window.addEventListener("pageshow", (e) => {
+        if (e.persisted) {
+            doors.classList.remove("closing");
+            root.classList.remove("doors-closed");
+        }
+    });
+})();
+
+
+// ===== 15. News: cards built from js/news-data.js =====
+function renderNews() {
+    if (typeof NEWS === "undefined") return;
+    const lang = currentLanguage;
+    const locale = lang === "kn" ? "kn-IN" : "en-IN";
+    const sorted = NEWS.slice().sort((a, b) => b.date.localeCompare(a.date));
+
+    function makeCard(item) {
+        const title = item.title[lang] || item.title.en;
+        const text = item.text[lang] || item.text.en;
+        const date = new Date(item.date + "T00:00:00");
+
+        const article = document.createElement("article");
+        article.className = "news-card";
+
+        const badge = document.createElement("div");
+        badge.className = "news-date";
+        const day = document.createElement("b");
+        day.textContent = date.getDate();
+        const month = document.createElement("span");
+        month.textContent = date.toLocaleString(locale, { month: "short" }) + " " + date.getFullYear();
+        badge.append(day, month);
+        article.appendChild(badge);
+
+        if (item.image) {
+            const img = document.createElement("img");
+            img.className = "news-img";
+            img.src = item.image;
+            img.alt = "";
+            img.loading = "lazy";
+            article.appendChild(img);
+        }
+
+        const body = document.createElement("div");
+        body.className = "news-body";
+        const heading = document.createElement("h3");
+        heading.textContent = title;
+        const paragraph = document.createElement("p");
+        paragraph.textContent = text;
+        const actions = document.createElement("div");
+        actions.className = "news-actions";
+
+        if (item.link) {
+            const more = document.createElement("a");
+            more.className = "btn btn-sm";
+            more.href = item.link;
+            more.textContent = translations[lang]["news-more"];
+            if (/^https?:/.test(item.link)) { more.target = "_blank"; more.rel = "noopener"; }
+            actions.appendChild(more);
+        }
+
+        const share = document.createElement("a");
+        share.className = "btn btn-sm btn-outline-dark";
+        share.target = "_blank";
+        share.rel = "noopener";
+        share.href = "https://wa.me/?text=" + encodeURIComponent(title + "\n" + text + "\n" + new URL("news.html", location.href).href);
+        share.textContent = translations[lang]["news-share"];
+        actions.appendChild(share);
+
+        body.append(heading, paragraph, actions);
+        article.appendChild(body);
+        return article;
+    }
+
+    const fill = (box, items) => {
+        box.innerHTML = "";
+        items.forEach(item => box.appendChild(makeCard(item)));
+    };
+
+    const fullList = document.getElementById("newsList");
+    const homeList = document.getElementById("homeNews");
+    const empty = document.getElementById("newsEmpty");
+    if (fullList) { fill(fullList, sorted); if (empty) empty.hidden = sorted.length > 0; }
+    if (homeList) fill(homeList, sorted.slice(0, 3));
+}
+renderNews();
+
+
+// ===== 16. Scroll reveal + count-up numbers =====
+(function () {
+    if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const nodes = document.querySelectorAll(".card, .team-card, .evt, .eco a, .reel-card, .news-card, .stat, .tl-step, .about-card");
+    nodes.forEach(el => el.classList.add("reveal"));
+
+    const watcher = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("in");
+            watcher.unobserve(entry.target);
+        });
+    }, { threshold: 0.12 });
+    nodes.forEach(el => watcher.observe(el));
+
+    const counterWatcher = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            counterWatcher.unobserve(entry.target);
+            const el = entry.target;
+            const end = Number(el.dataset.count);
+            const suffix = el.dataset.suffix || "";
+            const start = performance.now();
+            const step = (now) => {
+                const progress = Math.min(1, (now - start) / 1300);
+                el.textContent = Math.round(end * (1 - Math.pow(1 - progress, 3))) + (progress === 1 ? suffix : "");
+                if (progress < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        });
+    }, { threshold: 0.5 });
+    document.querySelectorAll("[data-count]").forEach(el => counterWatcher.observe(el));
+})();
