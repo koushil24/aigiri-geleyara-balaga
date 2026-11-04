@@ -33,6 +33,7 @@ const translations = {
         "gal-sub": "ನಮ್ಮ ಆಚರಣೆಗಳ ಫೋಟೋ ಮತ್ತು ರೀಲ್‌ಗಳು",
         "gal-empty": "ಫೋಟೋಗಳನ್ನು ಶೀಘ್ರದಲ್ಲೇ ಸೇರಿಸಲಾಗುವುದು.",
         "reel-title": "ನಮ್ಮ ರೀಲ್‌ಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
+        "cd-starts": "ಕಾರ್ಯಕ್ರಮ ಆರಂಭಕ್ಕೆ ಉಳಿದ ಸಮಯ",
         "nav-home": "ಮುಖಪುಟ",
         "nav-about": "ನಮ್ಮ ಬಗ್ಗೆ",
         "nav-events": "ಕಾರ್ಯಕ್ರಮಗಳು",
@@ -234,6 +235,7 @@ const translations = {
         "tl3": "Future growth",
         "cta-title": "Be a part of AGB",
         "cta-sub": "Volunteer, support an event, or simply say hello.",
+        "cd-starts": "Event starts in",
         "nav-home": "Home",
         "nav-about": "About",
         "nav-events": "Events",
@@ -585,31 +587,18 @@ if (sliderImage) {
 }
 
 
-// ===== 8. Upcoming events countdown (brass temple-door flip clock) =====
-// Shows a number on a flip card. When the number changes, the card flips.
-function flipTo(card, value) {
+// ===== 8. Upcoming events countdown (royal glass timer) =====
+// Shows a number; when it changes the number slides in again.
+function setNumber(el, value) {
     const text = String(value);
-    const numbers = card.querySelectorAll("fc-num");     // 0 top, 1 bottom, 2 falling flap, 3 rising flap
-
-    if (card.dataset.v === undefined) {                  // first time: just show the number
-        numbers.forEach(n => { n.textContent = text; });
-        card.dataset.v = text;
-        return;
-    }
-    if (card.dataset.v === text) return;
-
-    numbers[0].textContent = text;                       // new number waits under the falling flap
-    numbers[2].textContent = card.dataset.v;             // the falling flap still shows the old number
-    numbers[3].textContent = text;                       // the rising flap shows the new number
-    card.dataset.v = text;
-
-    card.classList.remove("go");
-    void card.offsetWidth;                               // restart the animation
-    card.classList.add("go");
-    setTimeout(() => { numbers[1].textContent = text; }, 620);
+    if (el.textContent === text) return;
+    el.textContent = text;
+    el.classList.remove("tick");
+    void el.offsetWidth;                                 // restart the animation
+    el.classList.add("tick");
 }
 
-// To change a date, edit data-date="YYYY-MM-DDTHH:MM:SS" in index.html
+// To change a date, edit data-date="YYYY-MM-DDTHH:MM:SS" in the page
 document.querySelectorAll(".countdown-card").forEach(card => {
     const target = new Date(card.dataset.date).getTime();
     const box = card.querySelector(".countdown");
@@ -617,6 +606,7 @@ document.querySelectorAll(".countdown-card").forEach(card => {
     const hours = card.querySelector(".cd-hours");
     const mins = card.querySelector(".cd-mins");
     const secs = card.querySelector(".cd-secs");
+    const fill = card.querySelector("cd-fill");
     let timer;
 
     function tick() {
@@ -629,10 +619,13 @@ document.querySelectorAll(".countdown-card").forEach(card => {
             return;
         }
 
-        flipTo(days, Math.floor(diff / 86400000));
-        flipTo(hours, String(Math.floor(diff / 3600000) % 24).padStart(2, "0"));
-        flipTo(mins, String(Math.floor(diff / 60000) % 60).padStart(2, "0"));
-        flipTo(secs, String(Math.floor(diff / 1000) % 60).padStart(2, "0"));
+        setNumber(days, Math.floor(diff / 86400000));
+        setNumber(hours, String(Math.floor(diff / 3600000) % 24).padStart(2, "0"));
+        setNumber(mins, String(Math.floor(diff / 60000) % 60).padStart(2, "0"));
+        setNumber(secs, String(Math.floor(diff / 1000) % 60).padStart(2, "0"));
+
+        // the gold bar fills up during the last 365 days before the event
+        if (fill) fill.style.width = (100 * (1 - Math.min(1, diff / (365 * 86400000)))).toFixed(1) + "%";
     }
 
     tick();

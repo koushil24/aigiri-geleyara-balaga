@@ -2870,7 +2870,7 @@ fc-num {
     display: block;
 }
 
-.evt .countdown.door {
+.evt .countdown.tdoor {
     position: relative;
     display: block;
     margin: 22px 0 18px;
@@ -2883,7 +2883,7 @@ fc-num {
     box-shadow: 0 14px 26px rgba(60, 10, 0, .45), inset 0 0 22px rgba(0, 0, 0, .55);
 }
 
-.countdown.door::before {
+.countdown.tdoor::before {
     content: "";
     position: absolute;
     top: 8px;
@@ -2895,7 +2895,7 @@ fc-num {
 }
 
 /* row of brass studs along the bottom of the door */
-.countdown.door::after {
+.countdown.tdoor::after {
     content: "";
     position: absolute;
     right: 18px;
@@ -3018,7 +3018,7 @@ fc-card::after {
 }
 
 /* brass name plate under each card */
-.door small {
+.tdoor small {
     display: block;
     margin-top: 8px;
     padding: 2px 0;
@@ -3846,4 +3846,210 @@ html.doors-closed .door-seal {
 
 @media (max-width: 700px) {
     .footer-grid { grid-template-columns: 1fr; text-align: center; }
+}
+
+
+/* =====================================================
+   26. ROYAL GLASS TIMER + ROYAL GATE PAGE TRANSITION
+   ===================================================== */
+
+/* ---------- Countdown: royal glass timer ---------- */
+cd-head, cd-row, cd-tile, cd-num, cd-label, cd-bar, cd-fill {
+    display: block;
+}
+
+.evt .countdown.royal {
+    position: relative;
+    display: block;
+    margin: 20px 0 18px;
+    padding: 16px 14px 14px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 85% 0%, rgba(233, 196, 106, .22), transparent 55%),
+        linear-gradient(150deg, #6a0e0e, #2e0505);
+    border: 1px solid rgba(233, 196, 106, .7);
+    border-radius: 20px;
+    box-shadow: 0 16px 30px rgba(60, 10, 0, .4), inset 0 1px 0 rgba(255, 240, 190, .25);
+}
+
+.countdown.royal::before {
+    content: "";
+    position: absolute;
+    top: -70px;
+    right: -70px;
+    width: 220px;
+    height: 220px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='%23e9c46a' stroke-width='.9' opacity='.6'%3E%3Ccircle cx='100' cy='100' r='97'/%3E%3Ccircle cx='100' cy='100' r='90' stroke-dasharray='1.5 4'/%3E%3Ccircle cx='100' cy='100' r='26'/%3E%3Ccircle cx='100' cy='100' r='12'/%3E%3Cpath transform=%22rotate(0.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(22.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(45.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(67.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(90.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(112.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(135.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(157.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(180.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(202.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(225.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(247.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(270.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(292.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(315.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(337.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(0 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(45 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(90 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(135 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(180 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(225 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(270 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(315 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3C/svg%3E") center / contain no-repeat;
+    opacity: .35;
+    animation: ldSpin 60s linear infinite;
+    pointer-events: none;
+}
+
+.royal cd-head {
+    position: relative;
+    margin: 0 0 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #e9c46a;
+}
+
+.royal cd-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.royal cd-tile {
+    position: relative;
+    padding: 12px 4px 9px;
+    text-align: center;
+    container-type: inline-size;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .03));
+    border: 1px solid rgba(246, 221, 150, .35);
+    border-radius: 14px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15);
+    backdrop-filter: blur(6px);
+}
+
+.royal cd-tile:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 42%;
+    right: -7px;
+    width: 4px;
+    height: 4px;
+    background: #f6dd96;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #f2b705;
+    animation: dotPulse 1s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    50% { opacity: .25; }
+}
+
+.royal cd-num {
+    font-family: var(--serif);
+    font-size: clamp(24px, 40cqw, 46px);
+    font-weight: 700;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(180deg, #fff3c4, #f2b705 70%, #c98a00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #f6dd96;
+}
+
+.royal cd-num.tick {
+    animation: numIn .45s cubic-bezier(.2, .9, .3, 1);
+}
+
+@keyframes numIn {
+    from { opacity: 0; transform: translateY(45%); }
+    to   { opacity: 1; transform: none; }
+}
+
+.royal cd-label {
+    margin-top: 5px;
+    font-size: clamp(8px, 14cqw, 11px);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #f3e5d0;
+}
+
+.royal cd-bar {
+    position: relative;
+    height: 5px;
+    margin-top: 14px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, .14);
+    border-radius: 5px;
+}
+
+.royal cd-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #c98a00, #ffe27a);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(255, 210, 90, .9);
+    transition: width 1s linear;
+}
+
+/* ---------- Page transition: royal gate ---------- */
+.door {
+    transition: transform .75s cubic-bezier(.77, 0, .18, 1);
+}
+
+.door::before,
+.door::after {
+    content: none;
+}
+
+.door-l {
+    border-right: 3px solid #e9c46a;
+    box-shadow: inset -26px 0 46px rgba(0, 0, 0, .55), 0 0 34px rgba(233, 196, 106, .5);
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='%23e9c46a' stroke-width='.9' opacity='.6'%3E%3Ccircle cx='100' cy='100' r='97'/%3E%3Ccircle cx='100' cy='100' r='90' stroke-dasharray='1.5 4'/%3E%3Ccircle cx='100' cy='100' r='26'/%3E%3Ccircle cx='100' cy='100' r='12'/%3E%3Cpath transform=%22rotate(0.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(22.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(45.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(67.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(90.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(112.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(135.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(157.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(180.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(202.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(225.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(247.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(270.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(292.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(315.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(337.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(0 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(45 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(90 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(135 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(180 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(225 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(270 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(315 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3C/svg%3E") calc(50.6vw - 50vmin) 50% / 100vmin 100vmin no-repeat,
+        linear-gradient(90deg, rgba(0, 0, 0, .5), transparent 38%),
+        repeating-linear-gradient(90deg, rgba(246, 221, 150, .07) 0 1px, transparent 1px 34px),
+        radial-gradient(ellipse at 100% 50%, #8a1515 0%, #450808 55%, #1c0303 100%);
+}
+
+.door-r {
+    border-left: 3px solid #e9c46a;
+    box-shadow: inset 26px 0 46px rgba(0, 0, 0, .55), 0 0 34px rgba(233, 196, 106, .5);
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='%23e9c46a' stroke-width='.9' opacity='.6'%3E%3Ccircle cx='100' cy='100' r='97'/%3E%3Ccircle cx='100' cy='100' r='90' stroke-dasharray='1.5 4'/%3E%3Ccircle cx='100' cy='100' r='26'/%3E%3Ccircle cx='100' cy='100' r='12'/%3E%3Cpath transform=%22rotate(0.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(22.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(45.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(67.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(90.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(112.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(135.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(157.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(180.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(202.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(225.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(247.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(270.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(292.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(315.0 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(337.5 100 100)%22 d=%22M100 30c9 15 9 27 0 41-9-14-9-26 0-41z%22/%3E%3Cpath transform=%22rotate(0 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(45 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(90 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(135 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(180 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(225 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(270 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3Cpath transform=%22rotate(315 100 100)%22 d=%22M100 58c6 10 6 18 0 27-6-9-6-17 0-27z%22/%3E%3C/svg%3E") -50vmin 50% / 100vmin 100vmin no-repeat,
+        linear-gradient(270deg, rgba(0, 0, 0, .5), transparent 38%),
+        repeating-linear-gradient(90deg, rgba(246, 221, 150, .07) 0 1px, transparent 1px 34px),
+        radial-gradient(ellipse at 0% 50%, #8a1515 0%, #450808 55%, #1c0303 100%);
+}
+
+#doors::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(105deg, transparent 42%, rgba(255, 236, 170, .3) 50%, transparent 58%);
+    transform: translateX(-120%);
+    pointer-events: none;
+}
+
+#doors.closing::after {
+    animation: doorShine .9s .1s ease-in-out;
+}
+
+@keyframes doorShine {
+    to { transform: translateX(120%); }
+}
+
+.door-seal {
+    width: 124px;
+    height: 124px;
+    margin: -62px 0 0 -62px;
+    background: radial-gradient(circle, #8a1515, #3b0606);
+    border: 3px solid #f6dd96;
+}
+
+.door-seal img {
+    width: 88px;
+    height: 88px;
+}
+
+.door-seal::after {
+    content: "";
+    position: absolute;
+    inset: -16px;
+    border: 2px dashed rgba(246, 221, 150, .75);
+    border-radius: 50%;
+    animation: ldSpin 9s linear infinite;
+}
+
+@media (max-width: 600px) {
+    .door-seal { width: 104px; height: 104px; margin: -52px 0 0 -52px; }
+    .door-seal img { width: 72px; height: 72px; }
 }
