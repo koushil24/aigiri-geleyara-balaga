@@ -4277,3 +4277,23 @@ html.doors-closed .door-mandala {
 }
 
 @keyframes gateSpin { to { transform: rotate(360deg); } }
+
+
+/* =====================================================
+   28. SMALL FIXES (loading screen spacing, gate edge colour)
+   ===================================================== */
+
+/* while the gate is closed, anything not covered shows maroon instead of cream */
+html:has(#doors.closing),
+html.doors-closed {
+    background: #3a0606;
+}
+
+/* more room between the logo rings and the title */
+.lx-stage { margin-bottom: 64px; }
+
+@media (min-width: 900px) {
+    .lx-stage { width: 240px; margin-bottom: 76px; }
+    #loader .lx-title { font-size: 48px; }
+    #loader .lx-sub { font-size: 19px; }
+}
