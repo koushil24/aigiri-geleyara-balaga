@@ -506,11 +506,11 @@ if (teamGrid) {
 // ===== 6. Loader =====
 window.addEventListener("load", () => {
     const loader = document.getElementById("loader");
-    if (!loader) return;   // pages without a loader (like birthday.html)
+    if (!loader) return;   // pages without a loader
     setTimeout(() => {
-        loader.style.opacity = "0";
-        setTimeout(() => { loader.style.display = "none"; }, 600);
-    }, 1800);
+        loader.classList.add("leave");                   // zooms through the logo and fades
+        setTimeout(() => { loader.style.display = "none"; }, 900);
+    }, 2300);
 });
 
 
@@ -1049,7 +1049,7 @@ if (stageBox) {
         e.preventDefault();
         try { sessionStorage.setItem("agbDoor", "1"); } catch (err) { /* ignore */ }
         doors.classList.add("closing");
-        setTimeout(() => { location.href = link.href; }, 700);
+        setTimeout(() => { location.href = link.href; }, 850);
     });
 
     // coming back with the browser Back button
