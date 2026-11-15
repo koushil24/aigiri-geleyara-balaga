@@ -214,7 +214,7 @@
             ctx.fillStyle = "#2f8f3a"; ctx.beginPath(); ctx.ellipse(x + 28, y + 12, 18, 8, 0.5, 0, TAU); ctx.fill();
             marigold(x, y, 28, i % 2 ? "#ffb703" : "#fb8500", i % 2 ? "#fb8500" : "#ffb703");
         }
-        [0.12, 0.3, 0.5, 0.7, 0.88].forEach((f, k) => {
+        [0.07, 0.18, 0.82, 0.93].forEach((f, k) => {
             for (let j = 1; j <= 2 + (k % 2); j++) marigold(f * W, y0 + 20 + j * 44, 21, j % 2 ? "#ffb703" : "#fb8500", j % 2 ? "#fb8500" : "#ffb703");
         });
     }
@@ -381,7 +381,7 @@
     }
 
     function sparkles(cx, cy, S, color) {
-        [[-1.1, -0.9, 20], [1.15, -0.75, 26], [-1.25, 0.2, 14], [1.3, 0.35, 18], [0.2, -1.35, 16]].forEach(p => star4(cx + p[0] * S, cy + p[1] * S, p[2] * S / 200 * 9 + 8, color));
+        [[-1.1, -0.9, 20], [1.15, -0.75, 26], [-1.25, 0.2, 14], [1.3, 0.35, 18], [0.2, -1.35, 16]].forEach(p => star4(cx + p[0] * S, cy + p[1] * S, p[2] * (S / 230) + 6, color));
     }
 
     function motif(kind, cx, cy, S, t) {
@@ -408,9 +408,9 @@
             sun(cx, cy - S * 0.1, S * 0.62);
             kite(cx - S * 1.0, cy - S * 0.55, S * 0.4, "#e63946", -0.4); kite(cx + S * 1.0, cy - S * 0.35, S * 0.36, "#2a9d8f", 0.35); kite(cx + S * 0.1, cy + S * 0.55, S * 0.32, "#ffb703", 0.1);
         } else if (kind === "rajyotsava") {
-            mandala(cx, cy + S * 0.1, S * 1.35, t.line, 0.25, 2.2); flag(cx, cy - S * 0.05, S, "kannada"); lotus(cx, cy + S * 1.0, S * 0.55, "#fff0f5", "#ff7eb6");
+            mandala(cx, cy + S * 0.1, S * 1.35, t.line, 0.25, 2.2); flag(cx, cy - S * 0.15, S * 1.2, "kannada"); lotus(cx, cy + S * 1.3, S * 0.5, "#fff0f5", "#ff7eb6");
         } else if (kind === "tricolor") {
-            flag(cx, cy - S * 0.05, S, "tricolor"); firework(cx - S * 1.15, cy - S * 0.9, S * 0.38, "#ff9933"); firework(cx + S * 1.15, cy - S * 0.9, S * 0.38, "#138808"); sparkles(cx, cy + S * 0.2, S, sp);
+            flag(cx, cy + S * 0.05, S * 1.2, "tricolor"); firework(cx - S * 1.25, cy - S * 1.1, S * 0.28, "#ff9933"); firework(cx + S * 1.25, cy - S * 1.1, S * 0.28, "#138808"); sparkles(cx, cy + S * 0.2, S, sp);
         } else if (kind === "newyear") {
             firework(cx - S * 0.85, cy - S * 0.55, S * 0.55, "#ffd24a"); firework(cx + S * 0.85, cy - S * 0.65, S * 0.5, "#ff7a59"); firework(cx, cy - S * 0.1, S * 0.38, "#7ad7f0"); sparkles(cx, cy, S, sp);
             const now = new Date(), year = now.getMonth() >= 8 ? now.getFullYear() + 1 : now.getFullYear();
@@ -424,8 +424,8 @@
     function layout() {
         return ({
             portrait: { logoR: 46, bt: 104, ph: 0.445, pr: 0.205, nm: 0.735, bs: 40, wy: 0.795, ft: 108, my: 0.52, ms: 0.205, fw: 42 },
-            square: { logoR: 34, bt: 74, ph: 0.47, pr: 0.15, nm: 0.755, bs: 34, wy: 0.83, ft: 84, my: 0.5, ms: 0.15, fw: 36 },
-            story: { logoR: 54, bt: 118, ph: 0.41, pr: 0.235, nm: 0.68, bs: 46, wy: 0.745, ft: 124, my: 0.5, ms: 0.25, fw: 48 }
+            square: { logoR: 30, bt: 74, ph: 0.465, pr: 0.142, nm: 0.70, bs: 34, wy: 0.765, ft: 84, my: 0.49, ms: 0.14, fw: 36 },
+            story: { logoR: 54, bt: 118, ph: 0.43, pr: 0.235, nm: 0.70, bs: 46, wy: 0.77, ft: 124, my: 0.5, ms: 0.25, fw: 48 }
         })[ui.size];
     }
 
@@ -501,7 +501,7 @@
         paragraph(title, W / 2, baseline, W * 0.86, Math.max(40, cy - S * 1.35 - baseline - 10), m.ft, "800", lang === "kn" ? SANS : SERIF, grad3(W * 0.2, 0, W * 0.8, 0, t.g), 1.22);
         nosh();
         motif(f.motif, W / 2, cy, S, t);
-        const wy = Math.max(cy + S * 1.55, H * 0.765);
+        const wy = Math.max(cy + S * 1.55, H * (ui.size === "square" ? 0.745 : 0.765));
         paragraph(wish, W / 2, wy, W * 0.8, (H - 196) - wy, m.fw, "500", SANS, t.text, 1.42);
         footer(W, H, t, from ? T.festFrom + ": " + from : T.festFrom);
     }
@@ -525,10 +525,16 @@
         const rowH = ui.size === "square" ? 100 : 120, panelH = rows.length * rowH + 34, panelY = H - 215 - panelH;
         const ty = y0 + 78 + m.ft * 0.95;
         sh("rgba(0,0,0,.35)", 14, 6);
-        const end = paragraph(title, W / 2, ty, W * 0.86, Math.max(40, (panelY - 30) * 0.55 - ty + (ui.size === "story" ? 220 : 0)), m.ft * 0.9, "800", lang === "kn" ? SANS : SERIF, grad3(W * 0.2, 0, W * 0.8, 0, t.g), 1.2);
+        const end = paragraph(title, W / 2, ty, W * 0.86, Math.max(40, panelY - 40 - (tag ? 170 : 70) - ty), m.ft, "800", lang === "kn" ? SANS : SERIF, grad3(W * 0.2, 0, W * 0.8, 0, t.g), 1.2);
         nosh();
-        if (tag) paragraph(tag, W / 2, end + 62, W * 0.78, panelY - end - 130, m.fw, "500", SANS, t.text, 1.4);
-        else lotus(W / 2, Math.min(end + 190, panelY - 40), 120, "#fff0f5", "#ff7eb6");
+        let last = end;
+        if (tag) last = paragraph(tag, W / 2, end + 62, W * 0.78, 120, m.fw, "500", SANS, t.text, 1.4);
+        const gapTop = last + 40, gapBottom = panelY - 24, gap = gapBottom - gapTop;
+        if (gap > 150) {                       // fill the empty space with a lotus and two lamps
+            const ls = Math.min(150, (gap - 10) / 1.15), lcy = gapBottom - 8;
+            lotus(W / 2, lcy, ls, "#fff0f5", "#ff7eb6");
+            if (gap > 230) { diya(W / 2 - ls * 1.25, lcy, ls * 0.3); diya(W / 2 + ls * 1.25, lcy, ls * 0.3); }
+        }
         // info panel
         ctx.fillStyle = t.panel; rr(W * 0.09, panelY, W * 0.82, panelH, 30); ctx.fill(); ctx.strokeStyle = t.line; ctx.lineWidth = 2.5; ctx.stroke();
         rows.forEach((r, i) => {

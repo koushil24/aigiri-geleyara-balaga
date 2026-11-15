@@ -4,7 +4,7 @@
 // Change the number in CACHE_NAME when you change the list.
 // =====================================================
 
-const CACHE_NAME = "agb-v5";
+const CACHE_NAME = "agb-v6";
 
 const urlsToCache = [
     "./",
@@ -17,11 +17,13 @@ const urlsToCache = [
     "./support.html",
     "./contact.html",
     "./birthday.html",
+    "./poster.html",
     "./member.html",
     "./verify.html",
     "./css/style.css",
     "./js/script.js",
     "./js/news-data.js",
+    "./js/poster.js",
     "./js/member.js",
     "./js/member-config.js",
     "./js/card.js",

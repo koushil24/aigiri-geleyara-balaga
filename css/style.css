@@ -4297,3 +4297,177 @@ html.doors-closed {
     #loader .lx-title { font-size: 48px; }
     #loader .lx-sub { font-size: 19px; }
 }
+
+
+/* =====================================================
+   29. POSTER STUDIO
+   ===================================================== */
+.studio-tabs { display: flex; gap: 10px; justify-content: center; margin: 0 0 26px; }
+
+.stab {
+    padding: 11px 26px;
+    font: inherit;
+    font-weight: 700;
+    color: var(--heading);
+    background: transparent;
+    border: 2px solid var(--gold);
+    border-radius: 30px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.stab.on {
+    color: var(--maroon);
+    background: linear-gradient(135deg, #ffe27a, #f2b705);
+    box-shadow: 0 6px 14px rgba(200, 150, 0, .35);
+}
+
+.studio {
+    display: grid;
+    grid-template-columns: minmax(300px, 440px) 1fr;
+    gap: 30px;
+    align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.studio-controls {
+    padding: 22px;
+    background: var(--card);
+    border: 1px solid rgba(190, 140, 40, .35);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+.field { margin: 0 0 16px; }
+
+.field label {
+    display: block;
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--heading);
+}
+
+.field input[type="text"],
+.field input[type="number"],
+.field textarea,
+.field select {
+    width: 100%;
+    padding: 11px 14px;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg);
+    border: 1.5px solid rgba(190, 140, 40, .55);
+    border-radius: 12px;
+}
+
+.field textarea { min-height: 84px; resize: vertical; }
+.field input[type="range"] { width: 100%; accent-color: #c98a00; }
+
+.seg { display: flex; gap: 6px; }
+
+.seg button {
+    flex: 1;
+    padding: 10px 6px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--heading);
+    background: transparent;
+    border: 1.5px solid rgba(190, 140, 40, .6);
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.seg button.on {
+    color: var(--maroon);
+    background: linear-gradient(135deg, #ffe27a, #f2b705);
+    border-color: #f2b705;
+}
+
+.themes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+.themes button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 2px;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    cursor: pointer;
+}
+
+.themes button i {
+    display: block;
+    width: 44px;
+    height: 44px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+}
+
+.themes button.on { background: rgba(255, 210, 70, .15); border-color: var(--gold); }
+
+.upload { cursor: pointer; }
+
+#agbThumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 14px; }
+
+#agbThumbs button {
+    padding: 0;
+    overflow: hidden;
+    aspect-ratio: 1;
+    background: #ddd;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    opacity: .75;
+    cursor: pointer;
+}
+
+#agbThumbs button.on { border-color: var(--gold); opacity: 1; }
+#agbThumbs img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.studio-preview { position: sticky; top: 96px; text-align: center; }
+
+#posterCanvas {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 14px;
+    box-shadow: 0 20px 44px rgba(60, 10, 0, .35);
+}
+
+.studio-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 18px; }
+.studio-hint { margin: 12px 0 0; font-size: 14px; color: var(--muted); }
+
+.jump-preview {
+    position: fixed;
+    bottom: 86px;
+    left: 50%;
+    z-index: 1700;
+    display: none;
+    padding: 10px 20px;
+    font: inherit;
+    font-weight: 700;
+    color: var(--maroon);
+    background: linear-gradient(135deg, #ffe27a, #f2b705);
+    border: 0;
+    border-radius: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .35);
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .studio { grid-template-columns: 1fr; }
+    .studio-preview { position: static; }
+    .jump-preview.show { display: block; }
+}
