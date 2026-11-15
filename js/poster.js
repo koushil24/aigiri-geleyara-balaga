@@ -9,9 +9,10 @@
 
     const canvas = document.getElementById("posterCanvas");
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    let ctx = canvas.getContext("2d");
     const $ = (id) => document.getElementById(id);
-    const val = (id) => ($(id) ? $(id).value.trim() : "");
+    let preview = null;                       // sample words used only for the small template previews
+    const val = (id) => { if (preview && Object.prototype.hasOwnProperty.call(preview, id)) return preview[id]; return $(id) ? $(id).value.trim() : ""; };
     const TAU = Math.PI * 2;
 
     // ---------- 1. Settings ----------
@@ -31,7 +32,7 @@
         marigold: {
             bg: ["#ffc21a", "#f58a07", "#c2410c"], glow: "rgba(255,255,255,.35)", text: "#4a0a0a",
             g: ["#8a1515", "#a31a1a", "#5a0a0a"], f: ["#b22222", "#8a1515", "#5a0a0a"], line: "#7a1111", accent: "#7a1111", dark: "#fff3c4",
-            ov: ["rgba(255,190,40,.78)", "rgba(190,60,10,.90)"], top: 80, panel: "rgba(255,255,255,.38)", pal: ["#c0392b", "#7a1111", "#fff3c4", "#2a9d8f", "#6a1b9a"]
+            ov: ["rgba(255,190,40,.78)", "rgba(190,60,10,.90)"], top: 56, panel: "rgba(255,255,255,.38)", pal: ["#c0392b", "#7a1111", "#fff3c4", "#2a9d8f", "#6a1b9a"]
         },
         night: {
             bg: ["#0d1236", "#161c52", "#05071a"], glow: "rgba(120,140,255,.28)", text: "#f4f1ff",
@@ -76,7 +77,7 @@
         }
     };
 
-    const ui = { tab: "birthday", size: "portrait", lang: "kn", theme: "royal", bgMode: "none", agb: 0 };
+    const ui = { tab: "birthday", size: "portrait", lang: "kn", theme: "royal", template: "circle", bgMode: "none", agb: 0 };
     let logo = null, userPhoto = null, bgPhoto = null;
     const agbImages = {};
 
@@ -230,7 +231,7 @@
             mandala(W / 2, H * 0.42, W * 0.6, t.line, 0.08, 2);
         } else if (ui.theme === "marigold") {
             mandala(W / 2, H * 0.45, W * 0.62, "#ffffff", 0.18, 2.4);
-            garland(W, 74);
+            garland(W, 62);
         } else {
             mandala(W / 2, H * 0.44, W * 0.64, t.line, 0.12, 2.2);
         }
@@ -250,12 +251,12 @@
         return cy + R + 46 + size * 0.4;
     }
 
-    function footer(W, H, t, small) {
-        divider(W / 2, H - 172, W * 0.5, t);
+    function footer(W, H, t, small, wMul) {
+        divider(W / 2, H - 172, W * (wMul || 0.8) * 0.62, t);
         if (small) {
             setFont(32, "600", SANS); ctx.fillStyle = t.accent; ctx.textAlign = "center"; ctx.fillText(small, W / 2, H - 126);
         }
-        oneLine(ORG[ui.lang], W / 2, H - 80, W * 0.8, 42, "800", SANS, grad3(W * 0.2, 0, W * 0.8, 0, t.g), 22);
+        oneLine(ORG[ui.lang], W / 2, H - 80, W * (wMul || 0.8), 42, "800", SANS, grad3(W * 0.2, 0, W * 0.8, 0, t.g), 22);
     }
 
     // ---------- 3. Motifs (drawn pictures) ----------
@@ -424,8 +425,8 @@
     function layout() {
         return ({
             portrait: { logoR: 46, bt: 104, ph: 0.445, pr: 0.205, nm: 0.735, bs: 40, wy: 0.795, ft: 108, my: 0.52, ms: 0.205, fw: 42 },
-            square: { logoR: 30, bt: 74, ph: 0.465, pr: 0.142, nm: 0.70, bs: 34, wy: 0.765, ft: 84, my: 0.49, ms: 0.14, fw: 36 },
-            story: { logoR: 54, bt: 118, ph: 0.43, pr: 0.235, nm: 0.70, bs: 46, wy: 0.77, ft: 124, my: 0.5, ms: 0.25, fw: 48 }
+            square: { logoR: 28, bt: 70, ph: 0.445, pr: 0.128, nm: 0.672, bs: 34, wy: 0.742, ft: 84, my: 0.49, ms: 0.14, fw: 36 },
+            story: { logoR: 54, bt: 118, ph: 0.42, pr: 0.30, nm: 0.66, bs: 46, wy: 0.725, ft: 124, my: 0.5, ms: 0.25, fw: 48 }
         })[ui.size];
     }
 
@@ -439,53 +440,322 @@
         ctx.bezierCurveTo(x - 16, y + ry + 60, x + 16, y + ry + 95, x, y + ry + 150); ctx.stroke(); ctx.restore();
     }
 
-    function renderBirthday(W, H, t, m) {
+    // ---------- Birthday templates (10 layouts) ----------
+    THEMES.royal.curtain = "#8a1515"; THEMES.marigold.curtain = "#7a1111"; THEMES.night.curtain = "#2b2f80"; THEMES.cream.curtain = "#8a1515";
+    THEMES.royal.sil = "rgba(25,2,2,.88)"; THEMES.marigold.sil = "rgba(90,10,10,.92)"; THEMES.night.sil = "rgba(3,5,22,.92)"; THEMES.cream.sil = "rgba(90,10,10,.9)";
+
+    function bdData() {
         const lang = ui.lang, T = TEXT[lang];
-        const name = val("bName") || T.bdName, age = parseInt(val("bAge"), 10);
-        const wish = val("bWish") || T.bdWish;
-        const py = H * m.ph, R = W * m.pr;
+        return { lang: lang, T: T, name: val("bName") || T.bdName, raw: val("bName"), age: parseInt(val("bAge"), 10), wish: val("bWish") || T.bdWish };
+    }
+    function hasAge(d) { return d.age > 0 && d.age < 130; }
 
-        // confetti + balloons behind everything else
-        const rnd = seeded(5);
-        for (let i = 0; i < 44; i++) { ctx.fillStyle = t.pal[i % t.pal.length]; ctx.globalAlpha = 0.75; const x = rnd() * W, y = rnd() * H; if (i % 2) { ctx.beginPath(); ctx.arc(x, y, 5 + rnd() * 5, 0, TAU); ctx.fill(); } else { ctx.save(); ctx.translate(x, y); ctx.rotate(rnd() * 3); ctx.fillRect(-7, -3, 14, 6); ctx.restore(); } }
-        ctx.globalAlpha = 1;
+    function shapePath(kind, cx, cy, R) {
+        if (kind === "roundsq") { rr(cx - R, cy - R, 2 * R, 2 * R, R * 0.3); return; }
+        ctx.beginPath();
+        if (kind === "arch") { const a = R * 0.86, b = R * 1.0, c = R * 0.2; ctx.moveTo(cx - a, cy + b); ctx.lineTo(cx - a, cy - c); ctx.arc(cx, cy - c, a, Math.PI, 0); ctx.lineTo(cx + a, cy + b); ctx.closePath(); }
+        else if (kind === "hex") { for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; ctx.lineTo(cx + Math.cos(a) * R * 1.08, cy + Math.sin(a) * R * 1.08); } ctx.closePath(); }
+        else if (kind === "heart") { const s = R * 1.02; ctx.moveTo(cx, cy + s * 0.95); ctx.bezierCurveTo(cx + s * 1.45, cy + s * 0.05, cx + s * 1.0, cy - s * 1.05, cx, cy - s * 0.4); ctx.bezierCurveTo(cx - s * 1.0, cy - s * 1.05, cx - s * 1.45, cy + s * 0.05, cx, cy + s * 0.95); ctx.closePath(); }
+        else ctx.arc(cx, cy, R, 0, TAU);
+    }
+
+    function photoFill(cx, cy, R, t, d) {
+        const bx = cx - R * 1.1, by = cy - R * 1.1, bs = R * 2.2;
+        if (userPhoto) { drawCover(userPhoto, bx, by, bs, bs, parseFloat($("zoom").value), parseFloat($("posx").value), parseFloat($("posy").value)); return; }
+        const g = ctx.createRadialGradient(cx, cy - R * 0.3, 0, cx, cy, R * 1.2); g.addColorStop(0, t.bg[0]); g.addColorStop(1, t.bg[2]);
+        ctx.fillStyle = g; ctx.fillRect(bx, by, bs, bs);
+        mandala(cx, cy, R * 0.9, t.line, 0.5, 2);
+        const initial = (Array.from(d.raw || "A")[0] || "A").toUpperCase();
+        oneLine(initial, cx, cy + R * 0.3, R * 1.2, R * 0.95, "800", SERIF, grad3(cx - R, cy - R, cx + R, cy + R, t.g), 40);
+    }
+
+    function framedPhoto(kind, cx, cy, R, t, d, ring) {
+        ctx.save(); sh("rgba(0,0,0,.45)", 30, 10); ctx.strokeStyle = grad3(cx - R, cy - R, cx + R, cy + R, t.f); ctx.lineWidth = ring; ctx.lineJoin = "round"; shapePath(kind, cx, cy, R); ctx.stroke(); ctx.restore();
+        ctx.save(); ctx.strokeStyle = "rgba(255,255,255,.92)"; ctx.lineWidth = ring * 0.3; ctx.lineJoin = "round"; shapePath(kind, cx, cy, R); ctx.stroke(); ctx.restore();
+        ctx.save(); shapePath(kind, cx, cy, R); ctx.clip(); photoFill(cx, cy, R, t, d); ctx.restore();
+    }
+
+    function ageBadge(bx, by, r, t, age) {
+        sh("rgba(0,0,0,.4)", 12, 4); ctx.fillStyle = grad3(bx - r, by - r, bx + r, by + r, t.f); ctx.beginPath(); ctx.arc(bx, by, r, 0, TAU); ctx.fill(); nosh();
+        ctx.strokeStyle = "#fff"; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(bx, by, r - 8, 0, TAU); ctx.stroke();
+        oneLine(String(age), bx, by + r * 0.32, r * 1.4, r * 0.97, "800", SERIF, t.dark, 28);
+    }
+
+    function confetti(W, H, t, n, seed) {
+        const rnd = seeded(seed || 5); ctx.save();
+        for (let i = 0; i < n; i++) {
+            ctx.fillStyle = t.pal[i % t.pal.length]; ctx.globalAlpha = 0.75; const x = rnd() * W, y = rnd() * H;
+            if (i % 2) { ctx.beginPath(); ctx.arc(x, y, 5 + rnd() * 5, 0, TAU); ctx.fill(); } else { ctx.save(); ctx.translate(x, y); ctx.rotate(rnd() * 3); ctx.fillRect(-7, -3, 14, 6); ctx.restore(); }
+        }
+        ctx.restore();
+    }
+    function sunburst(cx, cy, R, t, k) {
+        ctx.save(); ctx.translate(cx, cy); ctx.fillStyle = t.line; ctx.globalAlpha = 0.2; const n = 28;
+        for (let i = 0; i < n; i++) { ctx.rotate(TAU / n); if (i % 2) { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-R * 0.1, -R * (k || 1.62)); ctx.lineTo(R * 0.1, -R * (k || 1.62)); ctx.closePath(); ctx.fill(); } }
+        ctx.restore();
+    }
+    function heart(x, y, s, color) {
+        ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(x, y + s * 0.35); ctx.bezierCurveTo(x + s * 0.9, y - s * 0.2, x + s * 0.45, y - s * 0.95, x, y - s * 0.4);
+        ctx.bezierCurveTo(x - s * 0.45, y - s * 0.95, x - s * 0.9, y - s * 0.2, x, y + s * 0.35); ctx.fill();
+    }
+    function ribbon(cx, cy, w, h, t) {
+        const x = cx - w / 2, y = cy - h / 2, tail = h * 0.55;
+        ctx.save(); sh("rgba(0,0,0,.35)", 14, 6); ctx.fillStyle = grad3(x, y, x + w, y + h, t.f);
+        ctx.beginPath(); ctx.moveTo(x - tail * 0.2, y + h * 0.18); ctx.lineTo(x + tail, y + h * 0.18); ctx.lineTo(x + tail, y + h); ctx.lineTo(x - tail * 0.2, y + h); ctx.lineTo(x + tail * 0.25, y + h * 0.59); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(x + w + tail * 0.2, y + h * 0.18); ctx.lineTo(x + w - tail, y + h * 0.18); ctx.lineTo(x + w - tail, y + h); ctx.lineTo(x + w + tail * 0.2, y + h); ctx.lineTo(x + w - tail * 0.25, y + h * 0.59); ctx.closePath(); ctx.fill();
+        nosh(); rr(x + tail * 0.6, y, w - tail * 1.2, h, 10); ctx.fill(); ctx.restore();
+    }
+    function bunting(W, y0, t) {
+        const n = Math.floor(W / 74); ctx.save(); ctx.strokeStyle = t.line; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(40, y0); ctx.quadraticCurveTo(W / 2, y0 + 70, W - 40, y0); ctx.stroke();
+        for (let i = 1; i < n; i++) { const f = i / n, x = 40 + f * (W - 80), y = y0 + 2 * (1 - f) * f * 70; ctx.fillStyle = t.pal[i % t.pal.length]; ctx.beginPath(); ctx.moveTo(x - 30, y); ctx.lineTo(x + 30, y); ctx.lineTo(x, y + 66); ctx.closePath(); ctx.fill(); }
+        ctx.restore();
+    }
+    function curtains(W, H, t) {
+        const cw = W * 0.19;
+        [0, 1].forEach(side => {
+            ctx.save(); if (side) { ctx.translate(W, 0); ctx.scale(-1, 1); }
+            ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(cw + 34, 0); ctx.quadraticCurveTo(cw * 0.35, H * 0.5, cw + 34, H); ctx.lineTo(0, H); ctx.closePath();
+            ctx.fillStyle = t.curtain; ctx.fill();
+            const g = ctx.createLinearGradient(0, 0, cw + 34, 0); for (let i = 0; i <= 6; i++) g.addColorStop(i / 6, i % 2 ? "rgba(255,255,255,.12)" : "rgba(0,0,0,.38)");
+            ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = t.line; ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
+        });
+        ctx.fillStyle = t.curtain; ctx.fillRect(0, 0, W, 78);
+        const n = 12, r = W / n / 2;
+        for (let i = 0; i < n; i++) { ctx.beginPath(); ctx.arc(r + i * 2 * r, 78, r, 0, Math.PI); ctx.fill(); ctx.strokeStyle = t.line; ctx.lineWidth = 3; ctx.stroke(); }
+        const sg = ctx.createLinearGradient(0, 0, 0, 90); sg.addColorStop(0, "rgba(0,0,0,.35)"); sg.addColorStop(1, "rgba(0,0,0,0)"); ctx.fillStyle = sg; ctx.fillRect(0, 0, W, 90);
+    }
+    function wreath(cx, cy, r, n) {
+        for (let i = 0; i < n; i++) { const a = i * TAU / n; ctx.save(); ctx.translate(cx + Math.cos(a) * r, cy + Math.sin(a) * r); ctx.rotate(a + Math.PI / 2); ctx.fillStyle = i % 2 ? "#2f8f3a" : "#3fae4a"; ctx.beginPath(); ctx.ellipse(0, 0, 14, 34, 0.5, 0, TAU); ctx.fill(); ctx.restore(); }
+        for (let i = 0; i < n; i++) {
+            const a = (i + 0.5) * TAU / n, x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+            if (i % 2) marigold(x, y, 26, "#ffb703", "#fb8500"); else { ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x, y, 12, 0, TAU); ctx.fill(); ctx.fillStyle = "#ffd6e7"; ctx.beginPath(); ctx.arc(x, y, 6, 0, TAU); ctx.fill(); }
+        }
+    }
+    function spray(x, y, rot, s) {
+        ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+        for (let i = 0; i < 5; i++) { ctx.fillStyle = i % 2 ? "#2f8f3a" : "#3fae4a"; ctx.beginPath(); ctx.ellipse(i * s * 0.55, (i % 2 ? -1 : 1) * s * 0.35, s * 0.55, s * 0.2, (i % 2 ? -0.5 : 0.5), 0, TAU); ctx.fill(); }
+        marigold(0, 0, s * 0.62, "#ffb703", "#fb8500"); marigold(s * 0.85, -s * 0.2, s * 0.5, "#fb8500", "#ffb703"); marigold(s * 1.6, s * 0.1, s * 0.4, "#ffb703", "#fb8500");
+        ctx.restore();
+    }
+    function cake(cx, baseY, w, h, t) {
+        const tiers = [[1, 0.42, "#f48fb1"], [0.72, 0.32, "#ffcc80"], [0.46, 0.26, "#fff59d"]];
+        let y = baseY; ctx.save();
+        ctx.fillStyle = "rgba(0,0,0,.28)"; ctx.beginPath(); ctx.ellipse(cx, baseY + 8, w * 0.64, 14, 0, 0, TAU); ctx.fill();
+        ctx.fillStyle = "#fffdf6"; ctx.beginPath(); ctx.ellipse(cx, baseY + 2, w * 0.6, 13, 0, 0, TAU); ctx.fill();
+        let topW = w;
+        tiers.forEach(tr => {
+            const tw = w * tr[0], th = h * tr[1]; y -= th; topW = tw;
+            ctx.fillStyle = tr[2]; rr(cx - tw / 2, y, tw, th, 12); ctx.fill();
+            ctx.fillStyle = "#ffffff"; rr(cx - tw / 2, y, tw, th * 0.26, 12); ctx.fill();
+            const N = 7; for (let i = 0; i < N; i++) { ctx.beginPath(); ctx.arc(cx - tw / 2 + tw / N * (i + 0.5), y + th * 0.26, tw / N / 2, 0, Math.PI); ctx.fill(); }
+        });
+        for (let i = 0; i < 5; i++) {
+            const x = cx - topW * 0.34 + i * topW * 0.17, top = y - 44;
+            ctx.fillStyle = t.pal[i % t.pal.length]; rr(x - 6, top, 12, 44, 3); ctx.fill();
+            const g = ctx.createRadialGradient(x, top - 14, 0, x, top - 14, 30); g.addColorStop(0, "rgba(255,200,80,.6)"); g.addColorStop(1, "rgba(255,160,40,0)"); ctx.fillStyle = g; ctx.fillRect(x - 32, top - 46, 64, 64);
+            ctx.fillStyle = "#ffb12a"; ctx.beginPath(); ctx.moveTo(x, top - 30); ctx.bezierCurveTo(x + 11, top - 14, x + 7, top - 2, x, top - 2); ctx.bezierCurveTo(x - 7, top - 2, x - 11, top - 14, x, top - 30); ctx.fill();
+        }
+        ctx.restore();
+    }
+    function palace(cx, baseY, w, t) {
+        const col = t.sil, lit = t.accent;
+        ctx.save();
+        const glow = ctx.createRadialGradient(cx, baseY, 0, cx, baseY, w * 0.7); glow.addColorStop(0, "rgba(255,190,70,.35)"); glow.addColorStop(1, "rgba(255,190,70,0)");
+        ctx.fillStyle = glow; ctx.fillRect(cx - w, baseY - w * 0.7, w * 2, w * 0.8);
+        ctx.fillStyle = col; ctx.fillRect(cx - w / 2, baseY - w * 0.03, w, w * 0.03); ctx.fillRect(cx - w * 0.43, baseY - w * 0.1, w * 0.86, w * 0.07);
+        ctx.fillStyle = lit;
+        for (let i = 0; i < 13; i++) { const x = cx - w * 0.4 + i * (w * 0.8 / 12), r = w * 0.012; ctx.beginPath(); ctx.arc(x, baseY - w * 0.062, r, Math.PI, 0); ctx.lineTo(x + r, baseY - w * 0.04); ctx.lineTo(x - r, baseY - w * 0.04); ctx.closePath(); ctx.fill(); }
+        [[0, 0.11, 0.09], [-0.2, 0.075, 0.07], [0.2, 0.075, 0.07], [-0.34, 0.055, 0.05], [0.34, 0.055, 0.05], [-0.42, 0.04, 0.035], [0.42, 0.04, 0.035]].forEach(tw => {
+            const x = cx + tw[0] * w, ww = tw[1] * w, hh = tw[2] * w, top = baseY - w * 0.1 - hh;
+            ctx.fillStyle = col; ctx.fillRect(x - ww / 2, top, ww, hh); ctx.fillRect(x - ww * 0.6, top + hh * 0.35, ww * 1.2, w * 0.008);
+            ctx.beginPath(); ctx.moveTo(x - ww * 0.62, top); ctx.bezierCurveTo(x - ww * 0.8, top - ww * 0.6, x - ww * 0.22, top - ww * 0.85, x, top - ww * 1.2); ctx.bezierCurveTo(x + ww * 0.22, top - ww * 0.85, x + ww * 0.8, top - ww * 0.6, x + ww * 0.62, top); ctx.closePath(); ctx.fill();
+            ctx.fillRect(x - 1.5, top - ww * 1.2 - w * 0.03, 3, w * 0.03);
+            ctx.fillStyle = lit; ctx.beginPath(); ctx.arc(x, top + hh * 0.2, ww * 0.14, Math.PI, 0); ctx.lineTo(x + ww * 0.14, top + hh * 0.55); ctx.lineTo(x - ww * 0.14, top + hh * 0.55); ctx.closePath(); ctx.fill();
+        });
+        ctx.fillStyle = "rgba(255,235,160,.95)";
+        for (let i = 0; i <= 40; i++) { ctx.beginPath(); ctx.arc(cx - w * 0.43 + i * (w * 0.86 / 40), baseY - w * 0.1, 3.2, 0, TAU); ctx.fill(); }
+        ctx.restore();
+    }
+    function logoOnly(W, cy, R, t) {
+        sh("rgba(0,0,0,.4)", 16, 6); ctx.fillStyle = grad3(W / 2 - R, cy - R, W / 2 + R, cy + R, t.f); ctx.beginPath(); ctx.arc(W / 2, cy, R + 6, 0, TAU); ctx.fill(); nosh();
+        ctx.save(); ctx.beginPath(); ctx.arc(W / 2, cy, R, 0, TAU); ctx.clip();
+        if (logo && logo.complete && logo.naturalWidth) ctx.drawImage(logo, W / 2 - R, cy - R, 2 * R, 2 * R); else { ctx.fillStyle = "#7d1313"; ctx.fillRect(W / 2 - R, cy - R, 2 * R, 2 * R); }
+        ctx.restore(); return cy + R + 18;
+    }
+
+    // keeps the photo below the title, whatever the colour design pushes the header down
+    function fitPy(py, R, t, m, ratio, titleK) {
+        const base = 70 + t.top + 2 * m.logoR + 60 + m.bt * (titleK || 0.95);
+        return Math.max(py, base + 44 + R * (ratio || 1) + 20);
+    }
+
+    function bdTitle(W, t, baseline, size, maxH, maxW, glow, text) {
+        const T = TEXT[ui.lang];
+        if (glow) sh(glow, 30, 0); else sh("rgba(0,0,0,.35)", 12, 5);
+        const end = paragraph(text || T.bdTitle, W / 2, baseline, maxW || W * 0.84, Math.max(30, maxH), size, "800", SERIF, grad3(W * 0.2, 0, W * 0.8, 0, t.g), 1.22);
+        nosh(); return end;
+    }
+    function bdName(W, y, t, d, size, opts) {
+        opts = opts || {};
+        if (opts.shadow !== false) sh("rgba(0,0,0,.35)", 12, 5);
+        const s = oneLine(d.name, W / 2, y, opts.maxW || W * 0.82, d.lang === "kn" ? size * 0.92 : size, "800", d.lang === "kn" ? SANS : SERIF, opts.fill || grad3(W * 0.2, 0, W * 0.8, 0, t.g), 34);
+        nosh(); return s;
+    }
+    function bdWish(W, H, t, d, y, size, maxW, bottom) {
+        return paragraph(d.wish, W / 2, y, maxW || W * 0.78, Math.max(28, (bottom || (H - 196)) - y), size, "500", SANS, t.text, 1.42);
+    }
+
+    // 1. Royal Circle
+    function bdCircle(W, H, t, m) {
+        const d = bdData(), R = W * m.pr, py = fitPy(H * m.ph, R, t, m);
+        confetti(W, H, t, 44, 5);
         [[0.1, -0.35, 0], [0.17, 0.05, 1], [0.9, -0.3, 2], [0.83, 0.1, 3]].forEach(b => balloon(W * b[0], py + R * b[1], W * 0.042, W * 0.053, t.pal[b[2] % t.pal.length]));
-
-        const y0 = header(W, t, m.logoR);
-        sh("rgba(0,0,0,.35)", 12, 5);
-        const title = lang === "kn" ? T.bdTitle : T.bdTitle;
-        paragraph(title, W / 2, y0 + m.bt * 0.95, W * 0.84, py - R - 40 - (y0 + m.bt * 0.95), m.bt, "800", SERIF, grad3(W * 0.2, 0, W * 0.8, 0, t.g), 1.22);
-        nosh();
-
-        // photo
-        ctx.save(); ctx.translate(W / 2, py); ctx.fillStyle = t.line; ctx.globalAlpha = 0.2; const n = 28;
-        for (let i = 0; i < n; i++) { ctx.rotate(TAU / n); if (i % 2) { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-R * 0.1, -R * 1.62); ctx.lineTo(R * 0.1, -R * 1.62); ctx.closePath(); ctx.fill(); } }
+        const y0 = header(W, t, m.logoR), base = y0 + m.bt * 0.95;
+        bdTitle(W, t, base, m.bt, py - R - 40 - base);
+        sunburst(W / 2, py, R, t); framedPhoto("circle", W / 2, py, R, t, d, 36);
+        if (hasAge(d)) ageBadge(W / 2 + R * 0.78, py + R * 0.78, 58, t, d.age);
+        bdName(W, H * m.nm, t, d, 92); bdWish(W, H, t, d, H * m.wy, m.bs); footer(W, H, t, d.T.bdFrom);
+    }
+    // 2. Arch Window
+    function bdArch(W, H, t, m) {
+        const d = bdData(), R = W * m.pr * 0.95, py = fitPy(H * m.ph + W * m.pr * 0.95 * 0.06, R, t, m, 1.06, 0.9);
+        confetti(W, H, t, 26, 9);
+        [0.08, 0.17, 0.83, 0.92].forEach((f, k) => { for (let j = 0; j < 2 + (k % 2); j++) marigold(f * W, 190 + t.top + j * 46, 20, j % 2 ? "#ffb703" : "#fb8500", j % 2 ? "#fb8500" : "#ffb703"); });
+        const y0 = header(W, t, m.logoR), base = y0 + m.bt * 0.9;
+        bdTitle(W, t, base, m.bt * 0.95, py - R * 1.05 - 40 - base);
+        framedPhoto("arch", W / 2, py, R, t, d, 34);
+        lotus(W / 2, py + R + 8, R * 0.6, "#fff0f5", "#ff7eb6"); diya(W / 2 - R * 1.0, py + R, R * 0.2); diya(W / 2 + R * 1.0, py + R, R * 0.2);
+        if (hasAge(d)) ageBadge(W / 2 + R * 0.8, py - R * 0.85, 54, t, d.age);
+        ribbon(W / 2, H * m.nm - 28, W * 0.8, 92, t); bdName(W, H * m.nm, t, d, 80, { fill: t.dark, maxW: W * 0.5, shadow: false });
+        bdWish(W, H, t, d, H * m.wy + (ui.size === "square" ? 0 : 14), m.bs); footer(W, H, t, d.T.bdFrom);
+    }
+    // 3. Polaroid Party
+    function bdPolaroid(W, H, t, m) {
+        const d = bdData(), cfg = { portrait: { pw: 0.42, cy: 0.545 }, square: { pw: 0.27, cy: 0.5 }, story: { pw: 0.5, cy: 0.52 } }[ui.size];
+        confetti(W, H, t, 40, 3); bunting(W, 78 + t.top, t);
+        const pw = W * cfg.pw, pad = pw * 0.075, ph = pw + pw * 0.24, cx = W / 2, cy = H * cfg.cy;
+        const base = 190 + t.top + m.bt * 0.85;
+        bdTitle(W, t, base, m.bt * 0.95, (cy - ph / 2 - 50) - base);
+        ctx.save(); ctx.translate(cx, cy); ctx.rotate(-0.065);
+        sh("rgba(0,0,0,.45)", 30, 12); ctx.fillStyle = "#fffdf6"; rr(-pw / 2, -ph / 2, pw, ph, 6); ctx.fill(); nosh();
+        const s = pw - 2 * pad; ctx.save(); ctx.beginPath(); ctx.rect(-pw / 2 + pad, -ph / 2 + pad, s, s); ctx.clip(); photoFill(0, -ph / 2 + pad + s / 2, s / 2 / 1.1, t, d); ctx.restore();
+        const cap = oneLine(d.name, 0, ph / 2 - pad * 1.1, pw - pad * 2, pw * 0.11, "italic 700", d.lang === "kn" ? SANS : SERIF, "#3a1a1a", 22);
+        ctx.fillStyle = "rgba(255,235,170,.85)"; ctx.save(); ctx.translate(-pw * 0.32, -ph / 2); ctx.rotate(-0.5); ctx.fillRect(-45, -14, 90, 28); ctx.restore();
+        ctx.save(); ctx.translate(pw * 0.32, -ph / 2); ctx.rotate(0.5); ctx.fillRect(-45, -14, 90, 28); ctx.restore();
         ctx.restore();
-        sh("rgba(0,0,0,.45)", 30, 10); ctx.fillStyle = grad3(W / 2 - R, py - R, W / 2 + R, py + R, t.f); ctx.beginPath(); ctx.arc(W / 2, py, R + 18, 0, TAU); ctx.fill(); nosh();
-        ctx.fillStyle = "rgba(255,255,255,.92)"; ctx.beginPath(); ctx.arc(W / 2, py, R + 6, 0, TAU); ctx.fill();
-        ctx.save(); ctx.beginPath(); ctx.arc(W / 2, py, R, 0, TAU); ctx.clip();
-        if (userPhoto) drawCover(userPhoto, W / 2 - R, py - R, 2 * R, 2 * R, parseFloat($("zoom").value), parseFloat($("posx").value), parseFloat($("posy").value));
-        else {
-            const g = ctx.createRadialGradient(W / 2, py - R * 0.3, 0, W / 2, py, R); g.addColorStop(0, t.bg[0]); g.addColorStop(1, t.bg[2]); ctx.fillStyle = g; ctx.fillRect(W / 2 - R, py - R, 2 * R, 2 * R);
-            mandala(W / 2, py, R * 0.9, t.line, 0.5, 2);
-            const initial = (Array.from(val("bName") || "A")[0] || "A").toUpperCase();
-            oneLine(initial, W / 2, py + R * 0.3, R * 1.2, R * 0.95, "800", SERIF, grad3(W / 2 - R, py - R, W / 2 + R, py + R, t.g), 40);
-        }
+        if (hasAge(d)) ageBadge(cx + pw * 0.5, cy + ph * 0.34, 52, t, d.age);
+        bdWish(W, H, t, d, cy + ph / 2 + (ui.size === "square" ? 56 : 70), m.bs); footer(W, H, t, d.T.bdFrom);
+    }
+    // 4. Star Stage
+    function bdStage(W, H, t, m) {
+        const d = bdData(), inner = W * 0.58, R = Math.min(W * m.pr * 0.92, W * 0.17), py = H * m.ph + 6;
+        const sg = ctx.createLinearGradient(W / 2, 0, W / 2, py + R * 1.4); sg.addColorStop(0, "rgba(255,250,225,.42)"); sg.addColorStop(1, "rgba(255,250,225,0)");
+        ctx.fillStyle = sg; ctx.beginPath(); ctx.moveTo(W / 2 - 50, 0); ctx.lineTo(W / 2 + 50, 0); ctx.lineTo(W / 2 + R * 1.8, py + R * 1.4); ctx.lineTo(W / 2 - R * 1.8, py + R * 1.4); ctx.closePath(); ctx.fill();
+        confetti(W, H, t, 22, 4); curtains(W, H, t);
+        const y0 = logoOnly(W, 150, 36, t), base = y0 + m.bt * 0.55;
+        bdTitle(W, t, base, m.bt * 0.7, py - R - 50 - base, inner);
+        for (let i = 0; i < 16; i++) { const a = i * TAU / 16; star4(W / 2 + Math.cos(a) * (R + 56), py + Math.sin(a) * (R + 56), i % 2 ? 11 : 17, t.line); }
+        framedPhoto("circle", W / 2, py, R, t, d, 30);
+        if (hasAge(d)) ageBadge(W / 2 + R * 0.78, py + R * 0.78, 52, t, d.age);
+        ribbon(W / 2, H * m.nm - 28, inner * 1.1, 88, t); bdName(W, H * m.nm, t, d, 76, { fill: t.dark, maxW: inner * 0.78, shadow: false });
+        bdWish(W, H, t, d, H * m.wy + (ui.size === "square" ? 0 : 8), m.bs * 0.92, inner); footer(W, H, t, d.T.bdFrom, 0.58);
+    }
+    // 5. Floral Wreath
+    function bdFloral(W, H, t, m) {
+        const d = bdData(), R = W * m.pr * 0.9, py = fitPy(H * m.ph, R, t, m, 1.12);
+        spray(70, 120 + t.top, 0.55, 46); spray(W - 70, H - 150, Math.PI + 0.55, 46); spray(W - 70, 120 + t.top, Math.PI - 0.55, 40); spray(70, H - 150, -0.55, 40);
+        const y0 = header(W, t, m.logoR), base = y0 + m.bt * 0.95;
+        bdTitle(W, t, base, m.bt, py - R - 60 - base);
+        framedPhoto("circle", W / 2, py, R, t, d, 26); wreath(W / 2, py, R + 16, 26);
+        if (hasAge(d)) ageBadge(W / 2 + R * 0.86, py + R * 0.86, 54, t, d.age);
+        bdName(W, H * m.nm, t, d, 92); divider(W / 2, H * m.nm + 34, W * 0.4, t); bdWish(W, H, t, d, H * m.wy + (ui.size === "square" ? 6 : 22), m.bs); footer(W, H, t, d.T.bdFrom);
+    }
+    // 6. Cake & Candles
+    function bdCake(W, H, t, m) {
+        const d = bdData(), st = ui.size === "story", R = W * 0.15;
+        confetti(W, H, t, 30, 12);
+        const y0 = logoOnly(W, 108, 36, t), base = y0 + m.bt * 0.78;
+        const py = Math.max(H * (st ? 0.3 : 0.335), base + 44 + R + 20);
+        bdTitle(W, t, base, m.bt * 0.78, py - R - 40 - base);
+        sunburst(W / 2, py, R, t, 1.5); framedPhoto("circle", W / 2, py, R, t, d, 30);
+        if (hasAge(d)) ageBadge(W / 2 + R * 0.78, py + R * 0.78, 50, t, d.age);
+        const ny = py + R + (st ? 112 : 88); bdName(W, ny, t, d, 84);
+        const cakeH = Math.max(120, Math.min(st ? 430 : 245, (H - 190) - (ny + 175))), cakeTop = (H - 190) - cakeH - 60;
+        bdWish(W, H, t, d, ny + 54, m.bs * 0.9, W * 0.78, cakeTop - 6);
+        cake(W / 2, H - 190, W * 0.5, cakeH, t); footer(W, H, t, d.T.bdFrom);
+    }
+    // 7. Modern Pop
+    function bdHex(W, H, t, m) {
+        const d = bdData(), R = W * m.pr, py = fitPy(H * m.ph, R, t, m, 1.08);
+        ctx.save(); ctx.globalAlpha = 0.22;
+        [0, 1, 2].forEach(i => { ctx.fillStyle = t.pal[i]; ctx.beginPath(); ctx.moveTo(-50, H * (0.2 + i * 0.22)); ctx.lineTo(W + 50, H * (0.06 + i * 0.22)); ctx.lineTo(W + 50, H * (0.18 + i * 0.22)); ctx.lineTo(-50, H * (0.32 + i * 0.22)); ctx.closePath(); ctx.fill(); });
+        const rnd = seeded(8); ctx.globalAlpha = 0.8;
+        for (let i = 0; i < 30; i++) { ctx.fillStyle = t.pal[i % t.pal.length]; const x = rnd() * W, y = rnd() * H, s = 10 + rnd() * 14; ctx.save(); ctx.translate(x, y); ctx.rotate(rnd() * 6); ctx.beginPath(); ctx.moveTo(0, -s); ctx.lineTo(s, s); ctx.lineTo(-s, s); ctx.closePath(); ctx.fill(); ctx.restore(); }
         ctx.restore();
-        if (age > 0 && age < 130) {
-            const bx = W / 2 + R * 0.78, by = py + R * 0.78;
-            sh("rgba(0,0,0,.4)", 12, 4); ctx.fillStyle = grad3(bx - 58, by - 58, bx + 58, by + 58, t.f); ctx.beginPath(); ctx.arc(bx, by, 58, 0, TAU); ctx.fill(); nosh();
-            ctx.strokeStyle = "#fff"; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(bx, by, 50, 0, TAU); ctx.stroke();
-            oneLine(String(age), bx, by + 18, 80, 56, "800", SERIF, t.dark, 28);
-        }
+        const y0 = header(W, t, m.logoR), base = y0 + m.bt * 0.95;
+        bdTitle(W, t, base, m.bt, py - R - 50 - base, null, null, ui.lang === "en" ? d.T.bdTitle.toUpperCase() : d.T.bdTitle);
+        framedPhoto("hex", W / 2, py, R, t, d, 34);
+        if (hasAge(d)) ageBadge(W / 2 + R * 0.86, py + R * 0.7, 54, t, d.age);
+        ctx.fillStyle = t.panel; rr(W * 0.1, H * m.nm - 92, W * 0.8, 128, 26); ctx.fill(); ctx.strokeStyle = t.line; ctx.lineWidth = 3; ctx.stroke();
+        bdName(W, H * m.nm, t, d, 92, { maxW: W * 0.74 }); bdWish(W, H, t, d, H * m.wy + (ui.size === "square" ? 8 : 20), m.bs); footer(W, H, t, d.T.bdFrom);
+    }
+    // 8. Fireworks
+    function bdFire(W, H, t, m) {
+        const d = bdData(), R = W * m.pr, py = fitPy(H * m.ph, R, t, m, 1.1);
+        ctx.save(); ctx.globalAlpha = 0.6;
+        firework(W * 0.14, py - R * 0.7, W * 0.13, t.pal[0]); firework(W * 0.86, py - R * 0.8, W * 0.12, t.pal[1]); firework(W * 0.12, py + R * 0.9, W * 0.1, t.pal[2]); firework(W * 0.88, py + R * 0.8, W * 0.11, t.pal[3]);
+        ctx.restore();
+        const rnd = seeded(21); for (let i = 0; i < 26; i++) star4(rnd() * W, rnd() * H, 5 + rnd() * 10, "rgba(255,240,170,.8)");
+        const y0 = header(W, t, m.logoR), base = y0 + m.bt * 0.95;
+        bdTitle(W, t, base, m.bt, py - R - 50 - base, null, t.accent);
+        ctx.save(); sh(t.accent, 44, 0); ctx.strokeStyle = t.accent; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(W / 2, py, R + 30, 0, TAU); ctx.stroke(); ctx.restore();
+        framedPhoto("circle", W / 2, py, R, t, d, 26);
+        if (hasAge(d)) ageBadge(W / 2 + R * 0.78, py + R * 0.78, 56, t, d.age);
+        sh(t.accent, 26, 0); bdName(W, H * m.nm, t, d, 92); nosh(); bdWish(W, H, t, d, H * m.wy, m.bs); footer(W, H, t, d.T.bdFrom);
+    }
+    // 9. Heart
+    function bdHeart(W, H, t, m) {
+        const d = bdData(), R = W * m.pr * 1.02, py = fitPy(H * m.ph + W * m.pr * 0.04, R, t, m, 1.05), rnd = seeded(17);
+        for (let i = 0; i < 30; i++) { ctx.globalAlpha = 0.5 + rnd() * 0.4; heart(rnd() * W, rnd() * H, 10 + rnd() * 22, t.pal[i % t.pal.length]); } ctx.globalAlpha = 1;
+        const y0 = header(W, t, m.logoR), base = y0 + m.bt * 0.95;
+        bdTitle(W, t, base, m.bt, py - R * 1.05 - 40 - base);
+        framedPhoto("heart", W / 2, py, R, t, d, 34);
+        heart(W / 2 - R * 1.25, py - R * 0.5, 34, t.pal[1]); heart(W / 2 + R * 1.2, py - R * 0.2, 26, t.pal[0]); heart(W / 2 + R * 1.05, py + R * 0.75, 40, t.pal[2]);
+        if (hasAge(d)) ageBadge(W / 2 - R * 0.95, py + R * 0.8, 52, t, d.age);
+        bdName(W, H * m.nm, t, d, 92); bdWish(W, H, t, d, H * m.wy, m.bs); footer(W, H, t, d.T.bdFrom);
+    }
+    // 10. Mysuru Palace
+    function bdPalace(W, H, t, m) {
+        const d = bdData(), st = ui.size === "story", R = W * 0.165, py = H * (st ? 0.33 : 0.345);
+        const pw = W * (st ? 0.86 : 0.8), baseY = H - 182, palaceTop = baseY - pw * 0.34;
+        const rnd = seeded(31); for (let i = 0; i < 36; i++) star4(rnd() * W, rnd() * (palaceTop - 20), 4 + rnd() * 9, "rgba(255,240,170,.7)");
+        const y0 = logoOnly(W, 112, 40, t), base = y0 + m.bt * 0.7;
+        bdTitle(W, t, base, m.bt * 0.72, py - R - 46 - base);
+        framedPhoto("circle", W / 2, py, R, t, d, 30);
+        if (hasAge(d)) ageBadge(W / 2 + R * 0.78, py + R * 0.78, 50, t, d.age);
+        const ny = py + R + (st ? 120 : 92); bdName(W, ny, t, d, 80);
+        bdWish(W, H, t, d, ny + 54, m.bs * 0.88, W * 0.78, palaceTop - 20);
+        palace(W / 2, baseY, pw, t); footer(W, H, t, d.T.bdFrom);
+    }
 
-        // name + wish
-        sh("rgba(0,0,0,.35)", 12, 5);
-        oneLine(name, W / 2, H * m.nm, W * 0.82, lang === "kn" ? 84 : 92, "800", lang === "kn" ? SANS : SERIF, grad3(W * 0.2, 0, W * 0.8, 0, t.g), 34);
-        nosh();
-        const wy = H * m.wy;
-        paragraph(wish, W / 2, wy, W * 0.78, (H - 196) - wy, m.bs, "500", SANS, t.text, 1.42);
-        footer(W, H, t, T.bdFrom);
+    const BD_TEMPLATES = [
+        { id: "circle", en: "Royal Circle", kn: "ರಾಯಲ್ ವೃತ್ತ", draw: bdCircle },
+        { id: "arch", en: "Arch Window", kn: "ಕಮಾನು ಕಿಟಕಿ", draw: bdArch },
+        { id: "polaroid", en: "Polaroid Party", kn: "ಪೋಲರಾಯ್ಡ್ ಪಾರ್ಟಿ", draw: bdPolaroid },
+        { id: "stage", en: "Star Stage", kn: "ತಾರಾ ವೇದಿಕೆ", draw: bdStage },
+        { id: "floral", en: "Floral Wreath", kn: "ಹೂವಿನ ಹಾರ", draw: bdFloral },
+        { id: "cake", en: "Cake & Candles", kn: "ಕೇಕ್ ಮತ್ತು ದೀಪ", draw: bdCake, sizes: ["portrait", "story"] },
+        { id: "hex", en: "Modern Pop", kn: "ಮಾಡರ್ನ್ ಪಾಪ್", draw: bdHex },
+        { id: "fire", en: "Fireworks", kn: "ಪಟಾಕಿ", draw: bdFire },
+        { id: "heart", en: "Heart", kn: "ಹೃದಯ", draw: bdHeart },
+        { id: "palace", en: "Mysuru Palace", kn: "ಮೈಸೂರು ಅರಮನೆ", draw: bdPalace, sizes: ["portrait", "story"] }
+    ];
+    function tplOk(tpl) { return !tpl.sizes || tpl.sizes.indexOf(ui.size) >= 0; }
+
+    function renderBirthday(W, H, t, m) {
+        let tpl = BD_TEMPLATES.find(x => x.id === ui.template) || BD_TEMPLATES[0];
+        if (!tplOk(tpl)) tpl = BD_TEMPLATES[0];
+        tpl.draw(W, H, t, m);
     }
 
     function renderFestival(W, H, t, m) {
@@ -547,11 +817,8 @@
         footer(W, H, t, T.welcome);
     }
 
-    let pending = false;
-    function render() {
-        pending = false;
-        const size = SIZES[ui.size], W = size[0], H = size[1], t = THEMES[ui.theme];
-        if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H; }
+    function drawPoster(W, H) {
+        const t = THEMES[ui.theme];
         ctx.clearRect(0, 0, W, H); nosh(); ctx.globalAlpha = 1;
         drawBackground(W, H, t);
         if (ui.tab !== "birthday") drawBackgroundPhoto(W, H, t);
@@ -561,6 +828,60 @@
         else if (ui.tab === "festival") renderFestival(W, H, t, m);
         else renderEvent(W, H, t, m);
         drawFrame(W, H, t);
+    }
+
+    let pending = false;
+    function render() {
+        pending = false;
+        const size = SIZES[ui.size];
+        if (canvas.width !== size[0] || canvas.height !== size[1]) { canvas.width = size[0]; canvas.height = size[1]; }
+        drawPoster(size[0], size[1]);
+    }
+
+    // small live previews of every birthday template (they use your name, photo and colours)
+    function renderThumb(el, id) {
+        const W = 1080, H = 1350, k = el.width / W, saved = ctx;
+        const keep = { size: ui.size, tab: ui.tab, template: ui.template };
+        const real = { bName: val("bName"), bAge: val("bAge"), bWish: val("bWish") };
+        preview = { bName: real.bName || (ui.lang === "kn" ? "ರಾಹುಲ್" : "Rahul"), bAge: real.bAge || "25", bWish: real.bWish };
+        ctx = el.getContext("2d"); ctx.setTransform(k, 0, 0, k, 0, 0);
+        ui.size = "portrait"; ui.tab = "birthday"; ui.template = id;
+        try { drawPoster(W, H); } catch (e) { console.error(e); }
+        ctx.setTransform(1, 0, 0, 1, 0, 0); ctx = saved;
+        ui.size = keep.size; ui.tab = keep.tab; ui.template = keep.template; preview = null;
+    }
+    const tplCanvases = {}, tplLabelEls = {};
+    let thumbTimer = null, thumbToken = 0;
+    function scheduleThumbs(delay) {
+        clearTimeout(thumbTimer);
+        thumbTimer = setTimeout(() => {
+            const token = ++thumbToken;
+            BD_TEMPLATES.forEach((tpl, i) => setTimeout(() => { if (token === thumbToken && tplCanvases[tpl.id]) renderThumb(tplCanvases[tpl.id], tpl.id); }, i * 45));
+        }, delay || 300);
+    }
+    function tplLabels() {
+        const kn = document.documentElement.lang === "kn";
+        BD_TEMPLATES.forEach(tpl => { if (tplLabelEls[tpl.id]) tplLabelEls[tpl.id].textContent = kn ? tpl.kn : tpl.en; });
+    }
+    function tplState() {
+        const cur = BD_TEMPLATES.find(x => x.id === ui.template);
+        if (cur && !tplOk(cur)) ui.template = "circle";
+        document.querySelectorAll("#tplStrip button").forEach(b => {
+            const tpl = BD_TEMPLATES.find(x => x.id === b.dataset.tpl);
+            b.classList.toggle("on", tpl.id === ui.template); b.classList.toggle("off", !tplOk(tpl));
+        });
+    }
+    function buildStrip() {
+        const box = $("tplStrip");
+        BD_TEMPLATES.forEach(tpl => {
+            const b = document.createElement("button"); b.type = "button"; b.dataset.tpl = tpl.id;
+            const c = document.createElement("canvas"); c.width = 216; c.height = 270;
+            const sp = document.createElement("span"); tplLabelEls[tpl.id] = sp; tplCanvases[tpl.id] = c;
+            b.appendChild(c); b.appendChild(sp);
+            b.addEventListener("click", () => { if (!tplOk(tpl)) return; ui.template = tpl.id; tplState(); schedule(); });
+            box.appendChild(b);
+        });
+        tplLabels(); tplState();
     }
     function schedule() { if (!pending) { pending = true; requestAnimationFrame(render); } }
     window.renderPosterNow = render;          // used for testing
@@ -598,6 +919,7 @@
         $("eTitle").placeholder = siteKn ? "ಉದಾ: ಗಣೇಶೋತ್ಸವ 2027" : "e.g. Ganeshotsava 2027";
         $("eTag").placeholder = siteKn ? "ಉದಾ: ಒಟ್ಟಾಗಿ ಆಚರಿಸೋಣ" : "e.g. Let us celebrate together";
         $("eDate").placeholder = T.sampleDate; $("eTime").placeholder = T.sampleTime; $("eVenue").placeholder = T.sampleVenue;
+        tplLabels();
     }
     function setTab(tab) {
         ui.tab = tab;
@@ -611,6 +933,8 @@
             ui[key] = b.dataset[attr];
             document.querySelectorAll("#" + groupId + " button").forEach(x => x.classList.toggle("on", x === b));
             if (key === "lang") { fillFestivalList(); placeholders(); }
+            if (key === "size") tplState();
+            if (key === "theme" || key === "lang") scheduleThumbs(150);
             schedule();
         }));
     }
@@ -624,15 +948,15 @@
     }
 
     function init() {
-        logo = new Image(); logo.onload = schedule; logo.src = "images/logo.png";
-        fillFestivalList(); placeholders();
+        logo = new Image(); logo.onload = () => { schedule(); scheduleThumbs(50); }; logo.src = "images/logo.png";
+        fillFestivalList(); placeholders(); buildStrip();
         document.querySelectorAll(".stab").forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab)));
         pick("segSize", "size", "size"); pick("segLang", "lang", "lang"); pick("themes", "theme", "theme");
-        document.querySelectorAll("#studio input[type=text], #studio input[type=number], #studio textarea, #studio select, #studio input[type=range]").forEach(el => el.addEventListener("input", () => { if (el.id === "bgMode") syncBg(); schedule(); }));
+        document.querySelectorAll("#studio input[type=text], #studio input[type=number], #studio textarea, #studio select, #studio input[type=range]").forEach(el => el.addEventListener("input", () => { if (el.id === "bgMode") syncBg(); if (/^(bName|bAge|bWish)$/.test(el.id)) scheduleThumbs(700); schedule(); }));
 
-        $("fPhoto").addEventListener("change", async (e) => { if (e.target.files[0]) { userPhoto = await readPhoto(e.target.files[0]); $("photoTools").hidden = false; schedule(); } });
+        $("fPhoto").addEventListener("change", async (e) => { if (e.target.files[0]) { userPhoto = await readPhoto(e.target.files[0]); $("photoTools").hidden = false; schedule(); scheduleThumbs(200); } });
         $("fBg").addEventListener("change", async (e) => { if (e.target.files[0]) { bgPhoto = await readPhoto(e.target.files[0]); schedule(); } });
-        $("photoClear").addEventListener("click", () => { userPhoto = null; $("fPhoto").value = ""; $("photoTools").hidden = true; schedule(); });
+        $("photoClear").addEventListener("click", () => { userPhoto = null; $("fPhoto").value = ""; $("photoTools").hidden = true; schedule(); scheduleThumbs(200); });
 
         const thumbs = $("agbThumbs");
         AGB_PHOTOS.forEach((src, i) => {

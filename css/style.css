@@ -4471,3 +4471,44 @@ html.doors-closed {
     .studio-preview { position: static; }
     .jump-preview.show { display: block; }
 }
+
+
+/* =====================================================
+   30. TEMPLATE STRIP (birthday templates)
+   ===================================================== */
+.tpl-strip {
+    display: flex;
+    gap: 10px;
+    padding: 4px 2px 12px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+}
+
+.tpl-strip button {
+    flex: 0 0 auto;
+    width: 104px;
+    padding: 4px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    scroll-snap-align: start;
+    cursor: pointer;
+}
+
+.tpl-strip canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 4px;
+    background: #ddd;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .3);
+}
+
+.tpl-strip button.on { background: rgba(255, 210, 70, .18); border-color: var(--gold); }
+.tpl-strip button.off { opacity: .35; cursor: not-allowed; }
