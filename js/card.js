@@ -104,145 +104,19 @@ function drawName(ctx, name) {
 }
 
 
-// ===== 2. Card designs (4 colour looks) =====
-// royal = maroon + gold, night = deep blue + gold, marigold = orange + maroon, classic = cream + maroon
+// ===== 2. Card looks: bold modern design (4 colours) =====
+// maroon = AGB colours, teal, red and charcoal are the other choices
 const CARD_THEMES = {
-    royal:    { bg: ["#7d1313", "#3d0707", "#190202"], glow: "rgba(255,190,70,.32)", text: "#fff4d6", sub: "rgba(255,244,214,.78)", head: ["#fff1b8", "#f2b705", "#c98a00"], line: "#f2b705", pill: ["#fff1b8", "#f2b705", "#c98a00"], pillText: "#4a0a0a", tile: "rgba(255,255,255,.09)", sil: "rgba(242,183,5,.32)", lit: "#ffd24a" },
-    night:    { bg: ["#0d1236", "#161c52", "#05071a"], glow: "rgba(120,140,255,.30)", text: "#f4f1ff", sub: "rgba(244,241,255,.75)", head: ["#fff1b8", "#ffd86b", "#d99a00"], line: "#ffd86b", pill: ["#fff1b8", "#ffd86b", "#d99a00"], pillText: "#0d1236", tile: "rgba(255,255,255,.08)", sil: "rgba(255,216,107,.30)", lit: "#ffd86b" },
-    marigold: { bg: ["#ffc21a", "#f58a07", "#c2410c"], glow: "rgba(255,255,255,.35)", text: "#4a0a0a", sub: "rgba(74,10,10,.78)", head: ["#8a1515", "#a31a1a", "#5a0a0a"], line: "#7a1111", pill: ["#b22222", "#8a1515", "#5a0a0a"], pillText: "#fff3c4", tile: "rgba(255,255,255,.38)", sil: "rgba(90,10,10,.6)", lit: "#fff3c4" },
-    classic:  { bg: ["#fffaf0", "#f7e9cc", "#ecd6a8"], glow: "rgba(255,255,255,.75)", text: "#4a0a0a", sub: "rgba(74,10,10,.72)", head: ["#b22222", "#8a1515", "#5a0a0a"], line: "#b8860b", pill: ["#e6b94d", "#b8860b", "#7a5a00"], pillText: "#3a0a0a", tile: "rgba(255,255,255,.65)", sil: "rgba(90,10,10,.5)", lit: "#f2b705" }
+    maroon:   { base: "#7b1620", dark: "#4a0a10", accent: "#ffc700", accentText: "#3a0a10", nameText: "#7b1620", big: "#ffffff", line: "#ffffff" },
+    teal:     { base: "#2a8f94", dark: "#17626a", accent: "#ffd23f", accentText: "#0f4147", nameText: "#17626a", big: "#ffffff", line: "#ffffff" },
+    red:      { base: "#d41f1f", dark: "#8e0b0b", accent: "#ffd400", accentText: "#5a0000", nameText: "#b01010", big: "#ffffff", line: "#ffffff" },
+    charcoal: { base: "#2b2b2e", dark: "#151517", accent: "#e9dcc2", accentText: "#1c1c1e", nameText: "#1c1c1e", big: "#e9dcc2", line: "#e9dcc2" }
 };
 
 function cardTheme(data) {
     let name = data.design;
     if (!name) { try { name = localStorage.getItem("agbCardDesign"); } catch (e) { name = null; } }
-    return CARD_THEMES[name] || CARD_THEMES.royal;
-}
-
-function across(ctx, colors, x0, x1) {
-    const g = ctx.createLinearGradient(x0, 0, x1, 0);
-    g.addColorStop(0, colors[0]); g.addColorStop(0.5, colors[1]); g.addColorStop(1, colors[2]);
-    return g;
-}
-
-function star4(ctx, x, y, s, color) {
-    ctx.save(); ctx.translate(x, y); ctx.fillStyle = color; ctx.beginPath();
-    for (let i = 0; i < 8; i++) {
-        const r = i % 2 ? s * 0.28 : s;
-        ctx.lineTo(Math.cos(i * Math.PI / 4 - Math.PI / 2) * r, Math.sin(i * Math.PI / 4 - Math.PI / 2) * r);
-    }
-    ctx.closePath(); ctx.fill(); ctx.restore();
-}
-
-function cardMandala(ctx, cx, cy, R, color, alpha) {
-    ctx.save(); ctx.translate(cx, cy); ctx.globalAlpha = alpha; ctx.strokeStyle = color; ctx.lineWidth = 1;
-    [1, 0.94].forEach(k => { ctx.beginPath(); ctx.arc(0, 0, R * k, 0, Math.PI * 2); ctx.stroke(); });
-    for (let ring = 0; ring < 3; ring++) {
-        const n = 16, pr = R * (0.86 - ring * 0.2), pw = R * (0.13 - ring * 0.025);
-        for (let i = 0; i < n; i++) {
-            ctx.save(); ctx.rotate(i * Math.PI * 2 / n + ring * Math.PI / n);
-            ctx.beginPath(); ctx.moveTo(0, -pr * 0.55); ctx.quadraticCurveTo(pw, -pr * 0.8, 0, -pr); ctx.quadraticCurveTo(-pw, -pr * 0.8, 0, -pr * 0.55);
-            ctx.stroke(); ctx.restore();
-        }
-    }
-    ctx.restore();
-}
-
-// fine wavy "banknote" lines - hard to copy, looks premium
-function drawGuilloche(ctx, th, y0, y1) {
-    ctx.save(); ctx.strokeStyle = th.line; ctx.globalAlpha = 0.09; ctx.lineWidth = 0.7;
-    for (let k = 0; y0 + k * 3.2 < y1; k++) {
-        ctx.beginPath();
-        for (let x = 0; x <= CARD_W; x += 4) {
-            const y = y0 + k * 3.2 + Math.sin(x / 15 + k * 0.45) * 5;
-            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-    }
-    ctx.restore();
-}
-
-function cardBackground(ctx, th) {
-    const g = ctx.createLinearGradient(0, 0, 0, CARD_H);
-    g.addColorStop(0, th.bg[0]); g.addColorStop(0.55, th.bg[1]); g.addColorStop(1, th.bg[2]);
-    ctx.fillStyle = g; ctx.fillRect(0, 0, CARD_W, CARD_H);
-    const r = ctx.createRadialGradient(150, 150, 0, 150, 150, 280);
-    r.addColorStop(0, th.glow); r.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = r; ctx.fillRect(0, 0, CARD_W, CARD_H);
-    cardMandala(ctx, 150, 230, 205, th.line, 0.11);
-    drawGuilloche(ctx, th, 300, CARD_H);
-    // thin inner border with four gold studs
-    ctx.save(); ctx.strokeStyle = th.line; ctx.globalAlpha = 0.6; ctx.lineWidth = 1.2; roundedRect(ctx, 7, 7, CARD_W - 14, CARD_H - 14, 12); ctx.stroke(); ctx.restore();
-    [[14, 14], [CARD_W - 14, 14], [14, CARD_H - 14], [CARD_W - 14, CARD_H - 14]].forEach(p => star4(ctx, p[0], p[1], 5, th.line));
-}
-
-function lotusSmall(ctx, cx, cy, s) {
-    ctx.save(); ctx.translate(cx, cy);
-    [[7, 2.3, 0.92], [5, 1.5, 1], [3, 0.7, 1.06]].forEach(layer => {
-        for (let i = 0; i < layer[0]; i++) {
-            const a = (i / (layer[0] - 1) - 0.5) * layer[1], L = s * layer[2];
-            ctx.save(); ctx.rotate(a);
-            const g = ctx.createLinearGradient(0, 0, 0, -L); g.addColorStop(0, "#fff0f5"); g.addColorStop(1, "#ff7eb6");
-            ctx.fillStyle = g; ctx.strokeStyle = "rgba(255,255,255,.7)"; ctx.lineWidth = 0.6;
-            ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(L * 0.36, -L * 0.25, L * 0.3, -L * 0.8, 0, -L);
-            ctx.bezierCurveTo(-L * 0.3, -L * 0.8, -L * 0.36, -L * 0.25, 0, 0); ctx.fill(); ctx.stroke(); ctx.restore();
-        }
-    });
-    ctx.restore();
-}
-
-// Mysuru palace skyline, squashed flat to sit along the bottom edge
-function cardPalace(ctx, th, baseY, w) {
-    ctx.save(); ctx.translate(150, baseY); ctx.scale(1, 0.62);
-    const col = th.sil;
-    ctx.fillStyle = col; ctx.fillRect(-w / 2, -w * 0.03, w, w * 0.03); ctx.fillRect(-w * 0.43, -w * 0.1, w * 0.86, w * 0.07);
-    ctx.fillStyle = th.lit;
-    for (let i = 0; i < 13; i++) { const x = -w * 0.4 + i * (w * 0.8 / 12), r = w * 0.012; ctx.beginPath(); ctx.arc(x, -w * 0.062, r, Math.PI, 0); ctx.lineTo(x + r, -w * 0.04); ctx.lineTo(x - r, -w * 0.04); ctx.closePath(); ctx.fill(); }
-    [[0, 0.11, 0.09], [-0.2, 0.075, 0.07], [0.2, 0.075, 0.07], [-0.34, 0.055, 0.05], [0.34, 0.055, 0.05], [-0.42, 0.04, 0.035], [0.42, 0.04, 0.035]].forEach(tw => {
-        const x = tw[0] * w, ww = tw[1] * w, hh = tw[2] * w, top = -w * 0.1 - hh;
-        ctx.fillStyle = col; ctx.fillRect(x - ww / 2, top, ww, hh);
-        ctx.beginPath(); ctx.moveTo(x - ww * 0.62, top); ctx.bezierCurveTo(x - ww * 0.8, top - ww * 0.6, x - ww * 0.22, top - ww * 0.85, x, top - ww * 1.2); ctx.bezierCurveTo(x + ww * 0.22, top - ww * 0.85, x + ww * 0.8, top - ww * 0.6, x + ww * 0.62, top); ctx.closePath(); ctx.fill();
-        ctx.fillRect(x - 1, top - ww * 1.2 - w * 0.03, 2, w * 0.03);
-        ctx.fillStyle = th.lit; ctx.beginPath(); ctx.arc(x, top + hh * 0.2, ww * 0.14, Math.PI, 0); ctx.lineTo(x + ww * 0.14, top + hh * 0.55); ctx.lineTo(x - ww * 0.14, top + hh * 0.55); ctx.closePath(); ctx.fill();
-    });
-    ctx.fillStyle = "rgba(255,235,160,.9)";
-    for (let i = 0; i <= 40; i++) { ctx.beginPath(); ctx.arc(-w * 0.43 + i * (w * 0.86 / 40), -w * 0.1, 1.5, 0, Math.PI * 2); ctx.fill(); }
-    ctx.restore();
-}
-
-// rainbow "hologram" security strip
-function drawHolo(ctx, y, h) {
-    const g = ctx.createLinearGradient(0, 0, CARD_W, 0);
-    ["#ff9aa2", "#ffd8a8", "#fff3a3", "#b5ead7", "#9ad7ff", "#c7b3ff", "#ff9aa2"].forEach((c, i, a) => g.addColorStop(i / (a.length - 1), c));
-    ctx.save(); ctx.fillStyle = g; ctx.fillRect(0, y, CARD_W, h);
-    ctx.beginPath(); ctx.rect(0, y, CARD_W, h); ctx.clip(); ctx.fillStyle = "rgba(255,255,255,.45)";
-    for (let x = -20; x < CARD_W + 20; x += 44) { ctx.beginPath(); ctx.moveTo(x, y + h); ctx.lineTo(x + 13, y + h); ctx.lineTo(x + 13 + h, y); ctx.lineTo(x + h, y); ctx.closePath(); ctx.fill(); }
-    ctx.restore();
-    ctx.font = "bold 7px " + FONT; ctx.fillStyle = "rgba(60,20,0,.6)";
-    ctx.fillText("AGB  •  MEMBER  •  AGB  •  MEMBER  •  AGB  •  MEMBER  •  AGB", 150, y + h * 0.72);
-}
-
-function drawHeader(ctx, logo, th, small) {
-    const y = small ? 32 : 42, r = small ? 16 : 22;
-    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.4)"; ctx.shadowBlur = 8; ctx.shadowOffsetY = 2;
-    ctx.fillStyle = across(ctx, th.head, 150 - r, 150 + r); ctx.beginPath(); ctx.arc(150, y, r + 3, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-    if (logo) { ctx.save(); ctx.beginPath(); ctx.arc(150, y, r, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(logo, 150 - r, y - r, r * 2, r * 2); ctx.restore(); }
-    if (small) {
-        writeText(ctx, "ಸದಸ್ಯ ಐಡಿ ಕಾರ್ಡ್", 150, 70, 15, th.head[1], true);
-        writeText(ctx, "MEMBER ID CARD", 150, 85, 9.5, th.sub, false);
-        divider(ctx, th, 95);
-    } else {
-        ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 4; ctx.shadowOffsetY = 1.5;
-        ctx.font = "bold 18px " + FONT; ctx.fillStyle = across(ctx, th.head, 60, 240); ctx.fillText("ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ", 150, 84); ctx.restore();
-        writeText(ctx, "AIGIRI GELEYARA BALAGA  •  MYSURU", 150, 99, 8.5, th.sub, true);
-        divider(ctx, th, 108);
-    }
-}
-
-function divider(ctx, th, y) {
-    ctx.save(); ctx.strokeStyle = th.line; ctx.lineWidth = 1; ctx.beginPath();
-    ctx.moveTo(60, y); ctx.lineTo(132, y); ctx.moveTo(168, y); ctx.lineTo(240, y); ctx.stroke(); ctx.restore();
-    star4(ctx, 150, y, 5, th.line);
+    return CARD_THEMES[name] || CARD_THEMES.maroon;
 }
 
 function coverImage(ctx, img, x, y, w, h) {
@@ -250,107 +124,153 @@ function coverImage(ctx, img, x, y, w, h) {
     ctx.drawImage(img, (img.width - sw) / 2, (img.height - sh) / 2, sw, sh, x, y, w, h);
 }
 
-function archPath(ctx, cx, cy, a, bottom) {
-    ctx.beginPath(); ctx.moveTo(cx - a, bottom); ctx.lineTo(cx - a, cy); ctx.arc(cx, cy, a, Math.PI, 0); ctx.lineTo(cx + a, bottom); ctx.closePath();
+// small capital label with a little letter spacing
+function tag(ctx, text, x, y, size, color, align) {
+    ctx.save(); if ("letterSpacing" in ctx) ctx.letterSpacing = "1px";
+    ctx.textAlign = align || "center"; writeText(ctx, text, x, y, size, color, true); ctx.restore();
 }
 
-// The member's name: one line if it fits, otherwise two lines. Returns true when it used two lines.
-function drawNameNew(ctx, name, th) {
-    const maxWidth = 252;
-    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 4; ctx.shadowOffsetY = 1.5; ctx.fillStyle = across(ctx, th.head, 40, 260);
-    for (let size = 24; size >= 15; size--) {
-        ctx.font = "bold " + size + "px " + FONT;
-        if (ctx.measureText(name).width <= maxWidth) { ctx.fillText(name, 150, 297); ctx.restore(); return false; }
-    }
-    ctx.font = "bold 16px " + FONT;
-    const words = name.split(" ");
-    let bestSplit = 1, bestWidth = Infinity;
-    for (let i = 1; i < words.length; i++) {
-        const widest = Math.max(ctx.measureText(words.slice(0, i).join(" ")).width, ctx.measureText(words.slice(i).join(" ")).width);
-        if (widest < bestWidth) { bestWidth = widest; bestSplit = i; }
-    }
-    ctx.fillText(words.slice(0, bestSplit).join(" "), 150, 288);
-    ctx.fillText(words.slice(bestSplit).join(" "), 150, 308);
-    ctx.restore(); return true;
+// thin wavy "map contour" lines: the modern background pattern
+function contours(ctx, th, h) {
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, CARD_W, h); ctx.clip();
+    ctx.strokeStyle = th.line; ctx.globalAlpha = 0.14; ctx.lineWidth = 0.9;
+    [[225, 120, 1], [30, 330, 2]].forEach(c => {
+        for (let k = 1; k <= 16; k++) {
+            ctx.beginPath();
+            for (let a = 0; a <= 360; a += 6) {
+                const t = a * Math.PI / 180, r = k * 15 * (1 + 0.14 * Math.sin(3 * t + k * 0.35 + c[2]) + 0.08 * Math.sin(5 * t - k * 0.2));
+                const x = c[0] + Math.cos(t) * r * 1.15, y = c[1] + Math.sin(t) * r;
+                if (a === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.closePath(); ctx.stroke();
+        }
+    });
+    ctx.restore();
 }
 
-function drawRole(ctx, role, top, th) {
-    ctx.font = "bold 12px " + FONT;
-    const w = Math.min(246, ctx.measureText(role).width + 56), x = 150 - w / 2, h = 22;
-    ctx.save(); ctx.fillStyle = across(ctx, th.pill, x, x + w); ctx.shadowColor = "rgba(0,0,0,.3)"; ctx.shadowBlur = 5; ctx.shadowOffsetY = 2;
-    ctx.beginPath(); ctx.moveTo(x - 15, top + 4); ctx.lineTo(x + 12, top + 4); ctx.lineTo(x + 12, top + h + 4); ctx.lineTo(x - 15, top + h + 4); ctx.lineTo(x - 7, top + h / 2 + 4); ctx.closePath(); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(x + w + 15, top + 4); ctx.lineTo(x + w - 12, top + 4); ctx.lineTo(x + w - 12, top + h + 4); ctx.lineTo(x + w + 15, top + h + 4); ctx.lineTo(x + w + 7, top + h / 2 + 4); ctx.closePath(); ctx.fill();
-    roundedRect(ctx, x, top, w, h, 5); ctx.fill(); ctx.restore();
-    writeText(ctx, role, 150, top + 15.5, 12, th.pillText, true);
+function slant(ctx, x, y, w, h, skew, fill) {
+    ctx.beginPath(); ctx.moveTo(x + skew, y); ctx.lineTo(x + w + skew, y); ctx.lineTo(x + w, y + h); ctx.lineTo(x, y + h); ctx.closePath();
+    ctx.fillStyle = fill; ctx.fill();
 }
+
+// repeating text band at the bottom
+function strip(ctx, th, y) {
+    const h = CARD_H - y;
+    ctx.save(); ctx.fillStyle = th.dark; ctx.fillRect(0, y, CARD_W, h); ctx.fillStyle = th.accent; ctx.fillRect(0, y, CARD_W, 2.5);
+    ctx.font = "bold 7.5px " + FONT; ctx.fillStyle = th.line; ctx.globalAlpha = 0.85; ctx.textAlign = "left";
+    const t = "FRIENDSHIP  •  CULTURE  •  SERVICE  •  "; let x = -8;
+    while (x < CARD_W) { ctx.fillText(t, x, y + h / 2 + 4); x += ctx.measureText(t).width; }
+    ctx.restore();
+}
+
+function lanyardSlot(ctx) {
+    ctx.save(); ctx.fillStyle = "rgba(0,0,0,.38)"; roundedRect(ctx, 131, 9, 38, 7, 3.5); ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,.55)"; ctx.lineWidth = 0.8; roundedRect(ctx, 131, 9, 38, 7, 3.5); ctx.stroke(); ctx.restore();
+}
+
+function topBar(ctx, logo, th) {
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2; ctx.fillStyle = "#ffffff";
+    ctx.beginPath(); ctx.arc(38, 40, 22, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    if (logo) { ctx.save(); ctx.beginPath(); ctx.arc(38, 40, 19, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(logo, 19, 21, 38, 38); ctx.restore(); }
+    ctx.save(); ctx.textAlign = "left"; ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 4; ctx.shadowOffsetY = 1.5;
+    writeText(ctx, "ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ", 66, 38, 15, "#ffffff", true); ctx.restore();
+    tag(ctx, "AIGIRI GELEYARA BALAGA  •  MYSURU", 66, 52, 6.6, th.accent, "left");
+}
+
+function iconPhone(ctx, x, y, c) { ctx.save(); ctx.strokeStyle = c; ctx.fillStyle = c; ctx.lineWidth = 1.5; roundedRect(ctx, x - 4, y - 7, 8, 14, 2); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y + 4, 1, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+function iconDrop(ctx, x, y, c) { ctx.save(); ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(x, y - 8); ctx.bezierCurveTo(x + 7, y, x + 6, y + 7, x, y + 7); ctx.bezierCurveTo(x - 6, y + 7, x - 7, y, x, y - 8); ctx.fill(); ctx.restore(); }
+function iconInsta(ctx, x, y, c) { ctx.save(); ctx.strokeStyle = c; ctx.fillStyle = c; ctx.lineWidth = 1.5; roundedRect(ctx, x - 7, y - 7, 14, 14, 4); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y, 3.2, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.arc(x + 4.2, y - 4.2, 1, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
 
 // ===== 3. Front of the card =====
 function drawFront(ctx, data, logo, photo, th) {
-    drawHeader(ctx, logo, th, false);
+    ctx.fillStyle = th.base; ctx.fillRect(0, 0, CARD_W, CARD_H);
+    const shade = ctx.createLinearGradient(0, 0, 0, CARD_H); shade.addColorStop(0, "rgba(255,255,255,.07)"); shade.addColorStop(1, "rgba(0,0,0,.28)");
+    ctx.fillStyle = shade; ctx.fillRect(0, 0, CARD_W, CARD_H);
+    contours(ctx, th, CARD_H);
+    topBar(ctx, logo, th);
+    lanyardSlot(ctx);
+    // "MEMBER" tag top right
+    ctx.fillStyle = th.accent; roundedRect(ctx, 224, 58, 62, 17, 8.5); ctx.fill(); tag(ctx, "MEMBER", 255, 70, 7.8, th.accentText);
 
-    // sunrays behind the photo
-    ctx.save(); ctx.translate(150, 196); ctx.fillStyle = th.line; ctx.globalAlpha = 0.14;
-    for (let i = 0; i < 24; i++) { ctx.rotate(Math.PI * 2 / 24); if (i % 2) { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-7, -128); ctx.lineTo(7, -128); ctx.closePath(); ctx.fill(); } }
-    ctx.restore();
+    // giant AGB letters behind the photo
+    let size = 150; ctx.font = "900 " + size + "px " + FONT;
+    while (size > 40 && ctx.measureText("AGB").width > 240) { size -= 2; ctx.font = "900 " + size + "px " + FONT; }
+    ctx.save(); ctx.textAlign = "left"; ctx.fillStyle = th.big; ctx.shadowColor = "rgba(0,0,0,.25)"; ctx.shadowBlur = 8; ctx.shadowOffsetY = 3;
+    ctx.fillText("AGB", 24, 168); ctx.restore();
 
-    // photo in a temple arch with a gold frame
-    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 12; ctx.shadowOffsetY = 4;
-    ctx.strokeStyle = across(ctx, th.head, 86, 214); ctx.lineWidth = 8; ctx.lineJoin = "round"; archPath(ctx, 150, 182, 60, 262); ctx.stroke(); ctx.restore();
-    ctx.save(); ctx.strokeStyle = "rgba(255,255,255,.92)"; ctx.lineWidth = 2.4; archPath(ctx, 150, 182, 60, 262); ctx.stroke(); ctx.restore();
-    ctx.save(); archPath(ctx, 150, 182, 60, 262); ctx.clip();
-    if (photo) coverImage(ctx, photo, 88, 118, 124, 146);
+    // photo card, slightly tilted, with a white border
+    ctx.save(); ctx.translate(150, 262); ctx.rotate(-0.03);
+    ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6; ctx.fillStyle = "#ffffff"; roundedRect(ctx, -126, -100, 252, 200, 20); ctx.fill(); ctx.shadowColor = "transparent";
+    ctx.save(); roundedRect(ctx, -121, -95, 242, 190, 16); ctx.clip();
+    if (photo) coverImage(ctx, photo, -121, -95, 242, 190);
     else {
-        const g = ctx.createLinearGradient(0, 118, 0, 264); g.addColorStop(0, th.bg[0]); g.addColorStop(1, th.bg[2]); ctx.fillStyle = g; ctx.fillRect(88, 118, 124, 146);
-        ctx.fillStyle = th.line; ctx.globalAlpha = 0.55; ctx.beginPath(); ctx.arc(150, 178, 24, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(150, 262, 46, Math.PI, 0); ctx.fill();
+        const g = ctx.createLinearGradient(0, -95, 0, 95); g.addColorStop(0, th.base); g.addColorStop(1, th.dark); ctx.fillStyle = g; ctx.fillRect(-121, -95, 242, 190);
+        ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.arc(0, -22, 34, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(0, 95, 70, Math.PI, 0); ctx.fill();
     }
-    ctx.restore();
-    lotusSmall(ctx, 150, 270, 26);
+    ctx.restore(); ctx.restore();
 
-    const twoLines = drawNameNew(ctx, data.name || "—", th);
-    drawRole(ctx, data.role || "MEMBER", twoLines ? 322 : 312, th);
+    // slanted name label (white) and role label (accent)
+    const name = (data.name || "—").toUpperCase();
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.4)"; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4; slant(ctx, 14, 342, 262, 48, 12, "#ffffff"); ctx.restore();
+    ctx.fillStyle = th.nameText; let fitted = false;
+    for (let s = 25; s >= 15; s--) { ctx.font = "900 " + s + "px " + FONT; if (ctx.measureText(name).width <= 236) { ctx.fillText(name, 151, 372 + (s > 21 ? 3 : 0)); fitted = true; break; } }
+    if (!fitted) {
+        ctx.font = "900 15px " + FONT; const words = name.split(" "); let best = 1, bw = Infinity;
+        for (let i = 1; i < words.length; i++) { const w = Math.max(ctx.measureText(words.slice(0, i).join(" ")).width, ctx.measureText(words.slice(i).join(" ")).width); if (w < bw) { bw = w; best = i; } }
+        ctx.fillText(words.slice(0, best).join(" "), 151, 363); ctx.fillText(words.slice(best).join(" "), 151, 381);
+    }
+    const role = (data.role || "MEMBER").toUpperCase();
+    let rs = 10.5; ctx.font = "900 " + rs + "px " + FONT; while (rs > 7.5 && ctx.measureText(role).width > 230) { rs -= 0.5; ctx.font = "900 " + rs + "px " + FONT; }
+    const rw = Math.min(262, ctx.measureText(role).width + 34);
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.3)"; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2; slant(ctx, 150 - rw / 2 - 5, 392, rw, 22, 10, th.accent); ctx.restore();
+    writeText(ctx, role, 150, 407, rs, th.accentText, true);
 
-    ctx.save(); if ("letterSpacing" in ctx) ctx.letterSpacing = "1.5px";
-    writeText(ctx, data.id || "", 150, 366, 22, th.text, true); ctx.restore();
-    writeText(ctx, "ಸೇರಿದ ವರ್ಷ / Joined " + (data.year || ""), 150, 384, 11, th.sub, false);
+    // three details in a row
+    [[56, "ID", data.id || ""], [150, "JOINED", String(data.year || "")], [244, "BLOOD", data.blood || "—"]].forEach((c, i) => {
+        tag(ctx, c[1], c[0], 427, 6.4, "rgba(255,255,255,.7)"); writeText(ctx, c[2], c[0], 442, i === 0 ? 11 : 13, "#ffffff", true);
+    });
+    ctx.save(); ctx.strokeStyle = "rgba(255,255,255,.3)"; ctx.lineWidth = 0.8; [[103, 421, 103, 444], [197, 421, 197, 444]].forEach(l => { ctx.beginPath(); ctx.moveTo(l[0], l[1]); ctx.lineTo(l[2], l[3]); ctx.stroke(); }); ctx.restore();
 
-    drawHolo(ctx, 395, 13);
-    cardPalace(ctx, th, 474, 290);
+    strip(ctx, th, 452);
 }
 
 // ===== 4. Back of the card =====
 function drawBack(ctx, data, logo, scale, th) {
-    drawHeader(ctx, logo, th, true);
+    // colour on top, white below with a slanted edge
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, CARD_W, CARD_H);
+    ctx.save(); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(CARD_W, 0); ctx.lineTo(CARD_W, 236); ctx.lineTo(0, 262); ctx.closePath(); ctx.clip();
+    ctx.fillStyle = th.base; ctx.fillRect(0, 0, CARD_W, 270);
+    const shade = ctx.createLinearGradient(0, 0, 0, 270); shade.addColorStop(0, "rgba(255,255,255,.07)"); shade.addColorStop(1, "rgba(0,0,0,.25)"); ctx.fillStyle = shade; ctx.fillRect(0, 0, CARD_W, 270);
+    contours(ctx, th, 270); ctx.restore();
+    topBar(ctx, logo, th); lanyardSlot(ctx);
 
-    ctx.save(); if ("letterSpacing" in ctx) ctx.letterSpacing = "1.5px";
-    writeText(ctx, data.id || "", 150, 124, 22, th.text, true); ctx.restore();
+    // big title
+    ctx.save(); ctx.fillStyle = th.big; ctx.shadowColor = "rgba(0,0,0,.25)"; ctx.shadowBlur = 8; ctx.shadowOffsetY = 3;
+    ctx.font = "900 40px " + FONT; ctx.fillText("SCAN TO", 150, 106);
+    let s = 62; ctx.font = "900 " + s + "px " + FONT; while (s > 30 && ctx.measureText("VERIFY").width > 236) { s -= 2; ctx.font = "900 " + s + "px " + FONT; }
+    ctx.fillText("VERIFY", 150, 106 + s * 0.82); ctx.restore();
 
-    [[22, "ರಕ್ತದ ಗುಂಪು / Blood", data.blood || "", 21, "#ff6b6b"], [154, "ಮೊಬೈಲ್ / Phone", data.phone || "", 14, th.text]].forEach(c => {
-        ctx.save(); ctx.fillStyle = th.tile; roundedRect(ctx, c[0], 136, 124, 40, 9); ctx.fill(); ctx.strokeStyle = th.line; ctx.globalAlpha = 0.6; ctx.lineWidth = 0.8; ctx.stroke(); ctx.restore();
-        writeText(ctx, c[1], c[0] + 62, 149, 8.5, th.sub, false);
-        writeText(ctx, c[2], c[0] + 62, 169, c[3], c[4], true);
-    });
-
-    // QR code in a white tile with gold corner brackets
-    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3; ctx.fillStyle = "#ffffff"; roundedRect(ctx, 79, 188, 142, 142, 10); ctx.fill(); ctx.restore();
-    ctx.save(); ctx.strokeStyle = th.line; ctx.lineWidth = 2.2; ctx.lineCap = "round";
-    [[84, 193, 1, 1], [216, 193, -1, 1], [84, 325, 1, -1], [216, 325, -1, -1]].forEach(c => { ctx.beginPath(); ctx.moveTo(c[0], c[1] + c[3] * 14); ctx.lineTo(c[0], c[1]); ctx.lineTo(c[0] + c[2] * 14, c[1]); ctx.stroke(); });
-    ctx.restore();
+    // QR tile
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6; ctx.fillStyle = "#ffffff"; roundedRect(ctx, 64, 176, 172, 188, 16); ctx.fill(); ctx.restore();
+    ctx.save(); ctx.strokeStyle = th.base; ctx.lineWidth = 2.4; ctx.lineCap = "round";
+    [[74, 186, 1, 1], [226, 186, -1, 1]].forEach(c => { ctx.beginPath(); ctx.moveTo(c[0], c[1] + 14); ctx.lineTo(c[0], c[1]); ctx.lineTo(c[0] + c[2] * 14, c[1]); ctx.stroke(); }); ctx.restore();
     if (data.verifyUrl) {
         const qr = QR.make(data.verifyUrl);
-        const module = Math.floor(116 * scale / qr.size) / scale;
-        const full = module * qr.size;
-        const left = Math.round((150 - full / 2) * scale) / scale;
-        const top = Math.round((259 - full / 2) * scale) / scale;
+        const module = Math.floor(132 * scale / qr.size) / scale, full = module * qr.size;
+        const left = Math.round((150 - full / 2) * scale) / scale, top = Math.round((260 - full / 2) * scale) / scale;
         ctx.fillStyle = "#000000";
         for (let r = 0; r < qr.size; r++) for (let c = 0; c < qr.size; c++) if (qr.modules[r][c]) ctx.fillRect(left + c * module, top + r * module, module, module);
     }
-    writeText(ctx, "ಪರಿಶೀಲಿಸಲು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ / Scan to verify", 150, 346, 9.5, th.sub, false);
-    writeText(ctx, "If found, please return to", 150, 364, 9.5, th.sub, false);
-    writeText(ctx, "AIGIRI GELEYARA BALAGA, Mysuru", 150, 378, 10.5, th.text, true);
-    writeText(ctx, "koushil24.github.io/aigiri-geleyara-balaga", 150, 390, 8, th.head[1], false);
+    tag(ctx, data.id || "", 150, 348, 13, th.nameText);
 
-    drawHolo(ctx, 397, 13);
-    cardPalace(ctx, th, 474, 290);
+    // contact rows
+    ctx.textAlign = "left";
+    const rows = [[385, iconPhone, data.phone || "—"], [405, iconDrop, "Blood group  " + (data.blood || "—")], [425, iconInsta, "@aigiri2025"]];
+    rows.forEach(r => { r[1](ctx, 84, r[0] - 4, th.base); writeText(ctx, r[2], 100, r[0], 11, "#222222", true); });
+    ctx.textAlign = "center";
+    writeText(ctx, "If found, please return to AGB, Mysuru", 150, 444, 7.6, "#777777", false);
+
+    strip(ctx, th, 452);
 }
 
 
@@ -373,15 +293,13 @@ async function renderCard(side, data, scale) {
     ctx.save();
     roundedRect(ctx, 0, 0, CARD_W, CARD_H, 18);
     ctx.clip();
-    cardBackground(ctx, th);
-
     if (side === "front") drawFront(ctx, data, logo, photo, th);
     else drawBack(ctx, data, logo, scale, th);
     ctx.restore();
 
     roundedRect(ctx, 0.5, 0.5, CARD_W - 1, CARD_H - 1, 18);
     ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(120,90,30,.6)";
+    ctx.strokeStyle = "rgba(0,0,0,.25)";
     ctx.stroke();
 
     return canvas;

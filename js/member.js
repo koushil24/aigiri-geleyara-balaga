@@ -323,8 +323,9 @@ if (saved) {
 (function () {
     const box = $("cardDesigns");
     if (!box) return;
-    let saved = "royal";
-    try { saved = localStorage.getItem("agbCardDesign") || "royal"; } catch (e) { /* ignore */ }
+    let saved = "maroon";
+    try { saved = localStorage.getItem("agbCardDesign") || "maroon"; } catch (e) { /* ignore */ }
+    if (!box.querySelector('[data-design="' + saved + '"]')) saved = "maroon";
     const mark = (name) => box.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.design === name));
     mark(saved);
     box.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
