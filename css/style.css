@@ -4512,3 +4512,24 @@ html.doors-closed {
 
 .tpl-strip button.on { background: rgba(255, 210, 70, .18); border-color: var(--gold); }
 .tpl-strip button.off { opacity: .35; cursor: not-allowed; }
+
+
+/* =====================================================
+   31. MOBILE FIXES + ID CARD COLOUR CHOOSER
+   ===================================================== */
+/* the long template strip must scroll inside its box, not stretch the whole page */
+.studio > * { min-width: 0; }
+.studio-controls { min-width: 0; max-width: 100%; }
+.tpl-strip { max-width: 100%; }
+
+/* gold buttons keep dark text, even inside a form label (was gold on gold) */
+.field label.btn,
+.field label.btn span { color: #4b0000; font-size: 15px; }
+.field label.btn { display: block; text-align: center; margin-bottom: 0; }
+
+/* active tab was dark red on near-black in night mode */
+body.dark-mode .tabbar a.on,
+body.dark-mode .tabbar a.on * { color: #FFD700 !important; }
+
+.card-designs { max-width: 460px; margin: 0 auto 22px; text-align: center; }
+.card-designs .themes { max-width: 420px; margin: 0 auto; }

@@ -74,6 +74,7 @@ const translations = {
         "ps-jump": "ಪೋಸ್ಟರ್ ನೋಡಿ ↓",
         "ps-hint": "ಡೌನ್‌ಲೋಡ್ ಒತ್ತಿ ಪೋಸ್ಟರ್ ಅನ್ನು ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ಉಳಿಸಿ.",
         "ps-template": "ಟೆಂಪ್ಲೇಟ್ (10 ಶೈಲಿಗಳು)",
+        "mb-design": "ಕಾರ್ಡ್ ಬಣ್ಣ",
         "nav-home": "ಮುಖಪುಟ",
         "nav-about": "ನಮ್ಮ ಬಗ್ಗೆ",
         "nav-events": "ಕಾರ್ಯಕ್ರಮಗಳು",
@@ -158,8 +159,8 @@ const translations = {
         "sp3-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಧ್ವನಿ ಮತ್ತು ವೇದಿಕೆ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
         "sp4-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ನಿಮ್ಮ ಸಾಮಗ್ರಿ ಬೆಂಬಲಕ್ಕೆ ಸಹಕರಿಸಲು (Sponsor) ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
         "sp5-msg": "ನಮಸ್ಕಾರ ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ! ನಾನು ಸ್ವಯಂಸೇವಕನಾಗಿ ಸೇರಲು ಬಯಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ವಿವರಗಳನ್ನು ತಿಳಿಸಿ.",
-        "nav-birthday": "🎉 ಪೋಸ್ಟರ್ ಸ್ಟುಡಿಯೋ",
-        "bd-title": "🎉 ಪೋಸ್ಟರ್ ಸ್ಟುಡಿಯೋ",
+        "nav-birthday": "🎨 ಪೋಸ್ಟರ್ ಸ್ಟುಡಿಯೋ",
+        "bd-title": "🎨 ಪೋಸ್ಟರ್ ಸ್ಟುಡಿಯೋ",
         "bd-sub": "ಹುಟ್ಟುಹಬ್ಬ, ಹಬ್ಬ ಮತ್ತು ಕಾರ್ಯಕ್ರಮದ ಸುಂದರ ಪೋಸ್ಟರ್‌ಗಳನ್ನು ಕ್ಷಣಾರ್ಧದಲ್ಲಿ ರಚಿಸಿ. ನಿಮ್ಮ ಫೋಟೋ ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲೇ ಉಳಿಯುತ್ತದೆ.",
         "bd-open": "ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ ↗",
         "mb-title": "ಐಗಿರಿ ಸದಸ್ಯ ಐಡಿ ಕಾರ್ಡ್",
@@ -229,7 +230,7 @@ const translations = {
         "de-member": "ಡಿಜಿಟಲ್ ಸದಸ್ಯ ಐಡಿ",
         "de-member-s": "ನಿಮ್ಮ AGB ಗುರುತು",
         "de-poster": "ಪೋಸ್ಟರ್ ಸ್ಟುಡಿಯೋ",
-        "de-poster-s": "ವಿಶೇಷ ಕ್ಷಣಗಳ ಆಚರಣೆ",
+        "de-poster-s": "ಹುಟ್ಟುಹಬ್ಬ, ಹಬ್ಬ ಮತ್ತು ಕಾರ್ಯಕ್ರಮದ ಪೋಸ್ಟರ್",
         "de-join": "ಸೇರಿ / ಸ್ವಯಂಸೇವಕರಾಗಿ",
         "de-join-s": "AGB ಯ ಭಾಗವಾಗಿ",
         "de-events": "ಕಾರ್ಯಕ್ರಮಗಳು",
@@ -316,6 +317,7 @@ const translations = {
         "ps-jump": "Preview poster ↓",
         "ps-hint": "Tap Download to save the poster to your phone.",
         "ps-template": "Template (10 styles)",
+        "mb-design": "Card colours",
         "nav-home": "Home",
         "nav-about": "About",
         "nav-events": "Events",
@@ -400,8 +402,8 @@ const translations = {
         "sp3-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Sound & Stage Support. Please share the details.",
         "sp4-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to sponsor your Material Support. Please share the details.",
         "sp5-msg": "Hello AIGIRI GELEYARA BALAGA! I would like to join as a Volunteer. Please share the details.",
-        "nav-birthday": "🎉 Poster Studio",
-        "bd-title": "🎉 Poster Studio",
+        "nav-birthday": "🎨 Poster Studio",
+        "bd-title": "🎨 Poster Studio",
         "bd-sub": "Create beautiful birthday, festival and event posters in seconds. Your photo stays on your phone.",
         "bd-open": "Open in a new tab ↗",
         "mb-title": "AIGIRI MEMBER ID CARD",
@@ -471,7 +473,7 @@ const translations = {
         "de-member": "Digital Member ID",
         "de-member-s": "Your AGB identity",
         "de-poster": "Poster Studio",
-        "de-poster-s": "Celebrate special moments",
+        "de-poster-s": "Birthday, festival and event posters",
         "de-join": "Join / Volunteer",
         "de-join-s": "Be part of AGB",
         "de-events": "Events",
@@ -806,7 +808,7 @@ updateEventBadges();
 
 // ===== 12. Icons: every emoji on the page becomes one of our own drawn icons =====
 // The pictures live in the hidden icon sheet at the top of each page (<symbol id="i-...">).
-const ICON_MAP = {"🪔": "lamp", "🐘": "modak", "📅": "calendar", "🙏": "namaste", "🟡": "diamond", "👥": "people", "📸": "camera", "🤝": "united", "🎉": "sparkle", "🍛": "bowl", "🎵": "music", "🎁": "gift", "🙋": "hand", "📍": "pin", "🗺": "map", "📧": "mail", "📞": "phone", "📷": "camera", "🧵": "at", "🕰": "clock", "✨": "sparkle", "🪪": "idcard", "🎂": "cake", "🔓": "unlock", "🔒": "lock", "🚪": "door", "⬇": "download", "📄": "document", "🖨": "printer", "✅": "check", "⏳": "hourglass", "❌": "cross", "⚠": "warning", "🛕": "temple", "❤": "heart", "🌐": "globe", "🌙": "moon", "☀": "sun", "⬆": "arrowup", "👤": "user", "🔧": "wrench", "▶": "play", "🏠": "home", "🖼": "image", "💬": "chat", "✔": "tick"};
+const ICON_MAP = {"🪔": "lamp", "🐘": "modak", "📅": "calendar", "🙏": "namaste", "🟡": "diamond", "👥": "people", "📸": "camera", "🤝": "united", "🎉": "sparkle", "🍛": "bowl", "🎵": "music", "🎁": "gift", "🙋": "hand", "📍": "pin", "🗺": "map", "📧": "mail", "📞": "phone", "📷": "camera", "🧵": "at", "🕰": "clock", "✨": "sparkle", "🪪": "idcard", "🎨": "palette", "🎂": "cake", "🔓": "unlock", "🔒": "lock", "🚪": "door", "⬇": "download", "📄": "document", "🖨": "printer", "✅": "check", "⏳": "hourglass", "❌": "cross", "⚠": "warning", "🛕": "temple", "❤": "heart", "🌐": "globe", "🌙": "moon", "☀": "sun", "⬆": "arrowup", "👤": "user", "🔧": "wrench", "▶": "play", "🏠": "home", "🖼": "image", "💬": "chat", "✔": "tick"};
 const ICON_PATTERN = "(" + Object.keys(ICON_MAP).join("|") + ")\\uFE0F?";
 
 function makeIcon(name) {

@@ -317,3 +317,19 @@ if (saved) {
 } else {
     showAuth();
 }
+
+
+// ===== Card colours: the member picks a look, the card is drawn again =====
+(function () {
+    const box = $("cardDesigns");
+    if (!box) return;
+    let saved = "royal";
+    try { saved = localStorage.getItem("agbCardDesign") || "royal"; } catch (e) { /* ignore */ }
+    const mark = (name) => box.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.design === name));
+    mark(saved);
+    box.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+        try { localStorage.setItem("agbCardDesign", b.dataset.design); } catch (e) { /* ignore */ }
+        mark(b.dataset.design);
+        if (cardData) { paint($("cardFront"), "front", cardData, 3); paint($("cardBack"), "back", cardData, 3); }
+    }));
+})();
