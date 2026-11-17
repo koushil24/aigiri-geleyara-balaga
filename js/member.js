@@ -319,18 +319,7 @@ if (saved) {
 }
 
 
-// ===== Card colours: the member picks a look, the card is drawn again =====
-(function () {
-    const box = $("cardDesigns");
-    if (!box) return;
-    let saved = "maroon";
-    try { saved = localStorage.getItem("agbCardDesign") || "maroon"; } catch (e) { /* ignore */ }
-    if (!box.querySelector('[data-design="' + saved + '"]')) saved = "maroon";
-    const mark = (name) => box.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.design === name));
-    mark(saved);
-    box.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
-        try { localStorage.setItem("agbCardDesign", b.dataset.design); } catch (e) { /* ignore */ }
-        mark(b.dataset.design);
-        if (cardData) { paint($("cardFront"), "front", cardData, 3); paint($("cardBack"), "back", cardData, 3); }
-    }));
-})();
+// ===== When the photo cut-out is ready, draw the card again =====
+window.addEventListener("agb-cutout", () => {
+    if (cardData && typeof paint === "function") { paint($("cardFront"), "front", cardData, 3); }
+});

@@ -104,37 +104,54 @@ function drawName(ctx, name) {
 }
 
 
-// ===== 2. Card looks: bold modern design (4 colours) =====
-// maroon = AGB colours, teal, red and charcoal are the other choices
-const CARD_THEMES = {
-    maroon:   { base: "#7b1620", dark: "#4a0a10", accent: "#ffc700", accentText: "#3a0a10", nameText: "#7b1620", big: "#ffffff", line: "#ffffff" },
-    teal:     { base: "#2a8f94", dark: "#17626a", accent: "#ffd23f", accentText: "#0f4147", nameText: "#17626a", big: "#ffffff", line: "#ffffff" },
-    red:      { base: "#d41f1f", dark: "#8e0b0b", accent: "#ffd400", accentText: "#5a0000", nameText: "#b01010", big: "#ffffff", line: "#ffffff" },
-    charcoal: { base: "#2b2b2e", dark: "#151517", accent: "#e9dcc2", accentText: "#1c1c1e", nameText: "#1c1c1e", big: "#e9dcc2", line: "#e9dcc2" }
-};
+// ===== 2. Card colours: maroon and gold chrome only =====
+const MAROON = ["#7b1620", "#4a0a10"];
+const DARK = "#2e0508";
 
-function cardTheme(data) {
-    let name = data.design;
-    if (!name) { try { name = localStorage.getItem("agbCardDesign"); } catch (e) { name = null; } }
-    return CARD_THEMES[name] || CARD_THEMES.maroon;
+// shiny gold: a bright top, a dark "horizon" line in the middle and a warm bottom
+function chromeV(ctx, y0, y1) {
+    const g = ctx.createLinearGradient(0, y0, 0, y1);
+    [[0, "#fffbe0"], [0.2, "#f7d86a"], [0.45, "#c8941a"], [0.5, "#7a5200"], [0.53, "#ffe9a0"], [0.75, "#e3b13b"], [1, "#8d5f05"]].forEach(s => g.addColorStop(s[0], s[1]));
+    return g;
+}
+function chromeH(ctx, x0, x1) {
+    const g = ctx.createLinearGradient(x0, 0, x1, 0);
+    [[0, "#fff3b8"], [0.3, "#f2c94c"], [0.55, "#b8860b"], [0.75, "#ffe08a"], [1, "#c99a1b"]].forEach(s => g.addColorStop(s[0], s[1]));
+    return g;
+}
+// text filled with gold chrome
+function chromeText(ctx, text, x, y, size, align) {
+    ctx.save(); ctx.font = "900 " + size + "px " + FONT; ctx.textAlign = align || "center";
+    ctx.fillStyle = chromeV(ctx, y - size * 0.78, y + size * 0.12); ctx.fillText(text, x, y);
+    ctx.lineWidth = 0.5; ctx.strokeStyle = "rgba(70,35,0,.5)"; ctx.strokeText(text, x, y); ctx.restore();
+}
+// big condensed word behind the photo
+function giantWord(ctx, word, baseline, maxW) {
+    const size = 150; ctx.save(); ctx.font = "900 " + size + "px " + FONT;
+    const w = ctx.measureText(word).width, sx = Math.min(1, maxW / w);
+    ctx.translate(150, baseline); ctx.scale(sx, 1); ctx.textAlign = "center";
+    ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 12; ctx.shadowOffsetY = 5;
+    ctx.fillStyle = chromeV(ctx, -size * 0.74, size * 0.03); ctx.fillText(word, 0, 0);
+    ctx.shadowColor = "transparent"; ctx.lineWidth = 1.4; ctx.strokeStyle = "rgba(80,40,0,.65)"; ctx.strokeText(word, 0, 0);
+    ctx.restore();
 }
 
 function coverImage(ctx, img, x, y, w, h) {
     const scale = Math.max(w / img.width, h / img.height), sw = w / scale, sh = h / scale;
     ctx.drawImage(img, (img.width - sw) / 2, (img.height - sh) / 2, sw, sh, x, y, w, h);
 }
-
-// small capital label with a little letter spacing
 function tag(ctx, text, x, y, size, color, align) {
     ctx.save(); if ("letterSpacing" in ctx) ctx.letterSpacing = "1px";
     ctx.textAlign = align || "center"; writeText(ctx, text, x, y, size, color, true); ctx.restore();
 }
-
-// thin wavy "map contour" lines: the modern background pattern
-function contours(ctx, th, h) {
-    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, CARD_W, h); ctx.clip();
-    ctx.strokeStyle = th.line; ctx.globalAlpha = 0.14; ctx.lineWidth = 0.9;
-    [[225, 120, 1], [30, 330, 2]].forEach(c => {
+function cardBackground(ctx) {
+    const g = ctx.createLinearGradient(0, 0, 0, CARD_H); g.addColorStop(0, MAROON[0]); g.addColorStop(1, MAROON[1]);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, CARD_W, CARD_H);
+    const glow = ctx.createRadialGradient(150, 140, 0, 150, 140, 260); glow.addColorStop(0, "rgba(255,190,70,.20)"); glow.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = glow; ctx.fillRect(0, 0, CARD_W, CARD_H);
+    // gold map-contour lines
+    ctx.save(); ctx.strokeStyle = "#f2c94c"; ctx.globalAlpha = 0.13; ctx.lineWidth = 0.9;
+    [[225, 120, 1], [30, 350, 2]].forEach(c => {
         for (let k = 1; k <= 16; k++) {
             ctx.beginPath();
             for (let a = 0; a <= 360; a += 6) {
@@ -146,73 +163,127 @@ function contours(ctx, th, h) {
         }
     });
     ctx.restore();
+    // thin gold frame
+    ctx.save(); ctx.strokeStyle = chromeV(ctx, 0, CARD_H); ctx.globalAlpha = 0.9; ctx.lineWidth = 1.4; roundedRect(ctx, 6, 6, CARD_W - 12, CARD_H - 12, 13); ctx.stroke(); ctx.restore();
 }
-
 function slant(ctx, x, y, w, h, skew, fill) {
     ctx.beginPath(); ctx.moveTo(x + skew, y); ctx.lineTo(x + w + skew, y); ctx.lineTo(x + w, y + h); ctx.lineTo(x, y + h); ctx.closePath();
     ctx.fillStyle = fill; ctx.fill();
 }
-
-// repeating text band at the bottom
-function strip(ctx, th, y) {
+function strip(ctx, y) {
     const h = CARD_H - y;
-    ctx.save(); ctx.fillStyle = th.dark; ctx.fillRect(0, y, CARD_W, h); ctx.fillStyle = th.accent; ctx.fillRect(0, y, CARD_W, 2.5);
-    ctx.font = "bold 7.5px " + FONT; ctx.fillStyle = th.line; ctx.globalAlpha = 0.85; ctx.textAlign = "left";
+    ctx.save(); ctx.fillStyle = DARK; ctx.fillRect(0, y, CARD_W, h); ctx.fillStyle = chromeH(ctx, 0, CARD_W); ctx.fillRect(0, y, CARD_W, 2.5);
+    ctx.font = "bold 7.5px " + FONT; ctx.fillStyle = chromeV(ctx, y, y + h); ctx.textAlign = "left";
     const t = "FRIENDSHIP  •  CULTURE  •  SERVICE  •  "; let x = -8;
     while (x < CARD_W) { ctx.fillText(t, x, y + h / 2 + 4); x += ctx.measureText(t).width; }
     ctx.restore();
 }
-
 function lanyardSlot(ctx) {
-    ctx.save(); ctx.fillStyle = "rgba(0,0,0,.38)"; roundedRect(ctx, 131, 9, 38, 7, 3.5); ctx.fill();
-    ctx.strokeStyle = "rgba(255,255,255,.55)"; ctx.lineWidth = 0.8; roundedRect(ctx, 131, 9, 38, 7, 3.5); ctx.stroke(); ctx.restore();
+    ctx.save(); ctx.fillStyle = "rgba(0,0,0,.45)"; roundedRect(ctx, 131, 12, 38, 7, 3.5); ctx.fill();
+    ctx.strokeStyle = chromeH(ctx, 131, 169); ctx.lineWidth = 1; roundedRect(ctx, 131, 12, 38, 7, 3.5); ctx.stroke(); ctx.restore();
 }
-
-function topBar(ctx, logo, th) {
-    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2; ctx.fillStyle = "#ffffff";
-    ctx.beginPath(); ctx.arc(38, 40, 22, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-    if (logo) { ctx.save(); ctx.beginPath(); ctx.arc(38, 40, 19, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(logo, 19, 21, 38, 38); ctx.restore(); }
-    ctx.save(); ctx.textAlign = "left"; ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 4; ctx.shadowOffsetY = 1.5;
-    writeText(ctx, "ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ", 66, 38, 15, "#ffffff", true); ctx.restore();
-    tag(ctx, "AIGIRI GELEYARA BALAGA  •  MYSURU", 66, 52, 6.6, th.accent, "left");
+function topBar(ctx, logo) {
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.4)"; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2; ctx.fillStyle = chromeH(ctx, 14, 62);
+    ctx.beginPath(); ctx.arc(38, 42, 23, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    if (logo) { ctx.save(); ctx.beginPath(); ctx.arc(38, 42, 19.5, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(logo, 18.5, 22.5, 39, 39); ctx.restore(); }
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.4)"; ctx.shadowBlur = 4; ctx.shadowOffsetY = 1.5; chromeText(ctx, "ಐಗಿರಿ ಗೆಳೆಯರ ಬಳಗ", 68, 40, 15, "left"); ctx.restore();
+    tag(ctx, "AIGIRI GELEYARA BALAGA  •  MYSURU", 68, 54, 6.6, "#f2d37a", "left");
 }
+function iconPhone(ctx, x, y) { ctx.save(); ctx.strokeStyle = chromeH(ctx, x - 5, x + 5); ctx.fillStyle = "#f2c94c"; ctx.lineWidth = 1.5; roundedRect(ctx, x - 4, y - 7, 8, 14, 2); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y + 4, 1, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+function iconDrop(ctx, x, y) { ctx.save(); ctx.fillStyle = chromeV(ctx, y - 8, y + 7); ctx.beginPath(); ctx.moveTo(x, y - 8); ctx.bezierCurveTo(x + 7, y, x + 6, y + 7, x, y + 7); ctx.bezierCurveTo(x - 6, y + 7, x - 7, y, x, y - 8); ctx.fill(); ctx.restore(); }
+function iconInsta(ctx, x, y) { ctx.save(); ctx.strokeStyle = chromeH(ctx, x - 7, x + 7); ctx.fillStyle = "#f2c94c"; ctx.lineWidth = 1.5; roundedRect(ctx, x - 7, y - 7, 14, 14, 4); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y, 3.2, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.arc(x + 4.2, y - 4.2, 1, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
 
-function iconPhone(ctx, x, y, c) { ctx.save(); ctx.strokeStyle = c; ctx.fillStyle = c; ctx.lineWidth = 1.5; roundedRect(ctx, x - 4, y - 7, 8, 14, 2); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y + 4, 1, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
-function iconDrop(ctx, x, y, c) { ctx.save(); ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(x, y - 8); ctx.bezierCurveTo(x + 7, y, x + 6, y + 7, x, y + 7); ctx.bezierCurveTo(x - 6, y + 7, x - 7, y, x, y - 8); ctx.fill(); ctx.restore(); }
-function iconInsta(ctx, x, y, c) { ctx.save(); ctx.strokeStyle = c; ctx.fillStyle = c; ctx.lineWidth = 1.5; roundedRect(ctx, x - 7, y - 7, 14, 14, 4); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y, 3.2, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.arc(x + 4.2, y - 4.2, 1, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+// ===== 2b. Cut-out: removes the photo background inside the member's own browser =====
+// Uses Google's free "selfie segmentation" model (loaded once from a CDN). The photo never leaves the phone.
+// If it cannot load (no internet), the card simply shows the photo in a frame instead.
+const SEG_BASE = "https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1.1675465747/";
+const cutouts = {};          // photo -> { canvas, box }  or false when it did not work
+const cutoutJobs = {};
+let segmenterPromise = null;
+
+function loadScript(src) {
+    return new Promise((ok, fail) => {
+        const s = document.createElement("script"); s.src = src; s.crossOrigin = "anonymous";
+        s.onload = ok; s.onerror = () => fail(new Error("Could not load " + src)); document.head.appendChild(s);
+    });
+}
+function getSegmenter() {
+    if (!segmenterPromise) segmenterPromise = (async () => {
+        await loadScript(SEG_BASE + "selfie_segmentation.js");
+        const seg = new SelfieSegmentation({ locateFile: (f) => SEG_BASE + f });
+        seg.setOptions({ modelSelection: 0 });
+        seg.onResults((r) => { seg.lastMask = r.segmentationMask; });
+        await seg.initialize();
+        return seg;
+    })();
+    return segmenterPromise;
+}
+function smooth(a, b, x) { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); }
+
+async function makeCutout(img) {
+    const seg = await getSegmenter();
+    const w = img.width, h = img.height;
+    const src = document.createElement("canvas"); src.width = w; src.height = h; src.getContext("2d").drawImage(img, 0, 0, w, h);
+    seg.lastMask = null; await seg.send({ image: src });
+    for (let i = 0; i < 30 && !seg.lastMask; i++) await new Promise(r => setTimeout(r, 100));
+    if (!seg.lastMask) throw new Error("no mask");
+
+    const mc = document.createElement("canvas"); mc.width = w; mc.height = h; const mctx = mc.getContext("2d");
+    mctx.drawImage(seg.lastMask, 0, 0, w, h);
+    const md = mctx.getImageData(0, 0, w, h).data;
+    let lo = 255, hi = 0; for (let i = 3; i < md.length; i += 4 * 37) { lo = Math.min(lo, md[i]); hi = Math.max(hi, md[i]); }
+    const channel = (hi - lo) > 40 ? 3 : 0;                 // the mask is either in the alpha or in the red channel
+
+    const out = document.createElement("canvas"); out.width = w; out.height = h; const octx = out.getContext("2d");
+    octx.drawImage(src, 0, 0); const od = octx.getImageData(0, 0, w, h);
+    let minX = w, minY = h, maxX = 0, maxY = 0;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4, a = smooth(0.35, 0.65, md[i + channel] / 255);
+        od.data[i + 3] = Math.round(a * 255);
+        if (a > 0.5) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; }
+    }
+    if (maxX - minX < w * 0.15 || maxY - minY < h * 0.15) throw new Error("person not found");
+    octx.putImageData(od, 0, 0);
+    return { canvas: out, box: { x: minX, y: minY, w: maxX - minX, h: maxY - minY } };
+}
+function startCutout(img, key) {
+    if (!cutoutJobs[key]) cutoutJobs[key] = makeCutout(img)
+        .then(r => { cutouts[key] = r; window.dispatchEvent(new Event("agb-cutout")); return r; })
+        .catch(e => { cutouts[key] = false; console.warn("Cut-out not available:", e.message); return null; });
+    return cutoutJobs[key];
+}
 
 // ===== 3. Front of the card =====
-function drawFront(ctx, data, logo, photo, th) {
-    ctx.fillStyle = th.base; ctx.fillRect(0, 0, CARD_W, CARD_H);
-    const shade = ctx.createLinearGradient(0, 0, 0, CARD_H); shade.addColorStop(0, "rgba(255,255,255,.07)"); shade.addColorStop(1, "rgba(0,0,0,.28)");
-    ctx.fillStyle = shade; ctx.fillRect(0, 0, CARD_W, CARD_H);
-    contours(ctx, th, CARD_H);
-    topBar(ctx, logo, th);
-    lanyardSlot(ctx);
-    // "MEMBER" tag top right
-    ctx.fillStyle = th.accent; roundedRect(ctx, 224, 58, 62, 17, 8.5); ctx.fill(); tag(ctx, "MEMBER", 255, 70, 7.8, th.accentText);
+function drawFront(ctx, data, logo, photo, cut) {
+    cardBackground(ctx);
+    topBar(ctx, logo); lanyardSlot(ctx);
+    ctx.fillStyle = chromeH(ctx, 224, 286); roundedRect(ctx, 224, 60, 62, 17, 8.5); ctx.fill(); tag(ctx, "MEMBER", 255, 72, 7.8, DARK);
 
-    // giant AGB letters behind the photo
-    let size = 150; ctx.font = "900 " + size + "px " + FONT;
-    while (size > 40 && ctx.measureText("AGB").width > 240) { size -= 2; ctx.font = "900 " + size + "px " + FONT; }
-    ctx.save(); ctx.textAlign = "left"; ctx.fillStyle = th.big; ctx.shadowColor = "rgba(0,0,0,.25)"; ctx.shadowBlur = 8; ctx.shadowOffsetY = 3;
-    ctx.fillText("AGB", 24, 168); ctx.restore();
+    giantWord(ctx, "AIGIRI", 196, 252);
 
-    // photo card, slightly tilted, with a white border
-    ctx.save(); ctx.translate(150, 262); ctx.rotate(-0.03);
-    ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6; ctx.fillStyle = "#ffffff"; roundedRect(ctx, -126, -100, 252, 200, 20); ctx.fill(); ctx.shadowColor = "transparent";
-    ctx.save(); roundedRect(ctx, -121, -95, 242, 190, 16); ctx.clip();
-    if (photo) coverImage(ctx, photo, -121, -95, 242, 190);
-    else {
-        const g = ctx.createLinearGradient(0, -95, 0, 95); g.addColorStop(0, th.base); g.addColorStop(1, th.dark); ctx.fillStyle = g; ctx.fillRect(-121, -95, 242, 190);
-        ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.arc(0, -22, 34, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(0, 95, 70, Math.PI, 0); ctx.fill();
+    if (cut) {
+        // the person stands in front of the big letters
+        const b = cut.box, s = Math.min(262 / b.w, 258 / b.h);
+        const dx = 150 - (b.x + b.w / 2) * s, dy = 356 - (b.y + b.h) * s;
+        ctx.save(); ctx.shadowColor = "rgba(0,0,0,.55)"; ctx.shadowBlur = 14; ctx.shadowOffsetY = 5;
+        ctx.drawImage(cut.canvas, dx, dy, cut.canvas.width * s, cut.canvas.height * s); ctx.restore();
+    } else {
+        // a framed photo (used when the cut-out is not ready or not possible)
+        ctx.save(); ctx.translate(150, 272); ctx.rotate(-0.03);
+        ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6; ctx.fillStyle = chromeH(ctx, -126, 126); roundedRect(ctx, -126, -92, 252, 184, 20); ctx.fill(); ctx.shadowColor = "transparent";
+        ctx.save(); roundedRect(ctx, -121, -87, 242, 174, 16); ctx.clip();
+        if (photo) coverImage(ctx, photo, -121, -87, 242, 174);
+        else {
+            const g = ctx.createLinearGradient(0, -87, 0, 87); g.addColorStop(0, MAROON[0]); g.addColorStop(1, DARK); ctx.fillStyle = g; ctx.fillRect(-121, -87, 242, 174);
+            ctx.fillStyle = "rgba(242,201,76,.5)"; ctx.beginPath(); ctx.arc(0, -20, 32, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(0, 90, 66, Math.PI, 0); ctx.fill();
+        }
+        ctx.restore(); ctx.restore();
     }
-    ctx.restore(); ctx.restore();
 
-    // slanted name label (white) and role label (accent)
+    // gold name label and dark role label
     const name = (data.name || "—").toUpperCase();
-    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.4)"; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4; slant(ctx, 14, 342, 262, 48, 12, "#ffffff"); ctx.restore();
-    ctx.fillStyle = th.nameText; let fitted = false;
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4; slant(ctx, 14, 342, 262, 48, 12, chromeH(ctx, 14, 288)); ctx.restore();
+    ctx.fillStyle = DARK; let fitted = false;
     for (let s = 25; s >= 15; s--) { ctx.font = "900 " + s + "px " + FONT; if (ctx.measureText(name).width <= 236) { ctx.fillText(name, 151, 372 + (s > 21 ? 3 : 0)); fitted = true; break; } }
     if (!fitted) {
         ctx.font = "900 15px " + FONT; const words = name.split(" "); let best = 1, bw = Infinity;
@@ -222,38 +293,32 @@ function drawFront(ctx, data, logo, photo, th) {
     const role = (data.role || "MEMBER").toUpperCase();
     let rs = 10.5; ctx.font = "900 " + rs + "px " + FONT; while (rs > 7.5 && ctx.measureText(role).width > 230) { rs -= 0.5; ctx.font = "900 " + rs + "px " + FONT; }
     const rw = Math.min(262, ctx.measureText(role).width + 34);
-    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.3)"; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2; slant(ctx, 150 - rw / 2 - 5, 392, rw, 22, 10, th.accent); ctx.restore();
-    writeText(ctx, role, 150, 407, rs, th.accentText, true);
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.4)"; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2; slant(ctx, 150 - rw / 2 - 5, 394, rw, 22, 10, DARK);
+    ctx.strokeStyle = chromeH(ctx, 150 - rw / 2, 150 + rw / 2); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(150 - rw / 2 - 5 + 10, 394); ctx.lineTo(150 + rw / 2 + 5, 394); ctx.lineTo(150 + rw / 2 - 5, 416); ctx.lineTo(150 - rw / 2 - 5, 416); ctx.closePath(); ctx.stroke(); ctx.restore();
+    chromeText(ctx, role, 150, 409, rs);
 
-    // three details in a row
+    // details
     [[56, "ID", data.id || ""], [150, "JOINED", String(data.year || "")], [244, "BLOOD", data.blood || "—"]].forEach((c, i) => {
-        tag(ctx, c[1], c[0], 427, 6.4, "rgba(255,255,255,.7)"); writeText(ctx, c[2], c[0], 442, i === 0 ? 11 : 13, "#ffffff", true);
+        tag(ctx, c[1], c[0], 429, 6.4, "rgba(255,230,160,.7)"); chromeText(ctx, c[2], c[0], 443, i === 0 ? 11 : 13);
     });
-    ctx.save(); ctx.strokeStyle = "rgba(255,255,255,.3)"; ctx.lineWidth = 0.8; [[103, 421, 103, 444], [197, 421, 197, 444]].forEach(l => { ctx.beginPath(); ctx.moveTo(l[0], l[1]); ctx.lineTo(l[2], l[3]); ctx.stroke(); }); ctx.restore();
+    ctx.save(); ctx.strokeStyle = "rgba(242,201,76,.4)"; ctx.lineWidth = 0.8; [[103, 422, 103, 446], [197, 422, 197, 446]].forEach(l => { ctx.beginPath(); ctx.moveTo(l[0], l[1]); ctx.lineTo(l[2], l[3]); ctx.stroke(); }); ctx.restore();
 
-    strip(ctx, th, 452);
+    strip(ctx, 452);
 }
 
 // ===== 4. Back of the card =====
-function drawBack(ctx, data, logo, scale, th) {
-    // colour on top, white below with a slanted edge
-    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, CARD_W, CARD_H);
-    ctx.save(); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(CARD_W, 0); ctx.lineTo(CARD_W, 236); ctx.lineTo(0, 262); ctx.closePath(); ctx.clip();
-    ctx.fillStyle = th.base; ctx.fillRect(0, 0, CARD_W, 270);
-    const shade = ctx.createLinearGradient(0, 0, 0, 270); shade.addColorStop(0, "rgba(255,255,255,.07)"); shade.addColorStop(1, "rgba(0,0,0,.25)"); ctx.fillStyle = shade; ctx.fillRect(0, 0, CARD_W, 270);
-    contours(ctx, th, 270); ctx.restore();
-    topBar(ctx, logo, th); lanyardSlot(ctx);
+function drawBack(ctx, data, logo, scale) {
+    cardBackground(ctx);
+    topBar(ctx, logo); lanyardSlot(ctx);
 
-    // big title
-    ctx.save(); ctx.fillStyle = th.big; ctx.shadowColor = "rgba(0,0,0,.25)"; ctx.shadowBlur = 8; ctx.shadowOffsetY = 3;
-    ctx.font = "900 40px " + FONT; ctx.fillText("SCAN TO", 150, 106);
-    let s = 62; ctx.font = "900 " + s + "px " + FONT; while (s > 30 && ctx.measureText("VERIFY").width > 236) { s -= 2; ctx.font = "900 " + s + "px " + FONT; }
-    ctx.fillText("VERIFY", 150, 106 + s * 0.82); ctx.restore();
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4;
+    chromeText(ctx, "SCAN TO", 150, 112, 40);
+    let s = 64; ctx.font = "900 " + s + "px " + FONT; while (s > 30 && ctx.measureText("VERIFY").width > 236) { s -= 2; ctx.font = "900 " + s + "px " + FONT; }
+    chromeText(ctx, "VERIFY", 150, 112 + s * 0.84, s); ctx.restore();
 
-    // QR tile
-    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6; ctx.fillStyle = "#ffffff"; roundedRect(ctx, 64, 176, 172, 188, 16); ctx.fill(); ctx.restore();
-    ctx.save(); ctx.strokeStyle = th.base; ctx.lineWidth = 2.4; ctx.lineCap = "round";
-    [[74, 186, 1, 1], [226, 186, -1, 1]].forEach(c => { ctx.beginPath(); ctx.moveTo(c[0], c[1] + 14); ctx.lineTo(c[0], c[1]); ctx.lineTo(c[0] + c[2] * 14, c[1]); ctx.stroke(); }); ctx.restore();
+    // QR code (white, so every phone can read it)
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6; ctx.fillStyle = "#ffffff"; roundedRect(ctx, 64, 182, 172, 184, 16); ctx.fill(); ctx.restore();
+    ctx.save(); ctx.strokeStyle = chromeH(ctx, 64, 236); ctx.lineWidth = 2.6; ctx.lineCap = "round"; roundedRect(ctx, 64, 182, 172, 184, 16); ctx.stroke(); ctx.restore();
     if (data.verifyUrl) {
         const qr = QR.make(data.verifyUrl);
         const module = Math.floor(132 * scale / qr.size) / scale, full = module * qr.size;
@@ -261,16 +326,15 @@ function drawBack(ctx, data, logo, scale, th) {
         ctx.fillStyle = "#000000";
         for (let r = 0; r < qr.size; r++) for (let c = 0; c < qr.size; c++) if (qr.modules[r][c]) ctx.fillRect(left + c * module, top + r * module, module, module);
     }
-    tag(ctx, data.id || "", 150, 348, 13, th.nameText);
+    ctx.save(); if ("letterSpacing" in ctx) ctx.letterSpacing = "1.5px"; writeText(ctx, data.id || "", 150, 352, 13, "#6d0f0f", true); ctx.restore();
 
     // contact rows
     ctx.textAlign = "left";
-    const rows = [[385, iconPhone, data.phone || "—"], [405, iconDrop, "Blood group  " + (data.blood || "—")], [425, iconInsta, "@aigiri2025"]];
-    rows.forEach(r => { r[1](ctx, 84, r[0] - 4, th.base); writeText(ctx, r[2], 100, r[0], 11, "#222222", true); });
+    [[390, iconPhone, data.phone || "—"], [410, iconDrop, "Blood group  " + (data.blood || "—")], [430, iconInsta, "@aigiri2025"]].forEach(r => { r[1](ctx, 88, r[0] - 4); chromeText(ctx, r[2], 104, r[0], 11.5, "left"); });
     ctx.textAlign = "center";
-    writeText(ctx, "If found, please return to AGB, Mysuru", 150, 444, 7.6, "#777777", false);
+    writeText(ctx, "If found, please return to AGB, Mysuru", 150, 446, 7.4, "rgba(255,230,160,.65)", false);
 
-    strip(ctx, th, 452);
+    strip(ctx, 452);
 }
 
 
@@ -279,7 +343,14 @@ function drawBack(ctx, data, logo, scale, th) {
 async function renderCard(side, data, scale) {
     const logo = await loadImage("images/logo.png").catch(() => null);
     const photo = data.photo ? await loadImage(data.photo).catch(() => null) : null;
-    const th = cardTheme(data);
+
+    // background removal: shown as soon as it is ready; downloads wait for it
+    let cut = null;
+    if (photo && side === "front" && data.cutout !== false) {
+        const key = data.photo;
+        if (cutouts[key] === undefined) { const job = startCutout(photo, key); if (window.AGB_WAIT_CUTOUT) await job; }
+        cut = cutouts[key] || null;
+    }
 
     const canvas = document.createElement("canvas");
     canvas.width = CARD_W * scale;
@@ -293,13 +364,13 @@ async function renderCard(side, data, scale) {
     ctx.save();
     roundedRect(ctx, 0, 0, CARD_W, CARD_H, 18);
     ctx.clip();
-    if (side === "front") drawFront(ctx, data, logo, photo, th);
-    else drawBack(ctx, data, logo, scale, th);
+    if (side === "front") drawFront(ctx, data, logo, photo, cut);
+    else drawBack(ctx, data, logo, scale);
     ctx.restore();
 
     roundedRect(ctx, 0.5, 0.5, CARD_W - 1, CARD_H - 1, 18);
     ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(0,0,0,.25)";
+    ctx.strokeStyle = "rgba(0,0,0,.35)";
     ctx.stroke();
 
     return canvas;
@@ -308,8 +379,10 @@ async function renderCard(side, data, scale) {
 
 // ===== 5. Sheets: front + back together, ready to save or print =====
 async function makeSheet(kind, data) {
-    const front = await renderCard("front", data, 3);
-    const back = await renderCard("back", data, 3);
+    window.AGB_WAIT_CUTOUT = true;                       // wait for the cut-out, so the file is the final card
+    let front, back;
+    try { front = await renderCard("front", data, 3); back = await renderCard("back", data, 3); }
+    finally { window.AGB_WAIT_CUTOUT = false; }
 
     const sheet = document.createElement("canvas");
     const ctx = sheet.getContext("2d");
