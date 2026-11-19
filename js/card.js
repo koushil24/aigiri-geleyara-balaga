@@ -123,7 +123,7 @@ function chromeH(ctx, x0, x1) {
 function chromeText(ctx, text, x, y, size, align) {
     ctx.save(); ctx.font = "900 " + size + "px " + FONT; ctx.textAlign = align || "center";
     ctx.fillStyle = chromeV(ctx, y - size * 0.78, y + size * 0.12); ctx.fillText(text, x, y);
-    ctx.lineWidth = 0.5; ctx.strokeStyle = "rgba(70,35,0,.5)"; ctx.strokeText(text, x, y); ctx.restore();
+    ctx.restore();
 }
 // big condensed word behind the photo
 function giantWord(ctx, word, baseline, maxW) {
@@ -132,13 +132,14 @@ function giantWord(ctx, word, baseline, maxW) {
     ctx.translate(150, baseline); ctx.scale(sx, 1); ctx.textAlign = "center";
     ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 12; ctx.shadowOffsetY = 5;
     ctx.fillStyle = chromeV(ctx, -size * 0.74, size * 0.03); ctx.fillText(word, 0, 0);
-    ctx.shadowColor = "transparent"; ctx.lineWidth = 1.4; ctx.strokeStyle = "rgba(80,40,0,.65)"; ctx.strokeText(word, 0, 0);
     ctx.restore();
 }
 
-function coverImage(ctx, img, x, y, w, h) {
-    const scale = Math.max(w / img.width, h / img.height), sw = w / scale, sh = h / scale;
-    ctx.drawImage(img, (img.width - sw) / 2, (img.height - sh) / 2, sw, sh, x, y, w, h);
+function coverImage(ctx, img, x, y, w, h, zoom, ox, oy) {
+    const scale = Math.max(w / img.width, h / img.height) * (zoom || 1), sw = w / scale, sh = h / scale;
+    const sx = Math.min(Math.max((img.width - sw) * (0.5 + (ox || 0) * 0.5), 0), img.width - sw);
+    const sy = Math.min(Math.max((img.height - sh) * (0.5 + (oy || 0) * 0.5), 0), img.height - sh);
+    ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
 }
 function tag(ctx, text, x, y, size, color, align) {
     ctx.save(); if ("letterSpacing" in ctx) ctx.letterSpacing = "1px";
@@ -260,11 +261,12 @@ function drawFront(ctx, data, logo, photo, cut) {
     ctx.fillStyle = chromeH(ctx, 224, 286); roundedRect(ctx, 224, 60, 62, 17, 8.5); ctx.fill(); tag(ctx, "MEMBER", 255, 72, 7.8, DARK);
 
     giantWord(ctx, "AIGIRI", 196, 252);
+    const st = data.settings || { z: 1, x: 0, y: 0 };      // the member's own zoom and position
 
     if (cut) {
         // the person stands in front of the big letters
-        const b = cut.box, s = Math.min(262 / b.w, 258 / b.h);
-        const dx = 150 - (b.x + b.w / 2) * s, dy = 356 - (b.y + b.h) * s;
+        const b = cut.box, s = Math.min(262 / b.w, 258 / b.h) * (st.z || 1);
+        const dx = 150 - (b.x + b.w / 2) * s + (st.x || 0) * 60, dy = 356 - (b.y + b.h) * s + (st.y || 0) * 60;
         ctx.save(); ctx.shadowColor = "rgba(0,0,0,.55)"; ctx.shadowBlur = 14; ctx.shadowOffsetY = 5;
         ctx.drawImage(cut.canvas, dx, dy, cut.canvas.width * s, cut.canvas.height * s); ctx.restore();
     } else {
@@ -272,7 +274,7 @@ function drawFront(ctx, data, logo, photo, cut) {
         ctx.save(); ctx.translate(150, 272); ctx.rotate(-0.03);
         ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6; ctx.fillStyle = chromeH(ctx, -126, 126); roundedRect(ctx, -126, -92, 252, 184, 20); ctx.fill(); ctx.shadowColor = "transparent";
         ctx.save(); roundedRect(ctx, -121, -87, 242, 174, 16); ctx.clip();
-        if (photo) coverImage(ctx, photo, -121, -87, 242, 174);
+        if (photo) coverImage(ctx, photo, -121, -87, 242, 174, Math.max(1, st.z || 1), -(st.x || 0), -(st.y || 0));
         else {
             const g = ctx.createLinearGradient(0, -87, 0, 87); g.addColorStop(0, MAROON[0]); g.addColorStop(1, DARK); ctx.fillStyle = g; ctx.fillRect(-121, -87, 242, 174);
             ctx.fillStyle = "rgba(242,201,76,.5)"; ctx.beginPath(); ctx.arc(0, -20, 32, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(0, 90, 66, Math.PI, 0); ctx.fill();

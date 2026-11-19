@@ -4533,3 +4533,62 @@ body.dark-mode .tabbar a.on * { color: #FFD700 !important; }
 
 .card-designs { max-width: 460px; margin: 0 auto 22px; text-align: center; }
 .card-designs .themes { max-width: 420px; margin: 0 auto; }
+
+
+/* =====================================================
+   32. MEMBER EDIT SCREEN
+   ===================================================== */
+#editScreen {
+    max-width: 980px;
+    padding: 24px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid rgba(190, 140, 40, .35);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+#editScreen h3 { margin: 0 0 6px; font-family: var(--serif); color: var(--heading); text-align: center; }
+
+.edit-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+    gap: 26px;
+    align-items: start;
+}
+
+.edit-preview { position: sticky; top: 96px; }
+#editPreview canvas { display: block; width: 100%; height: auto; border-radius: 14px; box-shadow: 0 14px 30px rgba(0, 0, 0, .35); }
+
+.edit-form label {
+    display: block;
+    margin: 14px 0 4px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--heading);
+}
+
+.edit-form label.btn { margin: 0 0 6px; color: #4b0000; text-align: center; cursor: pointer; }
+.edit-form label.btn span { color: #4b0000; }
+.edit-form label.check { display: flex; gap: 10px; align-items: center; font-weight: 600; color: var(--text); }
+.edit-form label.check input { width: 20px; height: 20px; accent-color: #c98a00; }
+.edit-form input[type="range"] { width: 100%; accent-color: #c98a00; }
+
+.edit-form input[type="tel"],
+.edit-form input[type="password"],
+.edit-form select {
+    width: 100%;
+    padding: 11px 14px;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg);
+    border: 1.5px solid rgba(190, 140, 40, .55);
+    border-radius: 12px;
+}
+
+.edit-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+@media (max-width: 800px) {
+    .edit-grid { grid-template-columns: 1fr; }
+    .edit-preview { position: static; max-width: 300px; margin: 0 auto; }
+}

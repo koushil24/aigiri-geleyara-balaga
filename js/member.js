@@ -122,11 +122,14 @@ function showCard(member, isNew) {
     shownMember = member;
     shownIsNew = isNew;
 
+    const ps = member.photoSettings || {};
     cardData = {
         id: member.id, name: member.name, role: member.role.toUpperCase(),
         year: member.joiningYear, photo: member.photo,
         blood: member.bloodGroup, phone: member.phone,
-        verifyUrl: new URL("verify.html?id=" + member.id, location.href).href   // the QR code opens this page
+        verifyUrl: new URL("verify.html?id=" + member.id, location.href).href,   // the QR code opens this page
+        settings: { z: ps.z || 1, x: ps.x || 0, y: ps.y || 0 },
+        cutout: !(ps.c === 0 || ps.c === false)
     };
     paint($("cardFront"), "front", cardData, 3);
     paint($("cardBack"), "back", cardData, 3);
@@ -196,6 +199,7 @@ function signupProblem() {
     if (!$("suBlood").value) return t("mb-v-blood");
     if (!$("suYear").value) return t("mb-v-year");
     if (!photoData) return t("mb-v-photo");
+    if (!$("suPass").value) return t("mb-v-pass");
     if (!/^\d{4,6}$/.test($("suPin").value)) return t("mb-v-pin");
     if ($("suPin").value !== $("suPin2").value) return t("mb-v-pin2");
     if (!$("suConsent").checked) return t("mb-v-consent");
@@ -220,6 +224,7 @@ $("signupForm").addEventListener("submit", async (e) => {
             bloodGroup: $("suBlood").value,
             joiningYear: Number($("suYear").value),
             photo: photoData,
+            password: $("suPass").value,
             pin: $("suPin").value,
             consent: true
         });
@@ -321,5 +326,92 @@ if (saved) {
 
 // ===== When the photo cut-out is ready, draw the card again =====
 window.addEventListener("agb-cutout", () => {
-    if (cardData && typeof paint === "function") { paint($("cardFront"), "front", cardData, 3); }
+    if (cardData && !$("memberCard").hidden) paint($("cardFront"), "front", cardData, 3);
+    if (!$("editScreen").hidden) drawEditPreview();
+});
+
+
+// ===== Edit my card: photo (change, zoom, move, cut-out), phone and blood group =====
+let editPhoto = "";                 // a new photo chosen on the edit screen (empty = keep the old one)
+let editQueued = false;
+
+function editSettings() { return { z: Number($("editZoom").value), x: Number($("editX").value), y: Number($("editY").value) }; }
+
+function editData() {
+    const m = shownMember;
+    return Object.assign({}, cardData, {
+        photo: editPhoto || m.photo,
+        phone: cleanPhone($("editPhone").value) || m.phone,
+        blood: $("editBlood").value || m.bloodGroup,
+        settings: editSettings(),
+        cutout: $("editCut").checked
+    });
+}
+
+function drawEditPreview() {
+    if (editQueued) return;
+    editQueued = true;
+    requestAnimationFrame(() => { editQueued = false; paint($("editPreview"), "front", editData(), 2); });
+}
+
+function openEdit() {
+    const m = shownMember, ps = m.photoSettings || { z: 1, x: 0, y: 0, c: 1 };
+    editPhoto = "";
+    $("editPhone").value = m.phone;
+    $("editBlood").value = m.bloodGroup;
+    $("editPin").value = "";
+    $("editZoom").value = ps.z; $("editX").value = ps.x; $("editY").value = ps.y;
+    $("editCut").checked = !(ps.c === 0 || ps.c === false);
+    showMessage($("editMsg"), "");
+    $("memberCard").hidden = true;
+    $("editScreen").hidden = false;
+    drawEditPreview();
+    window.scrollTo({ top: 0 });
+}
+
+function closeEdit() {
+    $("editScreen").hidden = true;
+    $("memberCard").hidden = false;
+}
+
+$("editBtn").addEventListener("click", openEdit);
+$("editCancel").addEventListener("click", closeEdit);
+["editZoom", "editX", "editY", "editCut", "editPhone", "editBlood"].forEach(id => $(id).addEventListener("input", drawEditPreview));
+$("editReset").addEventListener("click", () => { $("editZoom").value = 1; $("editX").value = 0; $("editY").value = 0; drawEditPreview(); });
+
+$("editPhoto").addEventListener("change", async (e) => {
+    if (!e.target.files[0]) return;
+    try { editPhoto = await shrinkPhoto(e.target.files[0]); drawEditPreview(); }
+    catch (error) { showMessage($("editMsg"), t("mb-e-photo-err")); }
+});
+
+$("editSave").addEventListener("click", async () => {
+    const phone = cleanPhone($("editPhone").value), pin = $("editPin").value, s = editSettings();
+    if (!/^[6-9]\d{9}$/.test(phone)) return showMessage($("editMsg"), t("mb-e-v-phone"));
+    if (!/^\d{4,6}$/.test(pin)) return showMessage($("editMsg"), t("mb-e-v-pin"));
+    showMessage($("editMsg"), "");
+
+    $("editSave").disabled = true;
+    try {
+        const answer = await callApi({
+            action: "update", id: shownMember.id, pin: pin, name: shownMember.name,
+            phone: phone, bloodGroup: $("editBlood").value,
+            photo: editPhoto || undefined,
+            photoSettings: { z: s.z, x: s.x, y: s.y, c: $("editCut").checked ? 1 : 0 }
+        });
+        if (answer.ok) {
+            const member = answer.member;
+            if (!member.photoSettings) member.photoSettings = { z: s.z, x: s.x, y: s.y, c: $("editCut").checked ? 1 : 0 };
+            sessionStorage.setItem(KEY, JSON.stringify(member));
+            closeEdit();
+            showCard(member, false);
+            const note = document.getElementById("toast");
+            if (note) { note.textContent = t("mb-e-saved"); note.classList.add("show"); setTimeout(() => note.classList.remove("show"), 4000); }
+        } else {
+            showMessage($("editMsg"), answer.error);
+        }
+    } catch (error) {
+        showMessage($("editMsg"), connectionMessage(error));
+    }
+    $("editSave").disabled = false;
 });

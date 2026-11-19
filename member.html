@@ -106,7 +106,6 @@ window.addEventListener("error", function (e) {
 <li><a href="support.html" data-i18n="nav-sponsor"></a></li>
 <li><a href="contact.html" data-i18n="nav-contact"></a></li>
 <li class="nav-extra"><a href="poster.html" data-i18n="sheet-birthday">Birthday Poster</a></li>
-<li class="nav-extra"><a href="member.html" data-i18n="sheet-member">Member ID</a></li>
 </ul>
 <div class="actions">
 <a class="join-btn" href="support.html" data-i18n="nav-join">Join / Volunteer</a>
@@ -167,6 +166,9 @@ window.addEventListener("error", function (e) {
 <input type="file" id="suPhoto" accept="image/*">
 <p class="member-hint" data-i18n="mb-photo-hint">A clear face photo. It is made smaller automatically.</p>
 
+<label for="suPass" data-i18n="mb-pass">AGB member password</label>
+<input type="password" id="suPass" autocomplete="off">
+<p class="member-hint" data-i18n="mb-pass-hint">Ask AGB for the member password. Only AGB members can sign up.</p>
 <label for="suPin" data-i18n="mb-pin">Create a PIN (4–6 digits)</label>
 <input type="password" id="suPin" inputmode="numeric" maxlength="6">
 <label for="suPin2" data-i18n="mb-pin2">Repeat PIN</label>
@@ -190,6 +192,29 @@ window.addEventListener("error", function (e) {
 </div>
 
 <!-- Screen 2: the member's own ID card -->
+<div id="editScreen" hidden>
+<h3 data-i18n="mb-edit-title">Edit my Member ID</h3>
+<p class="member-hint" data-i18n="mb-edit-note">Your name and role can only be changed by AGB.</p>
+<div class="edit-grid">
+<div class="edit-preview"><div id="editPreview" class="idcard"></div></div>
+<div class="edit-form">
+<label class="btn btn-sm upload"><input type="file" id="editPhoto" accept="image/*" hidden><span data-i18n="mb-e-photo">Change photo</span></label>
+<label class="check"><input type="checkbox" id="editCut" checked><span data-i18n="mb-e-cut">Remove photo background (cut-out)</span></label>
+<label for="editZoom" data-i18n="mb-e-zoom">Zoom</label><input type="range" id="editZoom" min="0.6" max="2" step="0.05" value="1">
+<label for="editX" data-i18n="mb-e-x">Left / Right</label><input type="range" id="editX" min="-1" max="1" step="0.05" value="0">
+<label for="editY" data-i18n="mb-e-y">Up / Down</label><input type="range" id="editY" min="-1" max="1" step="0.05" value="0">
+<button type="button" class="btn btn-sm btn-outline-dark" id="editReset" data-i18n="mb-e-reset">Reset position</button>
+<label for="editPhone" data-i18n="mb-e-phone">Mobile number</label>
+<input type="tel" id="editPhone" inputmode="numeric" maxlength="12" autocomplete="off">
+<label for="editBlood" data-i18n="mb-e-blood">Blood group</label>
+<select id="editBlood"><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option><option value="O+">O+</option><option value="O-">O-</option></select>
+<label for="editPin" data-i18n="mb-e-pin">Your PIN (needed to save)</label>
+<input type="password" id="editPin" inputmode="numeric" maxlength="6" autocomplete="off">
+<p class="member-error" id="editMsg" hidden></p>
+<div class="edit-actions"><button type="button" class="btn" id="editSave" data-i18n="mb-e-save">Save changes</button><button type="button" class="btn btn-outline-dark" id="editCancel" data-i18n="mb-e-cancel">Cancel</button></div>
+</div>
+</div>
+</div>
 <div id="memberCard" hidden>
 <h2 class="section-title" data-i18n="mb-card-title">🪪 Your ID Card</h2>
 <p class="member-notice" id="cardNotice"></p>
@@ -204,6 +229,7 @@ window.addEventListener("error", function (e) {
 <button class="btn" type="button" id="printBtn" data-i18n="mb-print">🖨 Print</button>
 </div>
 <p class="member-hint" data-i18n="mb-dl-hint">The PDF and Print are exactly card size (54 × 86 mm). When printing, choose 100% (actual size).</p>
+<button class="btn" type="button" id="editBtn" data-i18n="mb-edit-btn">Edit my card</button>
 <button class="btn" type="button" id="logoutBtn" data-i18n="mb-logout">🚪 Log out</button>
 </div>
 </div>
@@ -229,12 +255,11 @@ window.addEventListener("error", function (e) {
 <a href="support.html" data-i18n="nav-sponsor"></a>
 <a href="contact.html" data-i18n="nav-contact"></a>
 <a href="poster.html" data-i18n="sheet-birthday"></a>
-<a href="member.html" data-i18n="sheet-member"></a>
 </div>
 <div class="foot-col"><h4 data-i18n="foot-follow">Follow us</h4>
 <a href="https://www.instagram.com/aigiri2025?igsh=MXF0YjN5aWN6cHEwbQ==" target="_blank" rel="noopener">📷 Instagram</a>
 <a href="https://www.threads.com/@aigiri2025" target="_blank" rel="noopener">🧵 Threads</a>
-<a href="member.html" class="foot-member">🪪 Member Login</a>
+<a href="member.html" class="foot-member" data-i18n="foot-member">🪪 Member Zone</a>
 </div>
 </div>
 <hr>
@@ -255,7 +280,6 @@ window.addEventListener("error", function (e) {
 <a href="support.html"><svg class="ic" aria-hidden="true"><use href="#i-united"></use></svg><span data-i18n="nav-sponsor">Support</span></a>
 <a href="contact.html"><svg class="ic" aria-hidden="true"><use href="#i-phone"></use></svg><span data-i18n="nav-contact">Contact</span></a>
 <a href="poster.html"><svg class="ic" aria-hidden="true"><use href="#i-palette"></use></svg><span data-i18n="sheet-birthday">Birthday Poster</span></a>
-<a href="member.html"><svg class="ic" aria-hidden="true"><use href="#i-idcard"></use></svg><span data-i18n="sheet-member">Member ID</span></a>
 </div>
 <nav class="tabbar" aria-label="Quick menu">
 <a href="index.html" class="on"><span>🏠</span><em data-i18n="tab-home">Home</em></a>

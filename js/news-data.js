@@ -18,17 +18,7 @@ const NEWS = [
         image: "",
         link: ""
     },
-    {
-        date: "2026-10-20",
-        title: { en: "Digital Member ID cards are here", kn: "ಡಿಜಿಟಲ್ ಸದಸ್ಯ ಐಡಿ ಕಾರ್ಡ್ ಲಭ್ಯ" },
-        text: {
-            en: "AGB members can now sign up, get their own Member ID card with a QR code, and download or print it.",
-            kn: "ಎಜಿಬಿ ಸದಸ್ಯರು ಈಗ ಸೈನ್ ಅಪ್ ಮಾಡಿ, QR ಕೋಡ್ ಇರುವ ತಮ್ಮ ಸದಸ್ಯ ಐಡಿ ಕಾರ್ಡ್ ಪಡೆದು ಡೌನ್‌ಲೋಡ್ ಅಥವಾ ಪ್ರಿಂಟ್ ಮಾಡಬಹುದು."
-        },
-        image: "",
-        link: "member.html"
-    },
-    {
+        {
         date: "2026-10-15",
         title: { en: "Ashada Pooja Mahotsava 2027 on 30 July 2027", kn: "ಆಷಾಢ ಪೂಜಾ ಮಹೋತ್ಸವ 2027: 30 ಜುಲೈ 2027" },
         text: {
